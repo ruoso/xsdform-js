@@ -1,0 +1,11 @@
+
+label {
+	display: block;
+	position: relative;
+	margin: 0.4em;
+}
+
+label input {
+	position: absolute;
+	left: 20em;
+}
