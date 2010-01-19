@@ -123,7 +123,9 @@
 				type == "xs:datetime" ||
 				type == "xs:date"     ||
 				type == "xs:float") {
-				return generateFormFromSimpleTextNode(xmlNode, namePattern);
+				return generateFormFieldFromSimpleTextNode(xmlNode, namePattern);
+			} else if ( type == "xs:boolean" ) {
+				return generateFormFieldCheckboxFromSimpleTextNode(xmlNode, namePattern);
 			} else {
 				//throw type + " not supported.";
 			}
@@ -202,12 +204,13 @@
 		return newLabel;
 	}
 
-	function generateFormFromSimpleTextNode(xmlNode, namePattern) {
+	function generateFormFieldFromSimpleTextNode(xmlNode, namePattern) {
 		var name = getValueAttributeByName(xmlNode, "name");
 		var label;
 		for (var i = 0; i < xmlNode.childNodes.length; i++) {
 			if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:annotation' ) {
 				label = getNodeByTagName(xmlNode.childNodes[i], "xs:appinfo");
+				label = getTextByTagName(label, "label");
 			}
 		}
 
@@ -217,11 +220,31 @@
 		newInput.id    = namePattern + "__" + name;
 
 		var newLabel = document.createElement("label");
-		newLabel.appendChild(label);
+		newLabel.innerHTML = label;
 		newLabel.appendChild(newInput);
 		return newLabel;
 	}
 
+	function generateFormFieldCheckboxFromSimpleTextNode(xmlNode, namePattern) {
+		var name = getValueAttributeByName(xmlNode, "name");
+		var label;
+		for (var i = 0; i < xmlNode.childNodes.length; i++) {
+			if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:annotation' ) {
+				label = getNodeByTagName(xmlNode.childNodes[i], "xs:appinfo");
+				label = getTextByTagName(label, "label");
+			}
+		}
+
+		var newInput = document.createElement('input');
+		newInput.type  = 'checkbox';
+		newInput.name  = namePattern + "__" + name;
+		newInput.id    = namePattern + "__" + name;
+
+		var newLabel = document.createElement("label");
+		newLabel.innerHTML = label;
+		newLabel.appendChild(newInput);
+		return newLabel;
+	}
 
 	function generateForm() {
 		try {

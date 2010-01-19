@@ -77,6 +77,38 @@
 							</xs:restriction>
 						</xs:simpleType>
 					</xs:element>
+					<xs:element name="localizacao">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Localizacao</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="quadraloteada" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Quadra Loteada</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="leitoDeRua" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Leito de Rua</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="localizacaoOutro" type="xs:string">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Outro</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
 				</xs:sequence>
 			</xs:complexType>
 		</xs:element>
