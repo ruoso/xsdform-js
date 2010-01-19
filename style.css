@@ -5,7 +5,8 @@ label {
 	margin: 0.4em;
 }
 
-label input {
+label input, label select {
 	position: absolute;
 	left: 20em;
+	top: -2px;
 }

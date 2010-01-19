@@ -82,7 +82,7 @@
 		return getText(node);
 	}
 
-	function getValueAttributesByName(xmlNode,attributeName) {
+	function getValueAttributeByName(xmlNode,attributeName) {
 		var text = null;
 		for (var i = 0; i < xmlNode.attributes.length; i++) {
 			if ( xmlNode.attributes[i].nodeName == attributeName ) {
@@ -115,13 +115,13 @@
 
 	function generateFormFromNode(xmlNode, namePattern) {
 		var label, type;
-		type = getValueAttributesByName(xmlNode, "type");
+		type = getValueAttributeByName(xmlNode, "type");
 		if (type != null) {
 			// pre-defined types
-			if (type == "xs:integer" ||
-				type == "xs:string" ||
+			if (type == "xs:integer"  ||
+				type == "xs:string"   ||
 				type == "xs:datetime" ||
-				type == "xs:date" ||
+				type == "xs:date"     ||
 				type == "xs:float") {
 				return generateFormFromSimpleTextNode(xmlNode, namePattern);
 			} else {
@@ -131,10 +131,18 @@
 			// inline type definition
 			for (var i = 0; i < xmlNode.childNodes.length; i++) {
 				if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:annotation' ) {
-					label = getNodeByTagName(xmlNode, "xs:appinfo");
-					label = getNodeByTagName(xmlNode, "legend");
+
+					label = getNodeByTagName(xmlNode.childNodes[i], "xs:appinfo");
+					label = getTextByTagName(label, 'label');
+
 				} else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:complexType') {
-					return generateFormFromComplexTypeNode(xmlNode.childNodes[i], namePattern, getValueAttributesByName(xmlNode, "name"), label );
+
+					return generateFormFromComplexTypeNode(xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label );
+
+				} else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:simpleType') {
+
+					return generateFormFromSimpleTypeNode(xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label);
+
 				}
 			}
 		}
@@ -169,9 +177,34 @@
 
 	}
 
+	function generateFormFromSimpleTypeNode(xmlNode, namePattern, name, label) {
+		var restrictionNode;
+		restrictionNode = getNodeByTagName(xmlNode, 'xs:restriction');
+
+		var newSelect = document.createElement('select');
+		newSelect.name  = namePattern + "__" + name;
+		newSelect.id    = namePattern + "__" + name;
+
+		var newOption;
+		for (var i = 0; i < restrictionNode.childNodes.length; i++) {
+			if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:enumeration' ) {
+
+				newOption = document.createElement("option");
+				newOption.innerHTML = getValueAttributeByName(restrictionNode.childNodes[i], 'value');
+
+				newSelect.appendChild(newOption);
+			}
+		}
+
+		var newLabel = document.createElement("label");
+		newLabel.innerHTML = label;
+		newLabel.appendChild(newSelect);
+		return newLabel;
+	}
+
 	function generateFormFromSimpleTextNode(xmlNode, namePattern) {
-		var name = getValueAttributesByName(xmlNode, "name");
-		var label = name;
+		var name = getValueAttributeByName(xmlNode, "name");
+		var label;
 		for (var i = 0; i < xmlNode.childNodes.length; i++) {
 			if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:annotation' ) {
 				label = getNodeByTagName(xmlNode.childNodes[i], "xs:appinfo");
@@ -200,30 +233,24 @@
 				docWriteBr( xmlMicoxArvore(xml, ''));
 			} else {
 
-				var tagRaiz;
-				var elemRoot;
-				var node;
 
-				tagRaiz = xml.getElementsByTagName('xs:schema')[0];
-				elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
-
-				node = getNodeByTagName(elemRoot, 'xs:annotation');
-				node = getNodeByTagName(node, 'xs:appinfo');
-				node = getNodeByTagName(node, 'formAttibutes');
+				var tagRaiz  = xml.getElementsByTagName('xs:schema')[0];
+				var elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
+				var elem;
 
 		        var form = document.createElement("form");
-		        form.action = getTextByTagName(node,'action');
-		        form.method = getTextByTagName(node,'method');
-		        form.name	= getTextByTagName(node,'name');
-		        form.id 	= getTextByTagName(node,'id');
+		        form.action = 'teste.php';
+		        form.method = 'post';
+		        form.name	= 'formCadernoA';
+		        form.id 	= 'formCadernoA';
 
 				for ( var i = 0; i < elemRoot.childNodes.length; i++ ) {
-					if ( elemRoot.childNodes[i].nodeType == 1 && elemRoot.childNodes[i].nodeName == 'xs:element' ) {
-						var elHtml = generateFormFromNode(elemRoot.childNodes[i],"xsdform___"+form.name );
+					elem = elemRoot.childNodes[i];
+					if ( elem.nodeType == 1 && elem.nodeName == 'xs:element' ) {
+						var elHtml = generateFormFromNode(elem, "xsdform___" + form.name );
 						form.appendChild(elHtml);
 					}
 				}
-
 				getById('xsdform_container').appendChild( form );
 
 			}

@@ -1,75 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xs:element name="formCadernoA">
-		<xs:annotation>
-			<xs:appinfo>
-				<formAttibutes>
-					<action>teste.php</action>
-					<method>post</method>
-					<name>formCadernoA</name>
-					<id>formCadernoA</id>
-				</formAttibutes>
-			</xs:appinfo>
-		</xs:annotation>
 		<xs:element name="identificacao">
 			<xs:annotation>
 				<xs:appinfo>
-					<legend>Identificacao</legend>
+					<label>Identificacao</label>
 				</xs:appinfo>
 			</xs:annotation>
 			<xs:complexType>
 				<xs:sequence>
 					<xs:element name="codigoPMF" type="xs:integer">
 						<xs:annotation>
-							<xs:appinfo>Codigo PMF</xs:appinfo>
+							<xs:appinfo>
+								<label>Codigo PMF</label>
+							</xs:appinfo>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="data" type="xs:date">
 						<xs:annotation>
-							<xs:appinfo>Data</xs:appinfo>
+							<xs:appinfo>
+								<label>Data</label>
+							</xs:appinfo>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="orgaoCadastrador" type="xs:string">
 						<xs:annotation>
-							<xs:appinfo>Orgao Cadastrador</xs:appinfo>
+							<xs:appinfo>
+								<label>Orgao Cadastrador</label>
+							</xs:appinfo>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="entrevistador" type="xs:string">
 						<xs:annotation>
-							<xs:appinfo>Entrevistador</xs:appinfo>
+							<xs:appinfo>
+								<label>Orgao Cadastrador</label>
+							</xs:appinfo>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="titularBeneficiario" type="xs:string">
 						<xs:annotation>
-							<xs:appinfo>Titular Beneficiario</xs:appinfo>
+							<xs:appinfo>
+								<label>Titular Beneficiario</label>
+							</xs:appinfo>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="nomeComunidade" type="xs:string">
 						<xs:annotation>
-							<xs:appinfo>Nome da Comunidade</xs:appinfo>
+							<xs:appinfo>
+								<label>Nome da Comunidade</label>
+							</xs:appinfo>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="tipoDemanda">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Tipo de Demanda</label>
+							</xs:appinfo>
+						</xs:annotation>
 						<xs:simpleType>
 							<xs:restriction base="xs:string">
-								<xs:enumeration value="espontanea"/>
-								<xs:enumeration value="naoEspontanea"/>
+								<xs:enumeration value="Espontanea"/>
+								<xs:enumeration value="nao Espontanea"/>
 							</xs:restriction>
 						</xs:simpleType>
-						<xs:annotation>
-							<xs:appinfo>Tipo de Demanda</xs:appinfo>
-						</xs:annotation>
 					</xs:element>
 					<xs:element name="cartao">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Cartao</label>
+							</xs:appinfo>
+						</xs:annotation>
 						<xs:simpleType>
 							<xs:restriction base="xs:string">
 								<xs:enumeration value="entregue"/>
 								<xs:enumeration value="nao entregue"/>
 							</xs:restriction>
 						</xs:simpleType>
-						<xs:annotation>
-							<xs:appinfo>Cartao</xs:appinfo>
-						</xs:annotation>
 					</xs:element>
 				</xs:sequence>
 			</xs:complexType>
