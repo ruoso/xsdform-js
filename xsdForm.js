@@ -257,20 +257,19 @@
 		}
 		var frag = document.createDocumentFragment();
 		var dt = document.createElement('dt');
-		var dd = document.createElement('dd');
+                dt.class = "dtsemdd";
 
 		var newInput = document.createElement('input');
 		newInput.type  = 'checkbox';
 		newInput.name  = namePattern + "__" + name;
 		newInput.id    = namePattern + "__" + name;
-		dd.appendChild(newInput);
 
 		var newLabel = document.createElement("label");
 		newLabel.innerHTML = label;
+		dt.appendChild(newInput);
 		dt.appendChild(newLabel);
 
 		frag.appendChild(dt);
-		frag.appendChild(dd);
 
 		return frag;
 	}
