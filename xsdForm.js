@@ -260,14 +260,16 @@
 				var tagRaiz  = xml.getElementsByTagName('xs:schema')[0];
 				var elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
 				var elem;
+				var frag = document.createDocumentFragment();
 
 				for ( var i = 0; i < elemRoot.childNodes.length; i++ ) {
 					elem = elemRoot.childNodes[i];
 					if ( elem.nodeType == 1 && elem.nodeName == 'xs:element' ) {
 						var elHtml = generateFormFromNode(elem, "xsdform___" + getValueAttributeByName(elemRoot, 'name') );
+						frag.appendChild(elHtml);
 					}
 				}
-				getById(containerId).appendChild( elHtml );
+				getById(containerId).appendChild( frag );
 
 			}
 
