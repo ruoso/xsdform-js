@@ -159,6 +159,8 @@
 		var fieldset = document.createElement('fieldset');
 		fieldset.appendChild(legend);
 
+		var dl = document.createElement('dl');
+
 		for (var i = 0; i < xmlNode.childNodes.length; i++) {
 			var el = xmlNode.childNodes[i];
 			if (el.nodeType == 1 && el.nodeName == 'xs:sequence') {
@@ -166,7 +168,8 @@
 					if (el.childNodes[j].nodeType == 1 && el.childNodes[j].nodeName == "xs:element") {
 						var elHtml = generateFormFromNode(el.childNodes[j], namePattern + "__" + name);
 						if (elHtml) {
-							fieldset.appendChild(elHtml);
+							dl.appendChild(elHtml);
+							fieldset.appendChild(dl);
 						}
 					}
 				}
@@ -180,12 +183,17 @@
 	}
 
 	function generateFormFromSimpleTypeNode(xmlNode, namePattern, name, label) {
-		var restrictionNode;
-		restrictionNode = getNodeByTagName(xmlNode, 'xs:restriction');
+
+		var frag = document.createDocumentFragment();
+		var dt = document.createElement('dt');
+		var dd = document.createElement('dd');
+
+		var restrictionNode = getNodeByTagName(xmlNode, 'xs:restriction');
 
 		var newSelect = document.createElement('select');
 		newSelect.name  = namePattern + "__" + name;
 		newSelect.id    = namePattern + "__" + name;
+		dd.appendChild(newSelect);
 
 		var newOption;
 		for (var i = 0; i < restrictionNode.childNodes.length; i++) {
@@ -200,8 +208,12 @@
 
 		var newLabel = document.createElement("label");
 		newLabel.innerHTML = label;
-		newLabel.appendChild(newSelect);
-		return newLabel;
+		dt.appendChild(newLabel);
+
+		frag.appendChild(dt);
+		frag.appendChild(dd);
+
+		return frag;
 	}
 
 	function generateFormFieldFromSimpleTextNode(xmlNode, namePattern) {
@@ -214,15 +226,24 @@
 			}
 		}
 
+		var frag = document.createDocumentFragment();
+		var dt = document.createElement('dt');
+		var dd = document.createElement('dd');
+
 		var newInput = document.createElement('input');
 		newInput.type  = 'text';
 		newInput.name  = namePattern + "__" + name;
 		newInput.id    = namePattern + "__" + name;
+		dd.appendChild(newInput);
 
 		var newLabel = document.createElement("label");
 		newLabel.innerHTML = label;
-		newLabel.appendChild(newInput);
-		return newLabel;
+		dt.appendChild(newLabel);
+
+		frag.appendChild(dt);
+		frag.appendChild(dd);
+
+		return frag;
 	}
 
 	function generateFormFieldCheckboxFromSimpleTextNode(xmlNode, namePattern) {
@@ -234,16 +255,24 @@
 				label = getTextByTagName(label, "label");
 			}
 		}
+		var frag = document.createDocumentFragment();
+		var dt = document.createElement('dt');
+		var dd = document.createElement('dd');
 
 		var newInput = document.createElement('input');
 		newInput.type  = 'checkbox';
 		newInput.name  = namePattern + "__" + name;
 		newInput.id    = namePattern + "__" + name;
+		dd.appendChild(newInput);
 
 		var newLabel = document.createElement("label");
 		newLabel.innerHTML = label;
-		newLabel.appendChild(newInput);
-		return newLabel;
+		dt.appendChild(newLabel);
+
+		frag.appendChild(dt);
+		frag.appendChild(dd);
+
+		return frag;
 	}
 
 	function generateForm(xsdFile,containerId) {
