@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xs:element name="formCadernoA">
 		<xs:element name="identificacao">
 			<xs:annotation>
 				<xs:appinfo>
-					<label>Identificacao</label>
+					<label>Identificaçao</label>
 				</xs:appinfo>
 			</xs:annotation>
 			<xs:complexType>
@@ -12,7 +12,7 @@
 					<xs:element name="codigoPMF" type="xs:integer">
 						<xs:annotation>
 							<xs:appinfo>
-								<label>Codigo PMF</label>
+								<label>Código PMF</label>
 							</xs:appinfo>
 						</xs:annotation>
 					</xs:element>
@@ -26,21 +26,21 @@
 					<xs:element name="orgaoCadastrador" type="xs:string">
 						<xs:annotation>
 							<xs:appinfo>
-								<label>Orgao Cadastrador</label>
+								<label>Órgão Cadastrador</label>
 							</xs:appinfo>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="entrevistador" type="xs:string">
 						<xs:annotation>
 							<xs:appinfo>
-								<label>Orgao Cadastrador</label>
+								<label>Entrevistador</label>
 							</xs:appinfo>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="titularBeneficiario" type="xs:string">
 						<xs:annotation>
 							<xs:appinfo>
-								<label>Titular Beneficiario</label>
+								<label>Titular Beneficiário</label>
 							</xs:appinfo>
 						</xs:annotation>
 					</xs:element>
@@ -59,6 +59,7 @@
 						</xs:annotation>
 						<xs:simpleType>
 							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
 								<xs:enumeration value="Espontanea"/>
 								<xs:enumeration value="nao Espontanea"/>
 							</xs:restriction>
@@ -72,11 +73,130 @@
 						</xs:annotation>
 						<xs:simpleType>
 							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
 								<xs:enumeration value="entregue"/>
 								<xs:enumeration value="nao entregue"/>
 							</xs:restriction>
 						</xs:simpleType>
 					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:element>
+
+		<xs:element name="identificacao">
+			<xs:annotation>
+				<xs:appinfo>
+					<label>Endereco do Imovel</label>
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:complexType>
+				<xs:sequence>
+					<xs:element name="logradouro" type="xs:string">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Logradouro</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="numero" type="xs:integer">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Numero</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="complemento" type="xs:string">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Complemento</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="localizacaoCartografica" type="xs:string">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>localizacao Cartografica</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="bairro" type="xs:string">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Bairro</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="telefone" type="xs:string">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Telefone</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="informante">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Informante</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="presente"/>
+								<xs:enumeration value="ausente"/>
+								<xs:enumeration value="recusou-se"/>
+								<xs:enumeration value="casa desocupada"/>
+								<xs:enumeration value="terreno"/>
+								<xs:enumeration value="casa fechada"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="observacoes" type="xs:string">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Observacoes</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="visita1" type="xs:dateTime">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>1 Visita</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="visita2" type="xs:dateTime">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>2 Visita</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="visita3" type="xs:dateTime">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>3 Visita</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="notificacao" type="xs:dateTime">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Notificacao</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:element>
+		<xs:element name="identificacao">
+			<xs:annotation>
+				<xs:appinfo>
+					<label>Caracteristicas do Imovel</label>
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:complexType>
+				<xs:sequence>
 					<xs:element name="localizacao">
 						<xs:annotation>
 							<xs:appinfo>
@@ -99,7 +219,664 @@
 										</xs:appinfo>
 									</xs:annotation>
 								</xs:element>
+								<xs:element name="praca" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Praca</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="areaVerde" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Area Verde</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="terroParaEquipamentoComunitario" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Terro p/ Equipamento Comunitario</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="outro" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Outro</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
 								<xs:element name="localizacaoOutro" type="xs:string">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Outro</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="areaPreservacao">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Area de Preservacao</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="sim"/>
+								<xs:enumeration value="nao"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="tipologiaUso">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Tipologia de Uso</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="residencial"/>
+								<xs:enumeration value="comercial"/>
+								<xs:enumeration value="servicos"/>
+								<xs:enumeration value="mista"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="tipoServico" type="xs:string">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Tipo de Servico</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="situacaoFundiaria">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Situacao Fundiaria</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="publico"/>
+								<xs:enumeration value="privato"/>
+								<xs:enumeration value="nao sabe"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="compartimentosMoradia">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Compartimentos da Moradia</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="qtdQuartos" type="xs:integer">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Quarto(s)</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="qtdSalas" type="xs:integer">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Sala(s)</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="qtdCozinhas" type="xs:integer">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Cozinha(s)</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="qtdBanheiros" type="xs:integer">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Banheiro(s)</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="qtdQuintais" type="xs:integer">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Quintal(s)</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="qtdUotros" type="xs:integer">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Outro(s)</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="localizacaoOutro" type="xs:string">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Outro</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="tipoMoradia">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Tipo de Moradia</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="Propria/Regularizada"/>
+								<xs:enumeration value="Comprada(Propria)"/>
+								<xs:enumeration value="cedida"/>
+								<xs:enumeration value="invadida"/>
+								<xs:enumeration value="trocada"/>
+								<xs:enumeration value="alugada"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="numMatricula" type="xs:integer">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Num. Matricula</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="cartorio" type="xs:string">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Cartorio</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="zona" type="xs:string">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Zona</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="nomeProprietario" type="xs:string">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Nome do Proprietario</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="valor" type="xs:float">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Valor</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="enderecoProprietario" type="xs:string">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Endereco do Proprietario</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="telefoneProprietario" type="xs:string">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Telefone do Proprietario</label>
+							</xs:appinfo>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="tipologiaConstrucao">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Tipologia de Construcao</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="alvenaria"/>
+								<xs:enumeration value="taipa"/>
+								<xs:enumeration value="madeira"/>
+								<xs:enumeration value="pre-moldado"/>
+								<xs:enumeration value="papelao"/>
+								<xs:enumeration value="plastico"/>
+								<xs:enumeration value="lona"/>
+								<xs:enumeration value="mista"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="tipoCobertura">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Tipo de Cobertura</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="telha"/>
+								<xs:enumeration value="palha"/>
+								<xs:enumeration value="plastico/Madeira"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="tipoPiso">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Tipo de Piso</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="Barro Batido"/>
+								<xs:enumeration value="tabua"/>
+								<xs:enumeration value="ceramica"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="revestimentoParede">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Revestimento de Parede</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="Com Reboco"/>
+								<xs:enumeration value="Sem Reboco"/>
+								<xs:enumeration value="Pintura"/>
+								<xs:enumeration value="plastico"/>
+								<xs:enumeration value="papelao"/>
+								<xs:enumeration value="madeira"/>
+								<xs:enumeration value="taipa"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="casaEmSituacaRisco">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Casa Em Situaca de Risco</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="Sim"/>
+								<xs:enumeration value="Nao"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="tipoRisco">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Tipo de Risco</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="alagamento" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Alagamento</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="inundacao" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Inundacao</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="deslizamento" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Deslizamento</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="viaFerrea" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Via Ferrea</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="linhaAltaTensao" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Linha de Alta Tensao</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="outro" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Outro</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="tipoRiscoOutro" type="xs:string">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Outro</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:element>
+		<xs:element name="infraestrutura" >
+			<xs:annotation>
+				<xs:appinfo>
+					<label>Infraestrutura</label>
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:complexType>
+				<xs:sequence>
+					<xs:element name="redeDeAgua">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Rede de Agua</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="Sim"/>
+								<xs:enumeration value="Nao"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="abastecimentoAgua">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Abastecimento de Agua</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="Publico"/>
+								<xs:enumeration value="Privado"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="abastecimentoAgua">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Abastecimento</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="tipoAbastecimentoAgua">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Tipo de Abastecimento de Agua</label>
+										</xs:appinfo>
+									</xs:annotation>
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="Não Informado"/>
+											<xs:enumeration value="Hidrometro Individual"/>
+											<xs:enumeration value="Hidrometro Coletivo"/>
+											<xs:enumeration value="Ligacao Cladestina"/>
+											<xs:enumeration value="poco"/>
+											<xs:enumeration value="Chafariz"/>
+											<xs:enumeration value="Outro"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:element>
+								<xs:element name="tipoAbastecimentoAguaOutro" type="xs:string">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Outro</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="redeColetaEsgoto">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Rede de Coleta de Esgoto</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="Sim"/>
+								<xs:enumeration value="Nao"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="esgotamentoSanitario">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Esgotamento Sanitario</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="redeOficial"/>
+								<xs:enumeration value="redeNaoOficial"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="esgotamentoSanitario2">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Esgotamento Sanitário</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="tipo">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Tipo</label>
+										</xs:appinfo>
+									</xs:annotation>
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="Não Informado"/>
+											<xs:enumeration value="CAGECE"/>
+											<xs:enumeration value="Fossa/Sumidouro"/>
+											<xs:enumeration value="Vala Em Via Pública"/>
+											<xs:enumeration value="Rede de Drenagem/Recursos Hídricos"/>
+											<xs:enumeration value="outro"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:element>
+								<xs:element name="tipoAbastecimentoAgua2Outro" type="xs:string">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Outro</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="tipoLigacaoRedeEletrica">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Tipo de Ligação com a Rede de Energia Elétrica</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="Inexistente"/>
+								<xs:enumeration value="Oficial"/>
+								<xs:enumeration value="Clandestina"/>
+								<xs:enumeration value="Cortada"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="tipoPavimentacao">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Tipo de Pavimentação</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="Asfalto"/>
+								<xs:enumeration value="Pedra Tosca"/>
+								<xs:enumeration value="Piçarra"/>
+								<xs:enumeration value="Paralelepipedo"/>
+								<xs:enumeration value="Sem Pavimentação"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="tipoDrenagem">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Tipo de Drenagem</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="galeriaSubterranea" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Galeria Subterrânea</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="sarjeta" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Sarjeta</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="cursoDaguaCanalizado" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Curso D'água Canalizado</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="cursoDaguaNaoCanalizado" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Curso Não D'água Canalizado</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="outro" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Outro</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="tipoDrenagemOutro" type="xs:string">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Outro</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="tipoServicoTelefonicoPredominante">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Tipo de Serviço Telefônico Utilizado Predominantemente</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="Fixo"/>
+								<xs:enumeration value="Celular"/>
+								<xs:enumeration value="Publico"/>
+								<xs:enumeration value="Comunitário"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="coletaSistematicaLixo">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Coleta Sistemática (Lixo)</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Não Informado"/>
+								<xs:enumeration value="Sim"/>
+								<xs:enumeration value="Nao"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="destinoLixo">
+						<xs:annotation>
+							<xs:appinfo>
+								<label>Destino do Lixo</label>
+							</xs:appinfo>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="sistemaColeta" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Sistema de Coleta</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="sarjeta" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Sarjeta</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="cursoDaguaCanalizado" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Curso D'água Canalizado</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="cursoDaguaNaoCanalizado" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Curso Não D'água Canalizado</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="outro" type="xs:boolean">
+									<xs:annotation>
+										<xs:appinfo>
+											<label>Outro</label>
+										</xs:appinfo>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="tipoDrenagemOutro" type="xs:string">
 									<xs:annotation>
 										<xs:appinfo>
 											<label>Outro</label>

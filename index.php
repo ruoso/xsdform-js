@@ -7,7 +7,7 @@
 		<link href="style.css" rel="stylesheet" type="text/css"></link>
 		<script src="xsdForm.js" type="text/javascript"></script>
     </head>
-    <body onload="generateForm();" >
+    <body onload="generateForm('test.xsd.xml','xsdform_container');" >
 		<div id="xsdform_container" ></div>
     </body>
 </html>

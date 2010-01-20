@@ -120,7 +120,7 @@
 			// pre-defined types
 			if (type == "xs:integer"  ||
 				type == "xs:string"   ||
-				type == "xs:datetime" ||
+				type == "xs:dateTime" ||
 				type == "xs:date"     ||
 				type == "xs:float") {
 				return generateFormFieldFromSimpleTextNode(xmlNode, namePattern);
@@ -246,11 +246,11 @@
 		return newLabel;
 	}
 
-	function generateForm() {
+	function generateForm(xsdFile,containerId) {
 		try {
 
 			//carrega o xml
-			var xml = xmlLoader("test.xsd.xml");
+			var xml = xmlLoader(xsdFile);
 
 			if ( false ) {
 				docWriteBr( xmlMicoxArvore(xml, ''));
@@ -261,20 +261,13 @@
 				var elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
 				var elem;
 
-		        var form = document.createElement("form");
-		        form.action = 'teste.php';
-		        form.method = 'post';
-		        form.name	= 'formCadernoA';
-		        form.id 	= 'formCadernoA';
-
 				for ( var i = 0; i < elemRoot.childNodes.length; i++ ) {
 					elem = elemRoot.childNodes[i];
 					if ( elem.nodeType == 1 && elem.nodeName == 'xs:element' ) {
-						var elHtml = generateFormFromNode(elem, "xsdform___" + form.name );
-						form.appendChild(elHtml);
+						var elHtml = generateFormFromNode(elem, "xsdform___" + getValueAttributeByName(elemRoot, 'name') );
 					}
 				}
-				getById('xsdform_container').appendChild( form );
+				getById(containerId).appendChild( elHtml );
 
 			}
 
