@@ -1,12 +1,21 @@
-
-label {
-	display: block;
-	position: relative;
-	margin: 0.4em;
+fieldset
+{
+    padding: 0.8em;
+    margin: 0.4em;
 }
 
-label input, label select {
-	position: absolute;
-	left: 35em;
-	top: -2px;
+fieldset dd
+{
+  margin : 0;
+  padding:2px;
+  position: relative;
+  top: -1.7em;
+  margin-bottom: -1em;
+  left: 20em;
+}
+
+fieldset dt
+{
+  width: 20em;
+  position: relative;
 }
