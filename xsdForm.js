@@ -7,6 +7,15 @@
 		return document.getElementsByName(strId);
 	}
 
+	function docWrite(text) {
+		document.write( text );
+	}
+
+	function docWriteBr(text) {
+		document.write( text );
+		document.write( '<br>' );
+	}
+
 	function xmlLoader(pathXML) {
 		var loader;
 		if (window.XMLHttpRequest) {
@@ -134,8 +143,12 @@
 			for (var i = 0; i < xmlNode.childNodes.length; i++) {
 				if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:annotation' ) {
 
+					/*
 					label = getNodeByTagName(xmlNode.childNodes[i], "xs:appinfo");
 					label = getTextByTagName(label, 'label');
+					*/
+
+					label = getTextTagInAnnotationAppinfo(xmlNode.childNodes[i], 'label', true);
 
 				} else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:complexType') {
 
@@ -189,10 +202,11 @@
 		var dd = document.createElement('dd');
 
 		var restrictionNode = getNodeByTagName(xmlNode, 'xs:restriction');
+		var inputName = namePattern + "__" + name;
 
 		var newSelect = document.createElement('select');
-		newSelect.name  = namePattern + "__" + name;
-		newSelect.id    = namePattern + "__" + name;
+		newSelect.name  = inputName;
+		newSelect.id    = inputName;
 		dd.appendChild(newSelect);
 
 		var newOption;
@@ -208,38 +222,52 @@
 
 		var newLabel = document.createElement("label");
 		newLabel.innerHTML = label;
-		dt.appendChild(newLabel);
+		newLabel.htmlFor = inputName;
 
+		dt.appendChild(newLabel);
 		frag.appendChild(dt);
 		frag.appendChild(dd);
 
 		return frag;
 	}
 
-	function generateFormFieldFromSimpleTextNode(xmlNode, namePattern) {
-		var name = getValueAttributeByName(xmlNode, "name");
-		var label;
-		for (var i = 0; i < xmlNode.childNodes.length; i++) {
-			if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:annotation' ) {
-				label = getNodeByTagName(xmlNode.childNodes[i], "xs:appinfo");
-				label = getTextByTagName(label, "label");
+	function getTextTagInAnnotationAppinfo(xmlNode, strTag, annotation) {
+
+		var xmlNodeAux;
+		if ( annotation == undefined ) {
+			for (var i = 0; i < xmlNode.childNodes.length; i++) {
+				if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:annotation' ) {
+					xmlNodeAux = getNodeByTagName(xmlNode.childNodes[i], "xs:appinfo");
+					break;
+				}
 			}
+		} else if ( annotation == true ) {
+			xmlNodeAux = getNodeByTagName(xmlNode, "xs:appinfo");
 		}
+
+		return getTextByTagName(xmlNodeAux, strTag);
+	}
+
+	function generateFormFieldFromSimpleTextNode(xmlNode, namePattern) {
 
 		var frag = document.createDocumentFragment();
 		var dt = document.createElement('dt');
 		var dd = document.createElement('dd');
 
+		var name = getValueAttributeByName(xmlNode, "name");
+		var inputName = namePattern + "__" + name;
+
 		var newInput = document.createElement('input');
 		newInput.type  = 'text';
-		newInput.name  = namePattern + "__" + name;
-		newInput.id    = namePattern + "__" + name;
+		newInput.name  = inputName;
+		newInput.id    = inputName;
 		dd.appendChild(newInput);
 
 		var newLabel = document.createElement("label");
-		newLabel.innerHTML = label;
-		dt.appendChild(newLabel);
+		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label');
+		newLabel.htmlFor = inputName;
 
+		dt.appendChild(newLabel);
 		frag.appendChild(dt);
 		frag.appendChild(dd);
 
@@ -247,28 +275,23 @@
 	}
 
 	function generateFormFieldCheckboxFromSimpleTextNode(xmlNode, namePattern) {
-		var name = getValueAttributeByName(xmlNode, "name");
-		var label;
-		for (var i = 0; i < xmlNode.childNodes.length; i++) {
-			if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:annotation' ) {
-				label = getNodeByTagName(xmlNode.childNodes[i], "xs:appinfo");
-				label = getTextByTagName(label, "label");
-			}
-		}
 		var frag = document.createDocumentFragment();
+		var name = getValueAttributeByName(xmlNode, "name");
+		var inputName = namePattern + "__" + name;
 		var dt = document.createElement('dt');
         dt.setAttribute('class', 'dtsemdd');
 
 		var newInput = document.createElement('input');
 		newInput.type  = 'checkbox';
-		newInput.name  = namePattern + "__" + name;
-		newInput.id    = namePattern + "__" + name;
+		newInput.name  = inputName;
+		newInput.id    = inputName;
 
 		var newLabel = document.createElement("label");
-		newLabel.innerHTML = label;
+		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label');
+		newLabel.htmlFor = inputName;
+
 		dt.appendChild(newInput);
 		dt.appendChild(newLabel);
-
 		frag.appendChild(dt);
 
 		return frag;
@@ -279,27 +302,19 @@
 
 			//carrega o xml
 			var xml = xmlLoader(xsdFile);
+			var tagRaiz  = xml.getElementsByTagName('xs:schema')[0];
+			var elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
+			var elem;
+			var frag = document.createDocumentFragment();
 
-			if ( false ) {
-				docWriteBr( xmlMicoxArvore(xml, ''));
-			} else {
-
-
-				var tagRaiz  = xml.getElementsByTagName('xs:schema')[0];
-				var elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
-				var elem;
-				var frag = document.createDocumentFragment();
-
-				for ( var i = 0; i < elemRoot.childNodes.length; i++ ) {
-					elem = elemRoot.childNodes[i];
-					if ( elem.nodeType == 1 && elem.nodeName == 'xs:element' ) {
-						var elHtml = generateFormFromNode(elem, "xsdform___" + getValueAttributeByName(elemRoot, 'name') );
-						frag.appendChild(elHtml);
-					}
+			for ( var i = 0; i < elemRoot.childNodes.length; i++ ) {
+				elem = elemRoot.childNodes[i];
+				if ( elem.nodeType == 1 && elem.nodeName == 'xs:element' ) {
+					var elHtml = generateFormFromNode(elem, "xsdform___" + getValueAttributeByName(elemRoot, 'name') );
+					frag.appendChild(elHtml);
 				}
-				getById(containerId).appendChild( frag );
-
 			}
+			getById(containerId).appendChild( frag );
 
 
 		} catch (myError) {
