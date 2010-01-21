@@ -257,7 +257,7 @@
 		}
 		var frag = document.createDocumentFragment();
 		var dt = document.createElement('dt');
-                dt.class = "dtsemdd";
+        dt.setAttribute('class', 'dtsemdd');
 
 		var newInput = document.createElement('input');
 		newInput.type  = 'checkbox';
