@@ -4,8 +4,9 @@ fieldset
     margin: 0.4em;
 }
 
-fieldset dd
+fieldset dl dd
 {
+  width: 30em;
   margin : 0;
   padding:2px;
   position: relative;
@@ -14,12 +15,19 @@ fieldset dd
   left: 15em;
 }
 
-fieldset dt
+fieldset dl dt
 {
   width: 15em;
   position: relative;
 }
 
-fieldset dt .dtsemdd {
-  width: 100% !important;
+fieldset dl dd input,
+fieldset dl dd select
+{
+  width: 100%;
+  position: relative;
+}
+
+.dtsemdd {
+  width: 30em; !important;
 }
