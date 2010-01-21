@@ -221,7 +221,7 @@
 		}
 
 		var newLabel = document.createElement("label");
-		newLabel.innerHTML = label;
+		newLabel.innerHTML = label + ':';
 		newLabel.htmlFor = inputName;
 
 		dt.appendChild(newLabel);
@@ -263,7 +263,7 @@
 		dd.appendChild(newInput);
 
 		var newLabel = document.createElement("label");
-		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label');
+		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
 		newLabel.htmlFor = inputName;
 
 		dt.appendChild(newLabel);
