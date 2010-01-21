@@ -244,7 +244,6 @@
 		} else if ( annotation == true ) {
 			xmlNodeAux = getNodeByTagName(xmlNode, "xs:appinfo");
 		}
-
 		return getTextByTagName(xmlNodeAux, strTag);
 	}
 
