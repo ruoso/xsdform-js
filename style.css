@@ -11,11 +11,15 @@ fieldset dd
   position: relative;
   top: -1.7em;
   margin-bottom: -1em;
-  left: 20em;
+  left: 15em;
 }
 
 fieldset dt
 {
-  width: 20em;
+  width: 15em;
   position: relative;
+}
+
+fieldset dt .dtsemdd {
+  width: 100% !important;
 }
