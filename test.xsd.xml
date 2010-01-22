@@ -85,7 +85,7 @@
 			</xs:complexType>
 		</xs:element>
 
-		<xs:element name="identificacao">
+		<xs:element name="enderecoImovel">
 			<xs:annotation>
 				<xs:appinfo>
 					<label>Endereco do Imovel</label>
