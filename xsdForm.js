@@ -398,18 +398,8 @@
 			var xml = xmlLoader(xsdFile);
 			var tagRaiz  = xml.getElementsByTagName('xs:schema')[0];
 			var elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
-			var elem;
-			var frag = document.createDocumentFragment();
-
-			for ( var i = 0; i < elemRoot.childNodes.length; i++ ) {
-				elem = elemRoot.childNodes[i];
-				if ( elem.nodeType == 1 && elem.nodeName == 'xs:element' ) {
-					var elHtml = generateFormFromNode(elem, "xsdform___" + getValueAttributeByName(elemRoot, 'name') );
-					//alert(elHtml.nodeName);
-					frag.appendChild(elHtml);
-				}
-			}
-			getById(containerId).appendChild( frag );
+                        var elHtml = generateFormFromNode(elemRoot, "xsdform___");
+			getById(containerId).appendChild( elHtml );
 
 
 		} catch (myError) {
@@ -423,22 +413,10 @@
 			var xml = xmlLoader(xsdFile);
 			var tagRaiz  = xml.getElementsByTagName('xs:schema')[0];
 			var elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
-			var elem;
-
 			var odoc = document.implementation.createDocument("", "", null); 
-			var generated = odoc.createElement(getValueAttributeByName(elemRoot,"name"));
+                        var generated = generateXmlFromNode(odoc,elemRoot, "xsdform___");
 			odoc.appendChild(generated);
-
-			for ( var i = 0; i < elemRoot.childNodes.length; i++ ) {
-				elem = elemRoot.childNodes[i];
-				if ( elem.nodeType == 1 && elem.nodeName == 'xs:element' ) {
-					var subel = generateXmlFromNode(odoc,elem, "xsdform___" + getValueAttributeByName(elemRoot, 'name') );
-					generated.appendChild(subel);
-				}
-			}
-
 			input_to_set.value = ((new XMLSerializer()).serializeToString(odoc));
-
 		} catch (myError) {
 			alert( myError.name + ': ' + myError.message + "\n" + myError);
 		}	

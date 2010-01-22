@@ -1,6 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xs:element name="formCadernoA">
+	  <xs:annotation>
+	    <xs:appinfo>
+	      <label>Recadastramento Vila do Mar - Caderno A</label>
+	    </xs:appinfo>
+	  </xs:annotation>
           <xs:complexType>
             <xs:sequence>
 		<xs:element name="identificacao">
@@ -191,7 +196,7 @@
 				</xs:sequence>
 			</xs:complexType>
 		</xs:element>
-		<xs:element name="identificacao">
+		<xs:element name="caracteristicasImovel">
 			<xs:annotation>
 				<xs:appinfo>
 					<label>Caracteristicas do Imovel</label>
@@ -606,7 +611,7 @@
 							</xs:restriction>
 						</xs:simpleType>
 					</xs:element>
-					<xs:element name="abastecimentoAgua">
+					<xs:element name="abastecimentoAguaPublicoPrivado">
 						<xs:annotation>
 							<xs:appinfo>
 								<label>Abastecimento de Agua</label>
