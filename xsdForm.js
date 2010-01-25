@@ -1,3 +1,9 @@
+
+	function removeById(strId) {
+		var elem = getById(strId);
+		elem.parentNode.removeChild(elem);
+	}
+
 	function getById(strId) {
 		return document.getElementById(strId);
 	}
@@ -126,12 +132,14 @@
 		type = getValueAttributeByName(xmlNode, "type");
 		if (type != null) {
 			// pre-defined types
-			if (type == "xs:integer"  ||
-				type == "xs:string"   ||
-				type == "xs:dateTime" ||
-				type == "xs:date"     ||
-				type == "xs:float") {
+			if (type == "xs:string" || type == "xs:float") {
 				return generateFormFieldFromSimpleTextNode(xmlNode, namePattern);
+			} else if ( type == "xs:integer" ) {
+				return generateFormFieldIntegerFromSimpleTextNode(xmlNode, namePattern);
+			} else if ( type == "xs:date" ) {
+				return generateFormFieldDateFromSimpleTextNode(xmlNode, namePattern);
+			} else if ( type == "xs:dateTime" ) {
+				return generateFormFieldDateTimeFromSimpleTextNode(xmlNode, namePattern);
 			} else if ( type == "xs:boolean" ) {
 				return generateFormFieldCheckboxFromSimpleTextNode(xmlNode, namePattern);
 			} else {
@@ -141,20 +149,12 @@
 			// inline type definition
 			for (var i = 0; i < xmlNode.childNodes.length; i++) {
 				if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:annotation' ) {
-
-					/*
-					label = getNodeByTagName(xmlNode.childNodes[i], "xs:appinfo");
-					label = getTextByTagName(label, 'label');
-					*/
-
 					label = getTextTagInAnnotationAppinfo(xmlNode.childNodes[i], 'label', true);
 
 				} else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:complexType') {
-
 					return generateFormFromComplexTypeNode(xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label );
 
 				} else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:simpleType') {
-
 					return generateFormFromSimpleTypeNode(xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label);
 
 				}
@@ -413,7 +413,7 @@
 			var tagRaiz  = xml.getElementsByTagName('xs:schema')[0];
 			var elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
 			var odoc = document.implementation.createDocument("", "", null);
-                        var generated = generateXmlFromNode(odoc,elemRoot, "xsdform___");
+            var generated = generateXmlFromNode(odoc,elemRoot, "xsdform___");
 			odoc.appendChild(generated);
 			input_to_set.value = ((new XMLSerializer()).serializeToString(odoc));
 		} catch (myError) {
@@ -421,3 +421,246 @@
 		}
 	}
 
+	function integerField(obj) {
+		var expRegNumInt = /^\d+$/; // só números
+
+		if ( !expRegNumInt.test(obj.value) ) {
+			obj.value = obj.value.substr(0, (obj.value.length - 1));
+		}
+		obj.focus();
+	}
+
+	function validateDate(pObj) {
+		var dia = parseInt( pObj.value.substring(8,10), 10 );
+		var mes = parseInt( pObj.value.substring(5,7), 10 );
+		var ano = parseInt( pObj.value.substring(0,4), 10 );
+
+		var DateVal = mes + "/" + dia + "/" + ano;
+		var date = new Date(DateVal);
+		var mesValid = (mes - 1); // o metodo getMonth retorna o mes porem janeiro é zero
+
+		if ( date.getDate() != dia ) {
+			return false;
+		} else if ( date.getMonth() != mesValid ) {
+			return false;
+		} else if ( date.getFullYear() != ano ) {
+			return false;
+		}
+		return true;
+	}
+
+	function validateDateTime(pObj) {
+		var dia = parseInt( pObj.value.substring(8,10), 10 );
+		var mes = parseInt( pObj.value.substring(5,7), 10 );
+		var ano = parseInt( pObj.value.substring(0,4), 10 );
+
+		var hora = parseInt( pObj.value.substring(11,13), 10 );
+		var minuto = parseInt( pObj.value.substring(14,16), 10 );
+		var segundo = parseInt( pObj.value.substring(17,19), 10 );
+
+		var DateVal = mes + "/" + dia + "/" + ano + ' ' + hora + ':' + minuto + ':' + segundo;
+		var date = new Date(DateVal);
+		var mesValid = (mes - 1); // o metodo getMonth retorna o mes porem janeiro é zero
+
+		if ( date.getDate() != dia ) {
+			return false;
+		} else if ( date.getMonth() != mesValid ) {
+			return false;
+		} else if ( date.getFullYear() != ano ) {
+			return false;
+		} else if ( date.getHours() != hora ) {
+			return false;
+		} else if ( date.getHours() != hora ) {
+			return false;
+		} else if ( date.getMinutes() != minuto ) {
+			return false;
+		} else if ( date.getSeconds() != segundo ) {
+			return false;
+		}
+		return true;
+	}
+
+	function mascaraData(objFieldDate) {
+		var expRegNumInt = /^\d+$/; // só números
+
+		if ( !expRegNumInt.test( onlyNumbersDateTime( objFieldDate.value ) ) ) {
+			objFieldDate.value = objFieldDate.value.substr(0, (objFieldDate.value.length - 1));
+			return false;
+		}
+		objFieldDate.value = formatDate(objFieldDate.value);
+	}
+
+	function onlyNumbersDateTime(str) {
+		var expRegTrim = /:|-|T/g;
+		return str.replace(expRegTrim, '');
+	}
+
+	function formatDateTime(strDate) {
+		if (strDate.length == 4 || strDate.length == 7 ) {
+			strDate += '-';
+		} else if ( strDate.length == 10 ) {
+			strDate += 'T';
+		} else if ( strDate.length == 13 || strDate.length == 16 ) {
+			strDate += ':';
+		}
+		return strDate;
+	}
+
+	function formatDate(strDate) {
+		if (strDate.length == 4 || strDate.length == 7 ) {
+			strDate += '-';
+		}
+		return strDate;
+	}
+
+	function mascaraDateTime(objFieldDate) {
+		var date = objFieldDate.value;
+		var expRegNumInt = /^\d+$/; // só números
+
+		if ( !expRegNumInt.test( onlyNumbersDateTime( objFieldDate.value ) ) ) {
+			objFieldDate.value = objFieldDate.value.substr(0, (objFieldDate.value.length - 1));
+			return false;
+		}
+
+		objFieldDate.value = formatDateTime(date);
+	}
+
+	function dateField(obj) {
+		if ( !validateDate(obj) ) {
+
+			if ( getById('fieldDate__' + obj.di) == null ) {
+				var div = document.createElement('div');
+				div.setAttribute('style', 'color:red');
+				div.id = 'fieldDate__' + obj.di;
+
+				var containerField = obj.parentNode;
+				containerField.appendChild( div );
+			} else {
+				div = getById('fieldDate__' + obj.di);
+			}
+			div.innerHTML = 'Data Inválida.';
+			obj.focus();
+
+		} else {
+			try {
+				removeById('fieldDate__' + obj.di);
+			} catch (obgError) {
+			}
+		}
+	}
+
+	function dateTimeField(obj) {
+		if ( !validateDateTime(obj) ) {
+
+			if ( getById('fieldDate__' + obj.di) == null ) {
+				var div = document.createElement('div');
+				div.setAttribute('style', 'color:red');
+				div.id = 'fieldDate__' + obj.di;
+
+				var containerField = obj.parentNode;
+				containerField.appendChild( div );
+			} else {
+				div = getById('fieldDate__' + obj.di);
+			}
+			div.innerHTML = 'Data Inválida.';
+			obj.focus();
+
+		} else {
+			try {
+				removeById('fieldDate__' + obj.di);
+			} catch (obgError) {
+			}
+		}
+	}
+
+	function generateFormFieldIntegerFromSimpleTextNode(xmlNode, namePattern) {
+
+		var frag = document.createDocumentFragment();
+		var dt = document.createElement('dt');
+		var dd = document.createElement('dd');
+
+		var name = getValueAttributeByName(xmlNode, "name");
+		var inputName = namePattern + "__" + name;
+
+		var newInput = document.createElement('input');
+		newInput.type  = 'text';
+		newInput.name  = inputName;
+		newInput.id    = inputName;
+		newInput.setAttribute('onkeypress', 'integerField(this);');
+		newInput.setAttribute('onkeyup', 'integerField(this);');
+		dd.appendChild(newInput);
+
+		var newLabel = document.createElement("label");
+		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
+		newLabel.htmlFor = inputName;
+
+		dt.appendChild(newLabel);
+		frag.appendChild(dt);
+		frag.appendChild(dd);
+
+		return frag;
+	}
+
+	function generateFormFieldDateFromSimpleTextNode(xmlNode, namePattern) {
+
+		var frag = document.createDocumentFragment();
+		var dt = document.createElement('dt');
+		var dd = document.createElement('dd');
+
+		var name = getValueAttributeByName(xmlNode, "name");
+		var inputName = namePattern + "__" + name;
+
+		var newInput = document.createElement('input');
+		newInput.type  = 'text';
+		newInput.name  = inputName;
+		newInput.id    = inputName;
+		newInput.setAttribute('maxlength', '10');
+		//newInput.maxlength = 10;
+		//newInput.setAttribute('onkeyup', 'dateField(this);');
+		newInput.setAttribute('onkeypress', 'mascaraData(this);');
+		newInput.setAttribute('onkeyup', 'mascaraData(this);');
+		newInput.setAttribute('onblur', 'dateField(this);');
+		dd.appendChild(newInput);
+
+		var newLabel = document.createElement("label");
+		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
+		newLabel.htmlFor = inputName;
+
+		dt.appendChild(newLabel);
+		frag.appendChild(dt);
+		frag.appendChild(dd);
+
+		return frag;
+	}
+
+	function generateFormFieldDateTimeFromSimpleTextNode(xmlNode, namePattern) {
+
+		var frag = document.createDocumentFragment();
+		var dt = document.createElement('dt');
+		var dd = document.createElement('dd');
+
+		var name = getValueAttributeByName(xmlNode, "name");
+		var inputName = namePattern + "__" + name;
+
+		var newInput = document.createElement('input');
+		newInput.type  = 'text';
+		newInput.name  = inputName;
+		newInput.id    = inputName;
+		newInput.setAttribute('maxlength', '19');
+		//newInput.maxlength = 10;
+		//newInput.setAttribute('onkeyup', 'dateField(this);');
+		newInput.setAttribute('onkeypress', 'mascaraDateTime(this);');
+		newInput.setAttribute('onkeyup', 'mascaraDateTime(this);');
+		newInput.setAttribute('onblur', 'dateTimeField(this);');
+		dd.appendChild(newInput);
+
+		var newLabel = document.createElement("label");
+		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
+		newLabel.htmlFor = inputName;
+
+		dt.appendChild(newLabel);
+		frag.appendChild(dt);
+		frag.appendChild(dd);
+
+		return frag;
+	}
