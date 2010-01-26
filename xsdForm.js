@@ -132,8 +132,10 @@
 		type = getValueAttributeByName(xmlNode, "type");
 		if (type != null) {
 			// pre-defined types
-			if (type == "xs:string" || type == "xs:float") {
+			if ( type == "xs:string" ) {
 				return generateFormFieldFromSimpleTextNode(xmlNode, namePattern);
+			} else if ( type == "xs:float" ) {
+				return generateFormFieldFloatFromSimpleTextNode(xmlNode, namePattern);
 			} else if ( type == "xs:integer" ) {
 				return generateFormFieldIntegerFromSimpleTextNode(xmlNode, namePattern);
 			} else if ( type == "xs:date" ) {
@@ -652,6 +654,47 @@
 		newInput.setAttribute('onkeyup', 'mascaraDateTime(this);');
 
 		newInput.setAttribute('onblur', 'dateTimeField(this);');
+		dd.appendChild(newInput);
+
+		var newLabel = document.createElement("label");
+		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
+		newLabel.htmlFor = inputName;
+
+		dt.appendChild(newLabel);
+		frag.appendChild(dt);
+		frag.appendChild(dd);
+
+		return frag;
+	}
+
+	function onlyNumbersFloat(str) {
+		var expRegTrim = /\./g;
+		return str.replace(expRegTrim, '');
+	}
+
+	function floatField(obj) {
+		var expRegNumInt = /^\d+$/; // só números
+
+		if ( !expRegNumInt.test( onlyNumbersFloat(obj.value) ) ) {
+			obj.value = obj.value.substr(0, (obj.value.length - 1));
+		}
+	}
+
+	function generateFormFieldFloatFromSimpleTextNode(xmlNode, namePattern) {
+
+		var frag = document.createDocumentFragment();
+		var dt = document.createElement('dt');
+		var dd = document.createElement('dd');
+
+		var name = getValueAttributeByName(xmlNode, "name");
+		var inputName = namePattern + "__" + name;
+
+		var newInput = document.createElement('input');
+		newInput.type  = 'text';
+		newInput.name  = inputName;
+		newInput.id    = inputName;
+		newInput.setAttribute('onkeypress', 'floatField(this);');
+		newInput.setAttribute('onkeyup', 'floatField(this);');
 		dd.appendChild(newInput);
 
 		var newLabel = document.createElement("label");
