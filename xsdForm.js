@@ -480,14 +480,18 @@
 		return true;
 	}
 
-	function mascaraData(objFieldDate) {
+        function mascaraData(objFieldDate, evt) {
 		var expRegNumInt = /^\d+$/; // só números
 
 		if ( !expRegNumInt.test( onlyNumbersDateTime( objFieldDate.value ) ) ) {
 			objFieldDate.value = objFieldDate.value.substr(0, (objFieldDate.value.length - 1));
 			return false;
 		}
-		objFieldDate.value = formatDate(objFieldDate.value);
+                evt = (evt) ? evt : ((window.event) ? event : null);
+                if (evt.keyCode != 8 && evt.keyCode != 46) {
+                    objFieldDate.value = formatDate(objFieldDate.value);
+                    return true;
+                }
 	}
 
 	function onlyNumbersDateTime(str) {
@@ -513,7 +517,7 @@
 		return strDate;
 	}
 
-	function mascaraDateTime(objFieldDate) {
+        function mascaraDateTime(objFieldDate, evt) {
 		var date = objFieldDate.value;
 		var expRegNumInt = /^\d+$/; // só números
 
@@ -521,8 +525,11 @@
 			objFieldDate.value = objFieldDate.value.substr(0, (objFieldDate.value.length - 1));
 			return false;
 		}
-
-		objFieldDate.value = formatDateTime(date);
+                evt = (evt) ? evt : ((window.event) ? event : null);
+                if (evt.keyCode != 8 && evt.keyCode != 46) {
+                    objFieldDate.value = formatDateTime(date);
+                    return true;
+                }
 	}
 
 	function dateField(obj) {
@@ -616,10 +623,10 @@
 		newInput.id    = inputName;
 		newInput.setAttribute('maxlength', '10');
 
-		newInput.setAttribute('onkeypress', 'mascaraData(this);');
-		newInput.setAttribute('onkeyup', 'mascaraData(this);');
+		newInput.setAttribute('onkeypress', 'mascaraData(this, event);');
+		newInput.setAttribute('onkeyup', 'mascaraData(this, event);');
 
-		newInput.setAttribute('onblur', 'dateField(this);');
+		newInput.setAttribute('onblur', 'dateField(this,event);');
 		dd.appendChild(newInput);
 
 		var newLabel = document.createElement("label");
@@ -648,8 +655,8 @@
 		newInput.id    = inputName;
 		newInput.setAttribute('maxlength', '19');
 
-		newInput.setAttribute('onkeypress', 'mascaraDateTime(this);');
-		newInput.setAttribute('onkeyup', 'mascaraDateTime(this);');
+		newInput.setAttribute('onkeypress', 'mascaraDateTime(this,event);');
+		newInput.setAttribute('onkeyup', 'mascaraDateTime(this,event);');
 
 		newInput.setAttribute('onblur', 'dateTimeField(this);');
 		dd.appendChild(newInput);
