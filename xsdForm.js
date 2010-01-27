@@ -155,7 +155,8 @@
 		var label, type;
 		type = getValueAttributeByName(xmlNode, "type");
 		if (type != null) {
-			return generateFormField(xmlNode, type, namePattern);
+			var minOccurs = getValueAttributeByName(xmlNode, "minOccurs");
+			return generateFormField(xmlNode, type, namePattern, minOccurs);
 
 		} else {
 			// inline type definition
@@ -661,7 +662,7 @@
 		return createInput('checkbox', name, name);
 	}
 
-	function generateFormField(xmlNode, type, namePattern) {
+	function generateFormField(xmlNode, type, namePattern, minOccurs) {
 
 		var name = getValueAttributeByName(xmlNode, "name");
 		var inputName = namePattern + "__" + name;
@@ -702,7 +703,9 @@
 			var divRequiredField = document.createElement('div');
 			divRequiredField.setAttribute('name', 'requiredField')
 			divRequiredField.setAttribute('style', 'display:none;')
-			divRequiredField.appendChild( document.createTextNode('true') );
+
+			var required = ( minOccurs == '0' )? 'false': 'true';
+			divRequiredField.appendChild( document.createTextNode( required ) );
 
 			divValidation.appendChild(field);
 			divValidation.appendChild(divRequiredField);

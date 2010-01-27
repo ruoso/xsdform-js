@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xs:element name="formCadernoA">
 		<xs:annotation>
@@ -254,7 +254,7 @@
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="localizacaoOutro" type="xs:string">
+										<xs:element name="localizacaoOutro" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Outro</label>
@@ -366,7 +366,7 @@
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="localizacaoOutro" type="xs:string">
+										<xs:element name="localizacaoOutro" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Outro</label>
@@ -576,7 +576,7 @@
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="tipoRiscoOutro" type="xs:string">
+										<xs:element name="tipoRiscoOutro" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Outro</label>
@@ -651,7 +651,7 @@
 												</xs:restriction>
 											</xs:simpleType>
 										</xs:element>
-										<xs:element name="tipoAbastecimentoAguaOutro" type="xs:string">
+										<xs:element name="tipoAbastecimentoAguaOutro" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Outro</label>
@@ -714,7 +714,7 @@
 												</xs:restriction>
 											</xs:simpleType>
 										</xs:element>
-										<xs:element name="tipoAbastecimentoAgua2Outro" type="xs:string">
+										<xs:element name="tipoAbastecimentoAgua2Outro" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Outro</label>
@@ -800,7 +800,7 @@
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="tipoDrenagemOutro" type="xs:string">
+										<xs:element name="tipoDrenagemOutro" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Outro</label>
@@ -883,7 +883,7 @@
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="tipoDrenagemOutro" type="xs:string">
+										<xs:element name="tipoDrenagemOutro" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Outro</label>
