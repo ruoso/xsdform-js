@@ -1,4 +1,19 @@
 
+	function createInput(type, name, id) {
+		var newInput = document.createElement('input');
+		newInput.type  = type;
+		newInput.name  = name;
+		newInput.id    = id;
+		return newInput;
+	}
+
+	function createLabel(innerHTML, idField) {
+		var newLabel = document.createElement("label");
+		newLabel.innerHTML = innerHTML;
+		newLabel.htmlFor = idField;
+		return newLabel;
+	}
+
 	function createDivError(innerHTML, name) {
 		var div;
 		div = document.createElement('div');
@@ -140,22 +155,8 @@
 		var label, type;
 		type = getValueAttributeByName(xmlNode, "type");
 		if (type != null) {
-			// pre-defined types
-			if ( type == "xs:string" ) {
-				return generateFormFieldFromSimpleTextNode(xmlNode, namePattern);
-			} else if ( type == "xs:float" ) {
-				return generateFormFieldFloatFromSimpleTextNode(xmlNode, namePattern);
-			} else if ( type == "xs:integer" ) {
-				return generateFormFieldIntegerFromSimpleTextNode(xmlNode, namePattern);
-			} else if ( type == "xs:date" ) {
-				return generateFormFieldDateFromSimpleTextNode(xmlNode, namePattern);
-			} else if ( type == "xs:dateTime" ) {
-				return generateFormFieldDateTimeFromSimpleTextNode(xmlNode, namePattern);
-			} else if ( type == "xs:boolean" ) {
-				return generateFormFieldCheckboxFromSimpleTextNode(xmlNode, namePattern);
-			} else {
-				//throw type + " not supported.";
-			}
+			return generateFormField(xmlNode, type, namePattern);
+
 		} else {
 			// inline type definition
 			for (var i = 0; i < xmlNode.childNodes.length; i++) {
@@ -322,44 +323,6 @@
 		return getTextByTagName(xmlNodeAux, strTag);
 	}
 
-	function generateFormFieldFromSimpleTextNode(xmlNode, namePattern) {
-
-		var frag = document.createDocumentFragment();
-		var dt = document.createElement('dt');
-		var dd = document.createElement('dd');
-
-		var name = getValueAttributeByName(xmlNode, "name");
-		var inputName = namePattern + "__" + name;
-
-		var divValidation = document.createElement('div');
-		divValidation.setAttribute('name', 'xsdFormValidation')
-
-		var divRequiredField = document.createElement('div');
-		divRequiredField.setAttribute('name', 'requiredField')
-		divRequiredField.setAttribute('style', 'display:none;')
-		divRequiredField.appendChild( document.createTextNode('true') );
-
-		var newInput = document.createElement('input');
-		newInput.type  = 'text';
-		newInput.name  = inputName;
-		newInput.id    = inputName;
-
-		divValidation.appendChild(newInput);
-		divValidation.appendChild(divRequiredField);
-
-		dd.appendChild(divValidation);
-
-		var newLabel = document.createElement("label");
-		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
-		newLabel.htmlFor = inputName;
-
-		dt.appendChild(newLabel);
-		frag.appendChild(dt);
-		frag.appendChild(dd);
-
-		return frag;
-	}
-
 	function generateXmlFromSimpleTextNode(odoc, xmlNode, namePattern) {
 
 		var name = getValueAttributeByName(xmlNode, "name");
@@ -371,29 +334,6 @@
 		tag.appendChild(content);
 
 		return tag;
-	}
-
-	function generateFormFieldCheckboxFromSimpleTextNode(xmlNode, namePattern) {
-		var frag = document.createDocumentFragment();
-		var name = getValueAttributeByName(xmlNode, "name");
-		var inputName = namePattern + "__" + name;
-		var dt = document.createElement('dt');
-	        dt.setAttribute('class', 'dtsemdd');
-
-		var newInput = document.createElement('input');
-		newInput.type  = 'checkbox';
-		newInput.name  = inputName;
-		newInput.id    = inputName;
-
-		var newLabel = document.createElement("label");
-		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label');
-		newLabel.htmlFor = inputName;
-
-		dt.appendChild(newInput);
-		dt.appendChild(newLabel);
-		frag.appendChild(dt);
-
-		return frag;
 	}
 
 	function generateXmlFromCheckboxTextNode(odoc, xmlNode, namePattern) {
@@ -649,98 +589,6 @@
 		}
 	}
 
-	function generateFormFieldIntegerFromSimpleTextNode(xmlNode, namePattern) {
-
-		var frag = document.createDocumentFragment();
-		var dt = document.createElement('dt');
-		var dd = document.createElement('dd');
-
-		var name = getValueAttributeByName(xmlNode, "name");
-		var inputName = namePattern + "__" + name;
-
-		var newInput = document.createElement('input');
-		newInput.type  = 'text';
-		newInput.name  = inputName;
-		newInput.id    = inputName;
-		newInput.setAttribute('onkeypress', 'integerField(this);');
-		newInput.setAttribute('onkeyup', 'integerField(this);');
-		dd.appendChild(newInput);
-
-		var newLabel = document.createElement("label");
-		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
-		newLabel.htmlFor = inputName;
-
-		dt.appendChild(newLabel);
-		frag.appendChild(dt);
-		frag.appendChild(dd);
-
-		return frag;
-	}
-
-	function generateFormFieldDateFromSimpleTextNode(xmlNode, namePattern) {
-
-		var frag = document.createDocumentFragment();
-		var dt = document.createElement('dt');
-		var dd = document.createElement('dd');
-
-		var name = getValueAttributeByName(xmlNode, "name");
-		var inputName = namePattern + "__" + name;
-
-		var newInput = document.createElement('input');
-		newInput.type  = 'text';
-		newInput.name  = inputName;
-		newInput.id    = inputName;
-		newInput.setAttribute('maxlength', '10');
-
-		newInput.setAttribute('onkeypress', 'mascaraData(this, event);');
-		newInput.setAttribute('onkeyup', 'mascaraData(this, event);');
-
-		newInput.setAttribute('onblur', 'dateField(this,event);');
-		dd.appendChild(newInput);
-
-		var newLabel = document.createElement("label");
-		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
-		newLabel.htmlFor = inputName;
-
-		dt.appendChild(newLabel);
-		frag.appendChild(dt);
-		frag.appendChild(dd);
-
-		return frag;
-	}
-
-	function generateFormFieldDateTimeFromSimpleTextNode(xmlNode, namePattern) {
-
-		var frag = document.createDocumentFragment();
-		var dt = document.createElement('dt');
-		var dd = document.createElement('dd');
-
-		var name = getValueAttributeByName(xmlNode, "name");
-		var inputName = namePattern + "__" + name;
-
-		var newInput = document.createElement('input');
-		newInput.type  = 'text';
-		newInput.name  = inputName;
-		newInput.id    = inputName;
-		newInput.setAttribute('maxlength', '19');
-
-		newInput.setAttribute('onkeypress', 'mascaraDateTime(this,event);');
-		newInput.setAttribute('onkeyup', 'mascaraDateTime(this,event);');
-
-		newInput.setAttribute('onblur', 'dateTimeField(this);');
-		dd.appendChild(newInput);
-
-		var newLabel = document.createElement("label");
-		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
-		newLabel.htmlFor = inputName;
-
-		dt.appendChild(newLabel);
-		frag.appendChild(dt);
-		frag.appendChild(dd);
-
-		return frag;
-	}
-
 	function onlyNumbersFloat(str) {
 		var expRegTrim = /\./g;
 		return str.replace(expRegTrim, '');
@@ -752,34 +600,6 @@
 		if ( !expRegNumInt.test( onlyNumbersFloat(obj.value) ) ) {
 			obj.value = obj.value.substr(0, (obj.value.length - 1));
 		}
-	}
-
-	function generateFormFieldFloatFromSimpleTextNode(xmlNode, namePattern) {
-
-		var frag = document.createDocumentFragment();
-		var dt = document.createElement('dt');
-		var dd = document.createElement('dd');
-
-		var name = getValueAttributeByName(xmlNode, "name");
-		var inputName = namePattern + "__" + name;
-
-		var newInput = document.createElement('input');
-		newInput.type  = 'text';
-		newInput.name  = inputName;
-		newInput.id    = inputName;
-		newInput.setAttribute('onkeypress', 'formatCurrency(this, 2, "", ".");');
-		newInput.setAttribute('onkeyup', 'floatField(this);');
-		dd.appendChild(newInput);
-
-		var newLabel = document.createElement("label");
-		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
-		newLabel.htmlFor = inputName;
-
-		dt.appendChild(newLabel);
-		frag.appendChild(dt);
-		frag.appendChild(dd);
-
-		return frag;
 	}
 
 	function formatCurrency(o, n, dig, dec) {
@@ -801,51 +621,96 @@
 		}(!isNaN(n) ? Math.abs(n) : 2, typeof dig != "string" ? "." : dig, typeof dec != "string" ? "," : dec, o.maxLength);
 	}
 
+	function createFieldString(name) {
+		return createInput('text', name, name);
+	}
 
-function moeda(campo, e){
-   var SeparadorDecimal = ","
-   var SeparadorMilesimo = "."
-   var sep = 0;
-   var key = '';
-   var i = j = 0;
-   var len = len2 = 0;
-   var strCheck = '0123456789';
-   var aux = aux2 = '';
-   var whichCode = (window.Event) ? e.which : e.keyCode;
+	function createFieldFloat(name) {
+		return createInput('text', name, name);
+	}
 
-   if (whichCode == 13) return true;
-   key = String.fromCharCode(whichCode); // Valor para o código da Chave
+	function createFieldInteger(name) {
+		var field;
+		field = createInput('text', name, name);
+		field.setAttribute('onkeypress', 'integerField(this);');
+		field.setAttribute('onkeyup', 'integerField(this);');
+		return field;
+	}
 
-   if (strCheck.indexOf(key) == -1) return true; // Chave inválida
-   len = campo.value.length;
-   for(i = 0; i < len; i++)
+	function createFieldDate(name) {
+		var field;
+		field = createInput('text', name, name);
+		field.setAttribute('maxlength', '10');
+		field.setAttribute('onkeypress', 'mascaraData(this, event);');
+		field.setAttribute('onkeyup', 'mascaraData(this, event);');
+		field.setAttribute('onblur', 'dateField(this,event);');
+		return field;
+	}
 
-       if ((campo.value.charAt(i) != '0') && (campo.value.charAt(i) != SeparadorDecimal)) break;
-   aux = '';
-   for(; i < len; i++)
+	function createFieldDateTime(name) {
+		var field;
+		field = createInput('text', name, name);
+		field.setAttribute('maxlength', '19');
+		field.setAttribute('onkeypress', 'mascaraDateTime(this,event);');
+		field.setAttribute('onkeyup', 'mascaraDateTime(this,event);');
+		field.setAttribute('onblur', 'dateTimeField(this);');
+		return field;
+	}
 
-       if (strCheck.indexOf(campo.value.charAt(i))!=-1) aux += campo.value.charAt(i);
-   aux += key;
-   len = aux.length;
+	function createFieldBoolean(name) {
+		return createInput('checkbox', name, name);
+	}
 
-   if (len == 0) campo.value = '';
-   if (len == 1) campo.value = '0'+ SeparadorDecimal + '0' + aux;
-   if (len == 2) campo.value = '0'+ SeparadorDecimal + aux;
-   if (len > 2) {
-       aux2 = '';
-       for (j = 0, i = len - 3; i >= 0; i--) {
-           if (j == 3) {
-               aux2 += SeparadorMilesimo;
-               j = 0;
-           }
-           aux2 += aux.charAt(i);
-           j++;
-       }
-       campo.value = '';
-       len2 = aux2.length;
-       for (i = len2 - 1; i >= 0; i--)
-       campo.value += aux2.charAt(i);
-       campo.value += SeparadorDecimal + aux.substr(len - 2, len);
-}
-   return false;
-}
+	function generateFormField(xmlNode, type, namePattern) {
+
+		var name = getValueAttributeByName(xmlNode, "name");
+		var inputName = namePattern + "__" + name;
+
+		var field;
+		if ( type == "xs:string" ) {
+			field = createFieldString(inputName);
+		} else if ( type == "xs:float" ) {
+			field = createFieldFloat(inputName);
+		} else if ( type == "xs:integer" ) {
+			field = createFieldInteger(inputName);
+		} else if ( type == "xs:date" ) {
+			field = createFieldDate(inputName);
+		} else if ( type == "xs:dateTime" ) {
+			field = createFieldDateTime(inputName);
+		} else if ( type == "xs:boolean" ) {
+			field = createFieldBoolean(inputName);
+		} else {
+			alert('Unknown type!');
+			return false;
+		}
+
+		var frag = document.createDocumentFragment();
+		var dt = document.createElement('dt');
+		var newLabel = createLabel(getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':', inputName);
+
+		if ( type == "xs:boolean" ) {
+	        dt.setAttribute('class', 'dtsemdd');
+			dt.appendChild(field);
+			dt.appendChild(newLabel);
+			frag.appendChild(dt);
+		} else {
+			var dd = document.createElement('dd');
+
+			var divValidation = document.createElement('div');
+			divValidation.setAttribute('name', 'xsdFormValidation')
+
+			var divRequiredField = document.createElement('div');
+			divRequiredField.setAttribute('name', 'requiredField')
+			divRequiredField.setAttribute('style', 'display:none;')
+			divRequiredField.appendChild( document.createTextNode('true') );
+
+			divValidation.appendChild(field);
+			divValidation.appendChild(divRequiredField);
+
+			dd.appendChild(divValidation);
+			dt.appendChild(newLabel);
+			frag.appendChild(dt);
+			frag.appendChild(dd);
+		}
+		return frag;
+	}
