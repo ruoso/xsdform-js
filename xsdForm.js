@@ -1,4 +1,13 @@
 
+	function createDivError(innerHTML, name) {
+		var div;
+		div = document.createElement('div');
+		div.setAttribute('name', name);
+		div.setAttribute('style', 'color:red');
+		div.innerHTML = innerHTML;
+		return div;
+	}
+
 	function removeById(strId) {
 		var elem = getById(strId);
 		elem.parentNode.removeChild(elem);
@@ -322,11 +331,23 @@
 		var name = getValueAttributeByName(xmlNode, "name");
 		var inputName = namePattern + "__" + name;
 
+		var divValidation = document.createElement('div');
+		divValidation.setAttribute('name', 'xsdFormValidation')
+
+		var divRequiredField = document.createElement('div');
+		divRequiredField.setAttribute('name', 'requiredField')
+		divRequiredField.setAttribute('style', 'display:none;')
+		divRequiredField.appendChild( document.createTextNode('true') );
+
 		var newInput = document.createElement('input');
 		newInput.type  = 'text';
 		newInput.name  = inputName;
 		newInput.id    = inputName;
-		dd.appendChild(newInput);
+
+		divValidation.appendChild(newInput);
+		divValidation.appendChild(divRequiredField);
+
+		dd.appendChild(divValidation);
 
 		var newLabel = document.createElement("label");
 		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
@@ -387,7 +408,7 @@
 		} else {
 			content = odoc.createTextNode("false");
 		}
-                tag.appendChild(content);
+		tag.appendChild(content);
 
 		return tag;
 	}
@@ -399,17 +420,67 @@
 			var xml = xmlLoader(xsdFile);
 			var tagRaiz  = xml.getElementsByTagName('xs:schema')[0];
 			var elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
-                        var elHtml = generateFormFromNode(elemRoot, "xsdform___");
+			var elHtml = generateFormFromNode(elemRoot, "xsdform___");
 			getById(containerId).appendChild( elHtml );
-
 
 		} catch (myError) {
 			alert( myError.name + ': ' + myError.message + "\n" + myError);
 		}
-
 	}
 
 	function generateXml(xsdFile, input_to_set) {
+
+		var divParent;
+		var field;
+		var requiredField;
+		var div
+		var divMessageError;
+		var messageError = false;
+		var submitForm = true;
+
+		var arrDivsValidation = getByName('xsdFormValidation');
+
+		for (var i = 0; i < arrDivsValidation.length; i++) {
+			divParent = arrDivsValidation[i];
+
+			// percorre a div que contem o campo
+			for (var j = 0; j < divParent.childNodes.length; j++) {
+
+				if ( divParent.childNodes[j].nodeName == 'INPUT' ) {
+					field = divParent.childNodes[j];
+
+				} else if ( divParent.childNodes[j].nodeName == 'DIV' && getValueAttributeByName(divParent.childNodes[j], 'name' ) == 'requiredField' ) {
+					requiredField = divParent.childNodes[j].innerHTML;
+
+				} else if ( divParent.childNodes[j].nodeName == 'DIV' && getValueAttributeByName(divParent.childNodes[j], 'name' ) == 'messageError' ) {
+					messageError = true;
+					divMessageError = divParent.childNodes[j];
+				}
+
+			}
+
+
+			if ( requiredField == 'true' ) {
+
+				if ( !messageError && field.value == '' ) {
+					div = createDivError('campo obrigatório.', 'messageError');
+					divParent.appendChild(div);
+					submitForm = false;
+
+				} else if ( messageError && field.value != '' ) {
+					divMessageError.parentNode.removeChild( divMessageError );
+
+				} else if ( field.value == '' ) {
+					submitForm = false;
+				}
+
+			}
+
+		}
+		if ( !submitForm ) {
+			return false;
+		}
+
 		try {
 			var xml = xmlLoader(xsdFile);
 			var tagRaiz  = xml.getElementsByTagName('xs:schema')[0];
@@ -489,11 +560,12 @@
 			objFieldDate.value = objFieldDate.value.substr(0, (objFieldDate.value.length - 1));
 			return false;
 		}
-                evt = (evt) ? evt : ((window.event) ? event : null);
-                if (evt.keyCode != 8 && evt.keyCode != 46) {
-                    objFieldDate.value = formatDate(objFieldDate.value);
-                    return true;
-                }
+
+		evt = (evt) ? evt : ((window.event) ? event : null);
+		if (evt.keyCode != 8 && evt.keyCode != 46) {
+			objFieldDate.value = formatDate(objFieldDate.value);
+			return true;
+		}
 	}
 
 	function onlyNumbersDateTime(str) {
@@ -527,19 +599,19 @@
 			objFieldDate.value = objFieldDate.value.substr(0, (objFieldDate.value.length - 1));
 			return false;
 		}
-                evt = (evt) ? evt : ((window.event) ? event : null);
-                if (evt.keyCode != 8 && evt.keyCode != 46) {
-                    objFieldDate.value = formatDateTime(date);
-                    return true;
-                }
+
+		evt = (evt) ? evt : ((window.event) ? event : null);
+		if (evt.keyCode != 8 && evt.keyCode != 46) {
+			objFieldDate.value = formatDateTime(date);
+			return true;
+		}
 	}
 
 	function dateField(obj) {
 		if ( !validateDate(obj) ) {
 
 			if ( getById('fieldDate__' + obj.id) == null ) {
-				var div = document.createElement('div');
-				div.setAttribute('style', 'color:red');
+				var div = createDivError('Data Inválida.');
 				div.id = 'fieldDate__' + obj.id;
 
 				var containerField = obj.parentNode;
@@ -547,8 +619,6 @@
 			} else {
 				div = getById('fieldDate__' + obj.id);
 			}
-			div.innerHTML = 'Data Inválida.';
-			obj.focus();
 
 		} else {
 			try {
@@ -562,8 +632,7 @@
 		if ( !validateDateTime(obj) ) {
 
 			if ( getById('fieldDate__' + obj.id) == null ) {
-				var div = document.createElement('div');
-				div.setAttribute('style', 'color:red');
+				var div = createDivError('Data Inválida.');
 				div.id = 'fieldDate__' + obj.id;
 
 				var containerField = obj.parentNode;
@@ -571,8 +640,6 @@
 			} else {
 				div = getById('fieldDate__' + obj.id);
 			}
-			div.innerHTML = 'Data Inválida.';
-			obj.focus();
 
 		} else {
 			try {
@@ -700,7 +767,7 @@
 		newInput.type  = 'text';
 		newInput.name  = inputName;
 		newInput.id    = inputName;
-		newInput.setAttribute('onkeypress', 'floatField(this);');
+		newInput.setAttribute('onkeypress', 'formatCurrency(this, 2, "", ".");');
 		newInput.setAttribute('onkeyup', 'floatField(this);');
 		dd.appendChild(newInput);
 
@@ -714,3 +781,71 @@
 
 		return frag;
 	}
+
+	function formatCurrency(o, n, dig, dec) {
+		new function(c, dig, dec, m){
+			addEvent(o, "keypress", function(e, _){
+				if((_ = e.key == 45) || e.key > 47 && e.key < 58){
+					var o = this, d = 0, n, s, h = o.value.charAt(0) == "-" ? "-" : "",
+						l = (s = (o.value.replace(/^(-?)0+/g, "$1") + String.fromCharCode(e.key)).replace(/\D/g, "")).length;
+					m + 1 && (o.maxLength = m + (d = o.value.length - l + 1));
+					if(m + 1 && l >= m && !_) return false;
+					l <= (n = c) && (s = new Array(n - l + 2).join("0") + s);
+					for(var i = (l = (s = s.split("")).length) - n; (i -= 3) > 0; s[i - 1] += dig);
+					n && n < l && (s[l - ++n] += dec);
+					_ ? h ? m + 1 && (o.maxLength = m + d) : s[0] = "-" + s[0] : s[0] = h + s[0];
+					o.value = s.join("");
+				}
+				e.key > 30 && e.preventDefault();
+			});
+		}(!isNaN(n) ? Math.abs(n) : 2, typeof dig != "string" ? "." : dig, typeof dec != "string" ? "," : dec, o.maxLength);
+	}
+
+
+function moeda(campo, e){
+   var SeparadorDecimal = ","
+   var SeparadorMilesimo = "."
+   var sep = 0;
+   var key = '';
+   var i = j = 0;
+   var len = len2 = 0;
+   var strCheck = '0123456789';
+   var aux = aux2 = '';
+   var whichCode = (window.Event) ? e.which : e.keyCode;
+
+   if (whichCode == 13) return true;
+   key = String.fromCharCode(whichCode); // Valor para o código da Chave
+
+   if (strCheck.indexOf(key) == -1) return true; // Chave inválida
+   len = campo.value.length;
+   for(i = 0; i < len; i++)
+
+       if ((campo.value.charAt(i) != '0') && (campo.value.charAt(i) != SeparadorDecimal)) break;
+   aux = '';
+   for(; i < len; i++)
+
+       if (strCheck.indexOf(campo.value.charAt(i))!=-1) aux += campo.value.charAt(i);
+   aux += key;
+   len = aux.length;
+
+   if (len == 0) campo.value = '';
+   if (len == 1) campo.value = '0'+ SeparadorDecimal + '0' + aux;
+   if (len == 2) campo.value = '0'+ SeparadorDecimal + aux;
+   if (len > 2) {
+       aux2 = '';
+       for (j = 0, i = len - 3; i >= 0; i--) {
+           if (j == 3) {
+               aux2 += SeparadorMilesimo;
+               j = 0;
+           }
+           aux2 += aux.charAt(i);
+           j++;
+       }
+       campo.value = '';
+       len2 = aux2.length;
+       for (i = len2 - 1; i >= 0; i--)
+       campo.value += aux2.charAt(i);
+       campo.value += SeparadorDecimal + aux.substr(len - 2, len);
+}
+   return false;
+}
