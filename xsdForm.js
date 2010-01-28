@@ -3,7 +3,7 @@
 		var newInput = document.createElement('input');
 		newInput.type  = type;
 		newInput.name  = name;
-		newInput.id    = id;
+		newInput.id    = ( id != undefined )? id: name;
 		return newInput;
 	}
 
@@ -378,8 +378,16 @@
 		var divMessageError;
 		var messageError = false;
 		var submitForm = true;
+		var type;
+		var firstFieldError = null;
 
 		var arrDivsValidation = getByName('xsdFormValidation');
+
+		this.setFirstFieldError = function(field) {
+			if ( firstFieldError == null ) {
+				firstFieldError = field;
+			}
+		}
 
 		for (var i = 0; i < arrDivsValidation.length; i++) {
 			divParent = arrDivsValidation[i];
@@ -396,6 +404,10 @@
 				} else if ( divParent.childNodes[j].nodeName == 'DIV' && getValueAttributeByName(divParent.childNodes[j], 'name' ) == 'messageError' ) {
 					messageError = true;
 					divMessageError = divParent.childNodes[j];
+
+				} else if ( divParent.childNodes[j].nodeName == 'DIV' && getValueAttributeByName(divParent.childNodes[j], 'name' ) == 'type' ) {
+					type = divParent.childNodes[j].innerHTML;
+
 				}
 
 			}
@@ -407,18 +419,32 @@
 					div = createDivError('campo obrigatório.', 'messageError');
 					divParent.appendChild(div);
 					submitForm = false;
+					this.setFirstFieldError(field);
 
 				} else if ( messageError && field.value != '' ) {
 					divMessageError.parentNode.removeChild( divMessageError );
 
 				} else if ( field.value == '' ) {
 					submitForm = false;
+					this.setFirstFieldError(field);
 				}
 
 			}
 
+			if ( type == 'xs:date' ) {
+				if ( !validateDateField(field) ) {
+					this.setFirstFieldError(field);
+				}
+			} else if ( type == 'xs:dateTime' ) {
+				if ( validateDateTimeField(field) ) {
+					this.setFirstFieldError(field);
+				}
+			}
+
 		}
 		if ( !submitForm ) {
+			alert('Dados inconsistentes.');
+			firstFieldError.focus();
 			return false;
 		}
 
@@ -444,10 +470,10 @@
 		obj.focus();
 	}
 
-	function validateDate(pObj) {
-		var dia = parseInt( pObj.value.substring(8,10), 10 );
-		var mes = parseInt( pObj.value.substring(5,7), 10 );
-		var ano = parseInt( pObj.value.substring(0,4), 10 );
+	function validateDate(objInputText) {
+		var dia = parseInt( objInputText.value.substring(8,10), 10 );
+		var mes = parseInt( objInputText.value.substring(5,7), 10 );
+		var ano = parseInt( objInputText.value.substring(0,4), 10 );
 
 		var DateVal = mes + "/" + dia + "/" + ano;
 		var date = new Date(DateVal);
@@ -548,7 +574,7 @@
 		}
 	}
 
-	function dateField(obj) {
+	function validateDateField(obj) {
 		if ( !validateDate(obj) ) {
 
 			if ( getById('fieldDate__' + obj.id) == null ) {
@@ -560,20 +586,23 @@
 			} else {
 				div = getById('fieldDate__' + obj.id);
 			}
+			return false;
 
 		} else {
 			try {
 				removeById('fieldDate__' + obj.id);
 			} catch (obgError) {
 			}
+			return true;
+
 		}
 	}
 
-	function dateTimeField(obj) {
+	function validateDateTimeField(obj) {
 		if ( !validateDateTime(obj) ) {
 
 			if ( getById('fieldDate__' + obj.id) == null ) {
-				var div = createDivError('Data Inválida.');
+				var div = createDivError('Data e/ou Hora Inválida(s).');
 				div.id = 'fieldDate__' + obj.id;
 
 				var containerField = obj.parentNode;
@@ -581,12 +610,14 @@
 			} else {
 				div = getById('fieldDate__' + obj.id);
 			}
+			return false;
 
 		} else {
 			try {
 				removeById('fieldDate__' + obj.id);
 			} catch (obgError) {
 			}
+			return true;
 		}
 	}
 
@@ -623,16 +654,16 @@
 	}
 
 	function createFieldString(name) {
-		return createInput('text', name, name);
+		return createInput('text', name);
 	}
 
 	function createFieldFloat(name) {
-		return createInput('text', name, name);
+		return createInput('text', name);
 	}
 
 	function createFieldInteger(name) {
 		var field;
-		field = createInput('text', name, name);
+		field = createInput('text', name);
 		field.setAttribute('onkeypress', 'integerField(this);');
 		field.setAttribute('onkeyup', 'integerField(this);');
 		return field;
@@ -640,26 +671,26 @@
 
 	function createFieldDate(name) {
 		var field;
-		field = createInput('text', name, name);
+		field = createInput('text', name);
 		field.setAttribute('maxlength', '10');
 		field.setAttribute('onkeypress', 'mascaraData(this, event);');
 		field.setAttribute('onkeyup', 'mascaraData(this, event);');
-		field.setAttribute('onblur', 'dateField(this,event);');
+		field.setAttribute('onblur', 'validateDateField(this,event);');
 		return field;
 	}
 
 	function createFieldDateTime(name) {
 		var field;
-		field = createInput('text', name, name);
+		field = createInput('text', name);
 		field.setAttribute('maxlength', '19');
 		field.setAttribute('onkeypress', 'mascaraDateTime(this,event);');
 		field.setAttribute('onkeyup', 'mascaraDateTime(this,event);');
-		field.setAttribute('onblur', 'dateTimeField(this);');
+		field.setAttribute('onblur', 'validateDateTimeField(this);');
 		return field;
 	}
 
 	function createFieldBoolean(name) {
-		return createInput('checkbox', name, name);
+		return createInput('checkbox', name);
 	}
 
 	function generateFormField(xmlNode, type, namePattern, minOccurs) {
@@ -707,8 +738,14 @@
 			var required = ( minOccurs == '0' )? 'false': 'true';
 			divRequiredField.appendChild( document.createTextNode( required ) );
 
+			var divType = document.createElement('div');
+			divType.setAttribute('name', 'type')
+			divType.setAttribute('style', 'display:none;')
+			divType.appendChild( document.createTextNode( type ) );
+
 			divValidation.appendChild(field);
 			divValidation.appendChild(divRequiredField);
+			divValidation.appendChild(divType);
 
 			dd.appendChild(divValidation);
 			dt.appendChild(newLabel);
