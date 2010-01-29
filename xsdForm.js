@@ -270,18 +270,31 @@
 		var restrictionNode = getNodeByTagName(xmlNode, 'xs:restriction');
 		var inputName = namePattern + "__" + name;
 
+		var minOccurs = getValueAttributeByName(restrictionNode, "minOccurs");
+
+		var divValidation = document.createElement('div');
+		divValidation.setAttribute('name', 'xsdFormValidation')
+
+		var divRequiredField = document.createElement('div');
+		divRequiredField.setAttribute('name', 'requiredField')
+		divRequiredField.setAttribute('style', 'display:none;')
+
+		var required = ( minOccurs == '0' )? 'false': 'true';
+		divRequiredField.appendChild( document.createTextNode( required ) );
+
 		var newSelect = document.createElement('select');
 		newSelect.name  = inputName;
 		newSelect.id    = inputName;
 		dd.appendChild(newSelect);
 
 		var newOption;
+		newOption = document.createElement("option");
+		newOption.innerHTML = '';
+		newSelect.appendChild(newOption);
 		for (var i = 0; i < restrictionNode.childNodes.length; i++) {
 			if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:enumeration' ) {
-
 				newOption = document.createElement("option");
 				newOption.innerHTML = getValueAttributeByName(restrictionNode.childNodes[i], 'value');
-
 				newSelect.appendChild(newOption);
 			}
 		}
@@ -291,6 +304,15 @@
 		newLabel.htmlFor = inputName;
 
 		dt.appendChild(newLabel);
+
+		divValidation.appendChild(newSelect);
+		divValidation.appendChild(divRequiredField);
+
+		dd.appendChild(divValidation);
+		dt.appendChild(newLabel);
+		frag.appendChild(dt);
+		frag.appendChild(dd);
+
 		frag.appendChild(dt);
 		frag.appendChild(dd);
 
@@ -376,7 +398,7 @@
 		var requiredField;
 		var div
 		var divMessageError;
-		var messageError = false;
+		var messageError;
 		var submitForm = true;
 		var type;
 		var firstFieldError = null;
@@ -391,6 +413,7 @@
 
 		for (var i = 0; i < arrDivsValidation.length; i++) {
 			divParent = arrDivsValidation[i];
+			messageError = false;
 
 			// percorre a div que contem o campo
 			for (var j = 0; j < divParent.childNodes.length; j++) {
@@ -408,41 +431,57 @@
 				} else if ( divParent.childNodes[j].nodeName == 'DIV' && getValueAttributeByName(divParent.childNodes[j], 'name' ) == 'type' ) {
 					type = divParent.childNodes[j].innerHTML;
 
+				} else if ( divParent.childNodes[j].nodeName == 'SELECT' ) {
+					field = divParent.childNodes[j];
+
 				}
 
 			}
 
 
 			if ( requiredField == 'true' ) {
-
-				if ( !messageError && field.value == '' ) {
-					div = createDivError('campo obrigatório.', 'messageError');
-					divParent.appendChild(div);
-					submitForm = false;
-					this.setFirstFieldError(field);
-
-				} else if ( messageError && field.value != '' ) {
-					divMessageError.parentNode.removeChild( divMessageError );
-
-				} else if ( field.value == '' ) {
-					submitForm = false;
-					this.setFirstFieldError(field);
+				if ( field.nodeName == 'INPUT' ) {
+					if ( messageError ) {
+						if ( field.value == '' ) {
+							submitForm = false;
+							this.setFirstFieldError(field);
+						} else {
+							divMessageError.parentNode.removeChild( divMessageError );
+						}
+					} else if ( field.value == '' ) {
+						div = createDivError('campo obrigatório.', 'messageError');
+						divParent.appendChild(div);
+						submitForm = false;
+						this.setFirstFieldError(field);
+					}
+				} else if ( field.nodeName == 'SELECT' ) {
+					if ( messageError ) {
+						if ( field.options[field.selectedIndex].text == '' ) {
+							submitForm = false;
+							this.setFirstFieldError(field);
+						} else {
+							divMessageError.parentNode.removeChild( divMessageError );
+						}
+					} else if ( field.options[field.selectedIndex].text == '' ) {
+						div = createDivError('campo obrigatório.', 'messageError');
+						divParent.appendChild(div);
+						submitForm = false;
+						this.setFirstFieldError(field);
+					}
 				}
-
 			}
 
-			if ( type == 'xs:date' ) {
-				if ( !validateDateField(field) ) {
-					this.setFirstFieldError(field);
-				}
-			} else if ( type == 'xs:dateTime' ) {
-				if ( validateDateTimeField(field) ) {
-					this.setFirstFieldError(field);
-				}
+			if ( type == 'xs:date' && !validateDateField(field) ) {
+				this.setFirstFieldError(field);
+				submitForm = false;
+			} else if ( type == 'xs:dateTime' && !validateDateTimeField(field) ) {
+				this.setFirstFieldError(field);
+				submitForm = false;
 			}
 
 		}
-		if ( !submitForm ) {
+
+		if ( submitForm == false ) {
 			alert('Dados inconsistentes.');
 			firstFieldError.focus();
 			return false;
