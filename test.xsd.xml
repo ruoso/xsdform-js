@@ -16,7 +16,7 @@
 					</xs:annotation>
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element name="codigoPMF" type="xs:integer">
+							<xs:element name="codigoPMF" type="xs:integer" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Código PMF</label>
@@ -58,7 +58,7 @@
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="tipoDemanda">
+							<xs:element name="tipoDemanda" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Tipo de Demanda</label>

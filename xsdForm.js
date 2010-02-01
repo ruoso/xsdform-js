@@ -152,10 +152,10 @@
 	}
 
 	function generateFormFromNode(xmlNode, namePattern) {
-		var label, type;
-		type = getValueAttributeByName(xmlNode, "type");
+		var label;
+		var type = getValueAttributeByName(xmlNode, "type");
+		var minOccurs = getValueAttributeByName(xmlNode, "minOccurs");
 		if (type != null) {
-			var minOccurs = getValueAttributeByName(xmlNode, "minOccurs");
 			return generateFormField(xmlNode, type, namePattern, minOccurs);
 
 		} else {
@@ -168,7 +168,7 @@
 					return generateFormFromComplexTypeNode(xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label );
 
 				} else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:simpleType') {
-					return generateFormFromSimpleTypeNode(xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label);
+					return generateFormFromSimpleTypeNode(xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label, minOccurs);
 
 				}
 			}
@@ -176,8 +176,8 @@
 	}
 
 	function generateXmlFromNode(odoc, xmlNode, namePattern) {
-		var type;
-		type = getValueAttributeByName(xmlNode, "type");
+		var type = getValueAttributeByName(xmlNode, "type");
+		var minOccurs = getValueAttributeByName(xmlNode, "minOccurs");
 		if (type != null) {
 			// pre-defined types
 			if (type == "xs:integer"  ||
@@ -197,7 +197,7 @@
 				if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:complexType') {
 					return generateXmlFromComplexTypeNode(odoc, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"));
 				} else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:simpleType') {
-					return generateXmlFromSimpleTypeNode(odoc, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"));
+					return generateXmlFromSimpleTypeNode(odoc, namePattern, getValueAttributeByName(xmlNode, "name"), minOccurs);
 				}
 			}
 		}
@@ -261,7 +261,7 @@
 
 	}
 
-	function generateFormFromSimpleTypeNode(xmlNode, namePattern, name, label) {
+	function generateFormFromSimpleTypeNode(xmlNode, namePattern, name, label, minOccurs) {
 
 		var frag = document.createDocumentFragment();
 		var dt = document.createElement('dt');
@@ -269,8 +269,6 @@
 
 		var restrictionNode = getNodeByTagName(xmlNode, 'xs:restriction');
 		var inputName = namePattern + "__" + name;
-
-		var minOccurs = getValueAttributeByName(restrictionNode, "minOccurs");
 
 		var divValidation = document.createElement('div');
 		divValidation.setAttribute('name', 'xsdFormValidation')
@@ -319,15 +317,20 @@
 		return frag;
 	}
 
-	function generateXmlFromSimpleTypeNode(odoc, xmlNode, namePattern, name) {
+	function generateXmlFromSimpleTypeNode(odoc, namePattern, name, minOccurs) {
 
 		var inputName = namePattern + "__" + name;
-		var tag = odoc.createElement(name);
-		var content = odoc.createTextNode(getById(inputName).value);
+		var valueField = getById(inputName).value;
 
-		tag.appendChild(content);
+		if ( minOccurs != '0' || valueField != '' ) {
+			var tag = odoc.createElement(name);
+			var content = odoc.createTextNode( valueField );
+			tag.appendChild(content);
+			return tag;
+		} else if ( minOccurs == '0' ) {
+			return false;
+		}
 
-		return tag;
 	}
 
 	function getTextTagInAnnotationAppinfo(xmlNode, strTag, annotation) {
@@ -349,14 +352,19 @@
 	function generateXmlFromSimpleTextNode(odoc, xmlNode, namePattern) {
 
 		var name = getValueAttributeByName(xmlNode, "name");
+		var minOccurs = getValueAttributeByName(xmlNode, "minOccurs");
 		var inputName = namePattern + "__" + name;
+		var valueField = getById(inputName).value;
 
-		var tag = odoc.createElement(name);
-		var content = odoc.createTextNode(getById(inputName).value);
+		if ( minOccurs != '0' || valueField != '' ) {
+			var tag = odoc.createElement(name);
+			var content = odoc.createTextNode( valueField );
+			tag.appendChild(content);
+			return tag;
+		} else if ( minOccurs == '0' ) {
+			return false;
+		}
 
-		tag.appendChild(content);
-
-		return tag;
 	}
 
 	function generateXmlFromCheckboxTextNode(odoc, xmlNode, namePattern) {
