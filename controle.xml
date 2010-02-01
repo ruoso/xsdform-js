@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="registroDigitacao">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="digitacao">
+					<xs:complexType>
+						<xs:element name="digitador" type="xs:string">
+							<xs:annotation>
+								<xs:appinfo>
+									<label>Digitador</label>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="dataDigitacao" type="xs:dateTime">
+							<xs:annotation>
+								<xs:appinfo>
+									<label>Data da Digitação</label>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="localDigitacao" type="xs:string">
+							<xs:annotation>
+								<xs:appinfo>
+									<label>Local da Digitação</label>
+								</xs:appinfo>
+							</xs:annotation>
+						</xs:element>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="leitura">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="id" type="xs:integer">
+								<xs:annotation>
+									<xs:appinfo>
+										<label>id leitura</label>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="coletaIni" type="xs:date">
+								<xs:annotation>
+									<xs:appinfo>
+										<label>Coleta Inicial</label>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="coletaFim" type="xs:date">
+								<xs:annotation>
+									<xs:appinfo>
+										<label>Coleta Final</label>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="digitacaoIni" type="xs:date">
+								<xs:annotation>
+									<xs:appinfo>
+										<label>Digitação Inicial</label>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="digitacaoFim" type="xs:date">
+								<xs:annotation>
+									<xs:appinfo>
+										<label>Digitação Final</label>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="revisaoIni" type="xs:date">
+								<xs:annotation>
+									<xs:appinfo>
+										<label>Revisão Inicial</label>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="revisaoFim" type="xs:date">
+								<xs:annotation>
+									<xs:appinfo>
+										<label>Revisão Final</label>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="instrumento">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="nome" type="xs:string">
+											<xs:annotation>
+												<xs:appinfo>
+													<label>Nome Instrumento</label>
+												</xs:appinfo>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="xmlSchema" type="xs:string">
+											<xs:annotation>
+												<xs:appinfo>
+													<label>XML Schema</label>
+												</xs:appinfo>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="projeto">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="id" type="xs:integer">
+														<xs:annotation>
+															<xs:appinfo>
+																<label>id projeto</label>
+															</xs:appinfo>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="nome" type="xs:string">
+														<xs:annotation>
+															<xs:appinfo>
+																<label>Nome Projeto</label>
+															</xs:appinfo>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="documento">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="id" type="xs:string">
+								<xs:annotation>
+									<xs:appinfo>
+										<label>id documento</label>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="controle" type="xs:string">
+								<xs:annotation>
+									<xs:appinfo>
+										<label>numero de controle do formulario</label>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="estado">
+								<xs:annotation>
+									<xs:appinfo>
+										<label>Estado do Documento</label>
+									</xs:appinfo>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="Digitado"/>
+										<xs:enumeration value="Aprovado"/>
+										<xs:enumeration value="Unido"/>
+										<xs:enumeration value="Rejeitado"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="conteudo" type="xs:any">
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>	
+	</xs:element>
+</xs:schema>
