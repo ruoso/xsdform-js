@@ -1,4 +1,28 @@
 
+	function createInput(type, name, id) {
+		var newInput = document.createElement('input');
+		newInput.type  = type;
+		newInput.name  = name;
+		newInput.id    = ( id != undefined )? id: name;
+		return newInput;
+	}
+
+	function createLabel(innerHTML, idField) {
+		var newLabel = document.createElement("label");
+		newLabel.innerHTML = innerHTML;
+		newLabel.htmlFor = idField;
+		return newLabel;
+	}
+
+	function createDivError(innerHTML, name) {
+		var div;
+		div = document.createElement('div');
+		div.setAttribute('name', name);
+		div.setAttribute('style', 'color:red');
+		div.innerHTML = innerHTML;
+		return div;
+	}
+
 	function removeById(strId) {
 		var elem = getById(strId);
 		elem.parentNode.removeChild(elem);
@@ -131,20 +155,9 @@
 		var label, type;
 		type = getValueAttributeByName(xmlNode, "type");
 		if (type != null) {
-			// pre-defined types
-			if (type == "xs:string" || type == "xs:float") {
-				return generateFormFieldFromSimpleTextNode(xmlNode, namePattern);
-			} else if ( type == "xs:integer" ) {
-				return generateFormFieldIntegerFromSimpleTextNode(xmlNode, namePattern);
-			} else if ( type == "xs:date" ) {
-				return generateFormFieldDateFromSimpleTextNode(xmlNode, namePattern);
-			} else if ( type == "xs:dateTime" ) {
-				return generateFormFieldDateTimeFromSimpleTextNode(xmlNode, namePattern);
-			} else if ( type == "xs:boolean" ) {
-				return generateFormFieldCheckboxFromSimpleTextNode(xmlNode, namePattern);
-			} else {
-				//throw type + " not supported.";
-			}
+			var minOccurs = getValueAttributeByName(xmlNode, "minOccurs");
+			return generateFormField(xmlNode, type, namePattern, minOccurs);
+
 		} else {
 			// inline type definition
 			for (var i = 0; i < xmlNode.childNodes.length; i++) {
@@ -257,18 +270,31 @@
 		var restrictionNode = getNodeByTagName(xmlNode, 'xs:restriction');
 		var inputName = namePattern + "__" + name;
 
+		var minOccurs = getValueAttributeByName(restrictionNode, "minOccurs");
+
+		var divValidation = document.createElement('div');
+		divValidation.setAttribute('name', 'xsdFormValidation')
+
+		var divRequiredField = document.createElement('div');
+		divRequiredField.setAttribute('name', 'requiredField')
+		divRequiredField.setAttribute('style', 'display:none;')
+
+		var required = ( minOccurs == '0' )? 'false': 'true';
+		divRequiredField.appendChild( document.createTextNode( required ) );
+
 		var newSelect = document.createElement('select');
 		newSelect.name  = inputName;
 		newSelect.id    = inputName;
 		dd.appendChild(newSelect);
 
 		var newOption;
+		newOption = document.createElement("option");
+		newOption.innerHTML = '';
+		newSelect.appendChild(newOption);
 		for (var i = 0; i < restrictionNode.childNodes.length; i++) {
 			if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:enumeration' ) {
-
 				newOption = document.createElement("option");
 				newOption.innerHTML = getValueAttributeByName(restrictionNode.childNodes[i], 'value');
-
 				newSelect.appendChild(newOption);
 			}
 		}
@@ -278,6 +304,15 @@
 		newLabel.htmlFor = inputName;
 
 		dt.appendChild(newLabel);
+
+		divValidation.appendChild(newSelect);
+		divValidation.appendChild(divRequiredField);
+
+		dd.appendChild(divValidation);
+		dt.appendChild(newLabel);
+		frag.appendChild(dt);
+		frag.appendChild(dd);
+
 		frag.appendChild(dt);
 		frag.appendChild(dd);
 
@@ -311,32 +346,6 @@
 		return getTextByTagName(xmlNodeAux, strTag);
 	}
 
-	function generateFormFieldFromSimpleTextNode(xmlNode, namePattern) {
-
-		var frag = document.createDocumentFragment();
-		var dt = document.createElement('dt');
-		var dd = document.createElement('dd');
-
-		var name = getValueAttributeByName(xmlNode, "name");
-		var inputName = namePattern + "__" + name;
-
-		var newInput = document.createElement('input');
-		newInput.type  = 'text';
-		newInput.name  = inputName;
-		newInput.id    = inputName;
-		dd.appendChild(newInput);
-
-		var newLabel = document.createElement("label");
-		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
-		newLabel.htmlFor = inputName;
-
-		dt.appendChild(newLabel);
-		frag.appendChild(dt);
-		frag.appendChild(dd);
-
-		return frag;
-	}
-
 	function generateXmlFromSimpleTextNode(odoc, xmlNode, namePattern) {
 
 		var name = getValueAttributeByName(xmlNode, "name");
@@ -348,29 +357,6 @@
 		tag.appendChild(content);
 
 		return tag;
-	}
-
-	function generateFormFieldCheckboxFromSimpleTextNode(xmlNode, namePattern) {
-		var frag = document.createDocumentFragment();
-		var name = getValueAttributeByName(xmlNode, "name");
-		var inputName = namePattern + "__" + name;
-		var dt = document.createElement('dt');
-	        dt.setAttribute('class', 'dtsemdd');
-
-		var newInput = document.createElement('input');
-		newInput.type  = 'checkbox';
-		newInput.name  = inputName;
-		newInput.id    = inputName;
-
-		var newLabel = document.createElement("label");
-		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label');
-		newLabel.htmlFor = inputName;
-
-		dt.appendChild(newInput);
-		dt.appendChild(newLabel);
-		frag.appendChild(dt);
-
-		return frag;
 	}
 
 	function generateXmlFromCheckboxTextNode(odoc, xmlNode, namePattern) {
@@ -385,7 +371,7 @@
 		} else {
 			content = odoc.createTextNode("false");
 		}
-                tag.appendChild(content);
+		tag.appendChild(content);
 
 		return tag;
 	}
@@ -397,17 +383,110 @@
 			var xml = xmlLoader(xsdFile);
 			var tagRaiz  = xml.getElementsByTagName('xs:schema')[0];
 			var elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
-                        var elHtml = generateFormFromNode(elemRoot, "xsdform___");
+			var elHtml = generateFormFromNode(elemRoot, "xsdform___");
 			getById(containerId).appendChild( elHtml );
-
 
 		} catch (myError) {
 			alert( myError.name + ': ' + myError.message + "\n" + myError);
 		}
-
 	}
 
 	function generateXml(xsdFile, input_to_set) {
+
+		var divParent;
+		var field;
+		var requiredField;
+		var div
+		var divMessageError;
+		var messageError;
+		var submitForm = true;
+		var type;
+		var firstFieldError = null;
+
+		var arrDivsValidation = getByName('xsdFormValidation');
+
+		this.setFirstFieldError = function(field) {
+			if ( firstFieldError == null ) {
+				firstFieldError = field;
+			}
+		}
+
+		for (var i = 0; i < arrDivsValidation.length; i++) {
+			divParent = arrDivsValidation[i];
+			messageError = false;
+
+			// percorre a div que contem o campo
+			for (var j = 0; j < divParent.childNodes.length; j++) {
+
+				if ( divParent.childNodes[j].nodeName == 'INPUT' ) {
+					field = divParent.childNodes[j];
+
+				} else if ( divParent.childNodes[j].nodeName == 'DIV' && getValueAttributeByName(divParent.childNodes[j], 'name' ) == 'requiredField' ) {
+					requiredField = divParent.childNodes[j].innerHTML;
+
+				} else if ( divParent.childNodes[j].nodeName == 'DIV' && getValueAttributeByName(divParent.childNodes[j], 'name' ) == 'messageError' ) {
+					messageError = true;
+					divMessageError = divParent.childNodes[j];
+
+				} else if ( divParent.childNodes[j].nodeName == 'DIV' && getValueAttributeByName(divParent.childNodes[j], 'name' ) == 'type' ) {
+					type = divParent.childNodes[j].innerHTML;
+
+				} else if ( divParent.childNodes[j].nodeName == 'SELECT' ) {
+					field = divParent.childNodes[j];
+
+				}
+
+			}
+
+
+			if ( requiredField == 'true' ) {
+				if ( field.nodeName == 'INPUT' ) {
+					if ( messageError ) {
+						if ( field.value == '' ) {
+							submitForm = false;
+							this.setFirstFieldError(field);
+						} else {
+							divMessageError.parentNode.removeChild( divMessageError );
+						}
+					} else if ( field.value == '' ) {
+						div = createDivError('campo obrigatório.', 'messageError');
+						divParent.appendChild(div);
+						submitForm = false;
+						this.setFirstFieldError(field);
+					}
+				} else if ( field.nodeName == 'SELECT' ) {
+					if ( messageError ) {
+						if ( field.options[field.selectedIndex].text == '' ) {
+							submitForm = false;
+							this.setFirstFieldError(field);
+						} else {
+							divMessageError.parentNode.removeChild( divMessageError );
+						}
+					} else if ( field.options[field.selectedIndex].text == '' ) {
+						div = createDivError('campo obrigatório.', 'messageError');
+						divParent.appendChild(div);
+						submitForm = false;
+						this.setFirstFieldError(field);
+					}
+				}
+			}
+
+			if ( type == 'xs:date' && !validateDateField(field) ) {
+				this.setFirstFieldError(field);
+				submitForm = false;
+			} else if ( type == 'xs:dateTime' && !validateDateTimeField(field) ) {
+				this.setFirstFieldError(field);
+				submitForm = false;
+			}
+
+		}
+
+		if ( submitForm == false ) {
+			alert('Dados inconsistentes.');
+			firstFieldError.focus();
+			return false;
+		}
+
 		try {
 			var xml = xmlLoader(xsdFile);
 			var tagRaiz  = xml.getElementsByTagName('xs:schema')[0];
@@ -430,10 +509,10 @@
 		obj.focus();
 	}
 
-	function validateDate(pObj) {
-		var dia = parseInt( pObj.value.substring(8,10), 10 );
-		var mes = parseInt( pObj.value.substring(5,7), 10 );
-		var ano = parseInt( pObj.value.substring(0,4), 10 );
+	function validateDate(objInputText) {
+		var dia = parseInt( objInputText.value.substring(8,10), 10 );
+		var mes = parseInt( objInputText.value.substring(5,7), 10 );
+		var ano = parseInt( objInputText.value.substring(0,4), 10 );
 
 		var DateVal = mes + "/" + dia + "/" + ano;
 		var date = new Date(DateVal);
@@ -487,11 +566,12 @@
 			objFieldDate.value = objFieldDate.value.substr(0, (objFieldDate.value.length - 1));
 			return false;
 		}
-                evt = (evt) ? evt : ((window.event) ? event : null);
-                if (evt.keyCode != 8 && evt.keyCode != 46) {
-                    objFieldDate.value = formatDate(objFieldDate.value);
-                    return true;
-                }
+
+		evt = (evt) ? evt : ((window.event) ? event : null);
+		if (evt.keyCode != 8 && evt.keyCode != 46) {
+			objFieldDate.value = formatDate(objFieldDate.value);
+			return true;
+		}
 	}
 
 	function onlyNumbersDateTime(str) {
@@ -525,19 +605,19 @@
 			objFieldDate.value = objFieldDate.value.substr(0, (objFieldDate.value.length - 1));
 			return false;
 		}
-                evt = (evt) ? evt : ((window.event) ? event : null);
-                if (evt.keyCode != 8 && evt.keyCode != 46) {
-                    objFieldDate.value = formatDateTime(date);
-                    return true;
-                }
+
+		evt = (evt) ? evt : ((window.event) ? event : null);
+		if (evt.keyCode != 8 && evt.keyCode != 46) {
+			objFieldDate.value = formatDateTime(date);
+			return true;
+		}
 	}
 
-	function dateField(obj) {
+	function validateDateField(obj) {
 		if ( !validateDate(obj) ) {
 
 			if ( getById('fieldDate__' + obj.id) == null ) {
-				var div = document.createElement('div');
-				div.setAttribute('style', 'color:red');
+				var div = createDivError('Data Inválida.');
 				div.id = 'fieldDate__' + obj.id;
 
 				var containerField = obj.parentNode;
@@ -545,23 +625,23 @@
 			} else {
 				div = getById('fieldDate__' + obj.id);
 			}
-			div.innerHTML = 'Data Inválida.';
-			obj.focus();
+			return false;
 
 		} else {
 			try {
 				removeById('fieldDate__' + obj.id);
 			} catch (obgError) {
 			}
+			return true;
+
 		}
 	}
 
-	function dateTimeField(obj) {
+	function validateDateTimeField(obj) {
 		if ( !validateDateTime(obj) ) {
 
 			if ( getById('fieldDate__' + obj.id) == null ) {
-				var div = document.createElement('div');
-				div.setAttribute('style', 'color:red');
+				var div = createDivError('Data e/ou Hora Inválida(s).');
 				div.id = 'fieldDate__' + obj.id;
 
 				var containerField = obj.parentNode;
@@ -569,106 +649,148 @@
 			} else {
 				div = getById('fieldDate__' + obj.id);
 			}
-			div.innerHTML = 'Data Inválida.';
-			obj.focus();
+			return false;
 
 		} else {
 			try {
 				removeById('fieldDate__' + obj.id);
 			} catch (obgError) {
 			}
+			return true;
 		}
 	}
 
-	function generateFormFieldIntegerFromSimpleTextNode(xmlNode, namePattern) {
-
-		var frag = document.createDocumentFragment();
-		var dt = document.createElement('dt');
-		var dd = document.createElement('dd');
-
-		var name = getValueAttributeByName(xmlNode, "name");
-		var inputName = namePattern + "__" + name;
-
-		var newInput = document.createElement('input');
-		newInput.type  = 'text';
-		newInput.name  = inputName;
-		newInput.id    = inputName;
-		newInput.setAttribute('onkeypress', 'integerField(this);');
-		newInput.setAttribute('onkeyup', 'integerField(this);');
-		dd.appendChild(newInput);
-
-		var newLabel = document.createElement("label");
-		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
-		newLabel.htmlFor = inputName;
-
-		dt.appendChild(newLabel);
-		frag.appendChild(dt);
-		frag.appendChild(dd);
-
-		return frag;
+	function onlyNumbersFloat(str) {
+		var expRegTrim = /\./g;
+		return str.replace(expRegTrim, '');
 	}
 
-	function generateFormFieldDateFromSimpleTextNode(xmlNode, namePattern) {
+	function floatField(obj) {
+		var expRegNumInt = /^\d+$/; // só números
 
-		var frag = document.createDocumentFragment();
-		var dt = document.createElement('dt');
-		var dd = document.createElement('dd');
-
-		var name = getValueAttributeByName(xmlNode, "name");
-		var inputName = namePattern + "__" + name;
-
-		var newInput = document.createElement('input');
-		newInput.type  = 'text';
-		newInput.name  = inputName;
-		newInput.id    = inputName;
-		newInput.setAttribute('maxlength', '10');
-
-		newInput.setAttribute('onkeypress', 'mascaraData(this, event);');
-		newInput.setAttribute('onkeyup', 'mascaraData(this, event);');
-
-		newInput.setAttribute('onblur', 'dateField(this,event);');
-		dd.appendChild(newInput);
-
-		var newLabel = document.createElement("label");
-		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
-		newLabel.htmlFor = inputName;
-
-		dt.appendChild(newLabel);
-		frag.appendChild(dt);
-		frag.appendChild(dd);
-
-		return frag;
+		if ( !expRegNumInt.test( onlyNumbersFloat(obj.value) ) ) {
+			obj.value = obj.value.substr(0, (obj.value.length - 1));
+		}
 	}
 
-	function generateFormFieldDateTimeFromSimpleTextNode(xmlNode, namePattern) {
+	function formatCurrency(o, n, dig, dec) {
+		new function(c, dig, dec, m){
+			addEvent(o, "keypress", function(e, _){
+				if((_ = e.key == 45) || e.key > 47 && e.key < 58){
+					var o = this, d = 0, n, s, h = o.value.charAt(0) == "-" ? "-" : "",
+						l = (s = (o.value.replace(/^(-?)0+/g, "$1") + String.fromCharCode(e.key)).replace(/\D/g, "")).length;
+					m + 1 && (o.maxLength = m + (d = o.value.length - l + 1));
+					if(m + 1 && l >= m && !_) return false;
+					l <= (n = c) && (s = new Array(n - l + 2).join("0") + s);
+					for(var i = (l = (s = s.split("")).length) - n; (i -= 3) > 0; s[i - 1] += dig);
+					n && n < l && (s[l - ++n] += dec);
+					_ ? h ? m + 1 && (o.maxLength = m + d) : s[0] = "-" + s[0] : s[0] = h + s[0];
+					o.value = s.join("");
+				}
+				e.key > 30 && e.preventDefault();
+			});
+		}(!isNaN(n) ? Math.abs(n) : 2, typeof dig != "string" ? "." : dig, typeof dec != "string" ? "," : dec, o.maxLength);
+	}
 
-		var frag = document.createDocumentFragment();
-		var dt = document.createElement('dt');
-		var dd = document.createElement('dd');
+	function createFieldString(name) {
+		return createInput('text', name);
+	}
+
+	function createFieldFloat(name) {
+		return createInput('text', name);
+	}
+
+	function createFieldInteger(name) {
+		var field;
+		field = createInput('text', name);
+		field.setAttribute('onkeypress', 'integerField(this);');
+		field.setAttribute('onkeyup', 'integerField(this);');
+		return field;
+	}
+
+	function createFieldDate(name) {
+		var field;
+		field = createInput('text', name);
+		field.setAttribute('maxlength', '10');
+		field.setAttribute('onkeypress', 'mascaraData(this, event);');
+		field.setAttribute('onkeyup', 'mascaraData(this, event);');
+		field.setAttribute('onblur', 'validateDateField(this,event);');
+		return field;
+	}
+
+	function createFieldDateTime(name) {
+		var field;
+		field = createInput('text', name);
+		field.setAttribute('maxlength', '19');
+		field.setAttribute('onkeypress', 'mascaraDateTime(this,event);');
+		field.setAttribute('onkeyup', 'mascaraDateTime(this,event);');
+		field.setAttribute('onblur', 'validateDateTimeField(this);');
+		return field;
+	}
+
+	function createFieldBoolean(name) {
+		return createInput('checkbox', name);
+	}
+
+	function generateFormField(xmlNode, type, namePattern, minOccurs) {
 
 		var name = getValueAttributeByName(xmlNode, "name");
 		var inputName = namePattern + "__" + name;
 
-		var newInput = document.createElement('input');
-		newInput.type  = 'text';
-		newInput.name  = inputName;
-		newInput.id    = inputName;
-		newInput.setAttribute('maxlength', '19');
+		var field;
+		if ( type == "xs:string" ) {
+			field = createFieldString(inputName);
+		} else if ( type == "xs:float" ) {
+			field = createFieldFloat(inputName);
+		} else if ( type == "xs:integer" ) {
+			field = createFieldInteger(inputName);
+		} else if ( type == "xs:date" ) {
+			field = createFieldDate(inputName);
+		} else if ( type == "xs:dateTime" ) {
+			field = createFieldDateTime(inputName);
+		} else if ( type == "xs:boolean" ) {
+			field = createFieldBoolean(inputName);
+		} else {
+			alert('Unknown type!');
+			return false;
+		}
 
-		newInput.setAttribute('onkeypress', 'mascaraDateTime(this,event);');
-		newInput.setAttribute('onkeyup', 'mascaraDateTime(this,event);');
+		var frag = document.createDocumentFragment();
+		var dt = document.createElement('dt');
+		var newLabel = createLabel(getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':', inputName);
 
-		newInput.setAttribute('onblur', 'dateTimeField(this);');
-		dd.appendChild(newInput);
+		if ( type == "xs:boolean" ) {
+	        dt.setAttribute('class', 'dtsemdd');
+			dt.appendChild(field);
+			dt.appendChild(newLabel);
+			frag.appendChild(dt);
+		} else {
+			var dd = document.createElement('dd');
 
-		var newLabel = document.createElement("label");
-		newLabel.innerHTML = getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':';
-		newLabel.htmlFor = inputName;
+			var divValidation = document.createElement('div');
+			divValidation.setAttribute('name', 'xsdFormValidation')
 
-		dt.appendChild(newLabel);
-		frag.appendChild(dt);
-		frag.appendChild(dd);
+			var divRequiredField = document.createElement('div');
+			divRequiredField.setAttribute('name', 'requiredField')
+			divRequiredField.setAttribute('style', 'display:none;')
 
+			var required = ( minOccurs == '0' )? 'false': 'true';
+			divRequiredField.appendChild( document.createTextNode( required ) );
+
+			var divType = document.createElement('div');
+			divType.setAttribute('name', 'type')
+			divType.setAttribute('style', 'display:none;')
+			divType.appendChild( document.createTextNode( type ) );
+
+			divValidation.appendChild(field);
+			divValidation.appendChild(divRequiredField);
+			divValidation.appendChild(divType);
+
+			dd.appendChild(divValidation);
+			dt.appendChild(newLabel);
+			frag.appendChild(dt);
+			frag.appendChild(dd);
+		}
 		return frag;
 	}
 	
