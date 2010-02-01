@@ -759,7 +759,7 @@
 		} else if ( type == "xs:boolean" ) {
 			field = createFieldBoolean(inputName);
 		} else {
-			alert('Unknown type!');
+			alert(type + ' - Unknown type!');
 			return false;
 		}
 
