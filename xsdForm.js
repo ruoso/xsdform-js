@@ -804,9 +804,8 @@
 	
 	function fillValues(xmlFile) {
 		try {
-                        var xml = xmlLoader(xmlFile);
-                        var raizXml  = xml.getElementsByTagName('formCadernoA')[0];
-                        getFormFromNode("xsdform___", xml);
+			var xml = xmlLoader(xmlFile);
+			getFormFromNode("xsdform___", xml);
 		} catch (myError) {
 			alert( myError.name + ': ' + myError.message + "\n" + myError);
 		}
@@ -814,22 +813,21 @@
 
 	function getFormFromNode(namePattern, xml) {
 
-                var xmlNode;
-                var name = "";
+		var xmlNode;
+		var name = "";
 
-                for (var i = 0; i < xml.childNodes.length; i++) {
-                    xmlNode = xml;
-                    if (xml.childNodes[i].nodeType == 1) {
-                       xmlNode = getNodeByTagName(xmlNode,xml.childNodes[i].nodeName);
-                       name = namePattern + "__" + xmlNode.nodeName;
-                       if (xmlNode.childNodes.length > 1) {
-                          getFormFromNode(name, xmlNode);
-                       } else if (xmlNode.childNodes.length == 1) {
-                          insereValor(name,getText(xmlNode));
-                       }
-                    }
-                }
-
+		for (var i = 0; i < xml.childNodes.length; i++) {
+			xmlNode = xml;
+			if (xml.childNodes[i].nodeType == 1) {
+			   xmlNode = getNodeByTagName(xmlNode,xml.childNodes[i].nodeName);
+			   name = namePattern + "__" + xmlNode.nodeName;
+			   if (xmlNode.childNodes.length > 1) {
+				  getFormFromNode(name, xmlNode);
+			   } else if (xmlNode.childNodes.length == 1) {
+				  insereValor(name,getText(xmlNode));
+			   }
+			}
+		}
 	}
 
         function insereValor(nameField,valor) {
