@@ -705,7 +705,11 @@
 	}
 
 	function createFieldFloat(name) {
-		return createInput('text', name);
+                var field;
+                field = createInput('text', name);
+                field.setAttribute('onkeypress','floatField(this);');
+                field.setAttribute('onkeyup','floatField(this);');
+		return field;
 	}
 
 	function createFieldInteger(name) {
