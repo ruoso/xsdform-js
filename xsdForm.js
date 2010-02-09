@@ -710,11 +710,12 @@ function onlyNumbersFloat(str) {
 }
 
 function floatField(obj) {
-    var expText = /[a-zA-Z]|,|ç/; // texto
+    //var expText = /[a-zA-Z]|,|ç/; // texto
+    var expText = /\d|\./;
     var caractere;
     for (var i = 0 ; i < obj.value.length ; i++) {
         caractere = obj.value.charAt(i);
-        if (expText.test(caractere)) {
+        if (!expText.test(caractere)) {
             obj.value = obj.value.replace(caractere,'');
         }
     }
