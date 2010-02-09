@@ -521,59 +521,71 @@ function integerField(obj) {
 }
 
 function validateDate(objInputText) {
-    var dia = parseInt( objInputText.value.substring(8,10), 10 );
-    var mes = parseInt( objInputText.value.substring(5,7), 10 );
-    var ano = parseInt( objInputText.value.substring(0,4), 10 );
+    if (objInputText.value != "") {
+        var dia = parseInt( objInputText.value.substring(8,10), 10 );
+        var mes = parseInt( objInputText.value.substring(5,7), 10 );
+        var ano = parseInt( objInputText.value.substring(0,4), 10 );
 
-    var DateVal = mes + "/" + dia + "/" + ano;
-    var date = new Date(DateVal);
-    var mesValid = (mes - 1); // o metodo getMonth retorna o mes porem janeiro é zero
+        var DateVal = mes + "/" + dia + "/" + ano;
+        var date = new Date(DateVal);
+        var mesValid = (mes - 1); // o metodo getMonth retorna o mes porem janeiro é zero
 
-    if ( date.getDate() != dia ) {
-        return false;
-    } else if ( date.getMonth() != mesValid ) {
-        return false;
-    } else if ( date.getFullYear() != ano ) {
-        return false;
+        if ( date.getDate() != dia ) {
+            return false;
+        } else if ( date.getMonth() != mesValid ) {
+            return false;
+        } else if ( date.getFullYear() != ano ) {
+            return false;
+        }
+        return true;
+    } else {
+        return true;
     }
-    return true;
 }
 
 function validateDateTime(pObj) {
-    var dia = parseInt( pObj.value.substring(8,10), 10 );
-    var mes = parseInt( pObj.value.substring(5,7), 10 );
-    var ano = parseInt( pObj.value.substring(0,4), 10 );
+    if (pObj.value != "") {
+        var dia = parseInt( pObj.value.substring(8,10), 10 );
+        var mes = parseInt( pObj.value.substring(5,7), 10 );
+        var ano = parseInt( pObj.value.substring(0,4), 10 );
 
-    var hora = parseInt( pObj.value.substring(11,13), 10 );
-    var minuto = parseInt( pObj.value.substring(14,16), 10 );
-    var segundo = parseInt( pObj.value.substring(17,19), 10 );
+        var hora = parseInt( pObj.value.substring(11,13), 10 );
+        var minuto = parseInt( pObj.value.substring(14,16), 10 );
+        var segundo = parseInt( pObj.value.substring(17,19), 10 );
 
-    var DateVal = mes + "/" + dia + "/" + ano + ' ' + hora + ':' + minuto + ':' + segundo;
-    var date = new Date(DateVal);
-    var mesValid = (mes - 1); // o metodo getMonth retorna o mes porem janeiro é zero
+        var DateVal = mes + "/" + dia + "/" + ano + ' ' + hora + ':' + minuto + ':' + segundo;
+        var date = new Date(DateVal);
+        var mesValid = (mes - 1); // o metodo getMonth retorna o mes porem janeiro é zero
 
-    if ( date.getDate() != dia ) {
-        return false;
-    } else if ( date.getMonth() != mesValid ) {
-        return false;
-    } else if ( date.getFullYear() != ano ) {
-        return false;
-    } else if ( date.getHours() != hora ) {
-        return false;
-    } else if ( date.getHours() != hora ) {
-        return false;
-    } else if ( date.getMinutes() != minuto ) {
-        return false;
-    } else if ( date.getSeconds() != segundo ) {
-        return false;
+        if ( date.getDate() != dia ) {
+            return false;
+        } else if ( date.getMonth() != mesValid ) {
+            return false;
+        } else if ( date.getFullYear() != ano ) {
+            return false;
+        } else if ( date.getHours() != hora ) {
+            return false;
+        } else if ( date.getHours() != hora ) {
+            return false;
+        } else if ( date.getMinutes() != minuto ) {
+            return false;
+        } else if ( date.getSeconds() != segundo ) {
+            return false;
+        }
+        return true;
+    } else {
+        return true;
     }
-    return true;
 }
 
 function validateFloat(pObj) {
     var expRegNumInt = /^\d+(\.\d+)?$/; // float
-    if (!expRegNumInt.test(pObj.value)) {
-        return false;
+    if (pObj.value != "") {
+        if (!expRegNumInt.test(pObj.value)) {
+            return false;
+        } else {
+            return true;
+        }
     } else {
         return true;
     }

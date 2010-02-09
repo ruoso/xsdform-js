@@ -23,35 +23,35 @@
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="data" type="xs:date">
+							<xs:element name="data" type="xs:date" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Data</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="orgaoCadastrador" type="xs:string">
+							<xs:element name="orgaoCadastrador" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Órgão Cadastrador</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="entrevistador" type="xs:string">
+							<xs:element name="entrevistador" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Entrevistador</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="titularBeneficiario" type="xs:string">
+							<xs:element name="titularBeneficiario" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Titular Beneficiário</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="nomeComunidade" type="xs:string">
+							<xs:element name="nomeComunidade" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Nome da Comunidade</label>
@@ -72,7 +72,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="cartao">
+							<xs:element name="cartao" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Cartao</label>
@@ -98,49 +98,49 @@
 					</xs:annotation>
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element name="logradouro" type="xs:string">
+							<xs:element name="logradouro" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Logradouro</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="numero" type="xs:integer">
+							<xs:element name="numero" type="xs:integer" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Numero</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="complemento" type="xs:string">
+							<xs:element name="complemento" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Complemento</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="localizacaoCartografica" type="xs:string">
+							<xs:element name="localizacaoCartografica" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>localizacao Cartografica</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="bairro" type="xs:string">
+							<xs:element name="bairro" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Bairro</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="telefone" type="xs:string">
+							<xs:element name="telefone" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Telefone</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="informante">
+							<xs:element name="informante" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Informante</label>
@@ -158,35 +158,35 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="observacoes" type="xs:string">
+							<xs:element name="observacoes" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Observacoes</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="visita1" type="xs:dateTime">
+							<xs:element name="visita1" type="xs:dateTime" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>1 Visita</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="visita2" type="xs:dateTime">
+							<xs:element name="visita2" type="xs:dateTime" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>2 Visita</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="visita3" type="xs:dateTime">
+							<xs:element name="visita3" type="xs:dateTime" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>3 Visita</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="notificacao" type="xs:dateTime">
+							<xs:element name="notificacao" type="xs:dateTime" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Notificacao</label>
@@ -204,7 +204,7 @@
 					</xs:annotation>
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element name="localizacao">
+							<xs:element name="localizacao" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Localizacao</label>
@@ -264,7 +264,7 @@
 									</xs:sequence>
 								</xs:complexType>
 							</xs:element>
-							<xs:element name="areaPreservacao">
+							<xs:element name="areaPreservacao" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Area de Preservacao</label>
@@ -278,7 +278,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="tipologiaUso">
+							<xs:element name="tipologiaUso" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Tipologia de Uso</label>
@@ -294,14 +294,14 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="tipoServico" type="xs:string">
+							<xs:element name="tipoServico" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Tipo de Servico</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="situacaoFundiaria">
+							<xs:element name="situacaoFundiaria" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Situacao Fundiaria</label>
@@ -324,42 +324,42 @@
 								</xs:annotation>
 								<xs:complexType>
 									<xs:sequence>
-										<xs:element name="qtdQuartos" type="xs:integer">
+										<xs:element name="qtdQuartos" type="xs:integer" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Quarto(s)</label>
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="qtdSalas" type="xs:integer">
+										<xs:element name="qtdSalas" type="xs:integer" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Sala(s)</label>
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="qtdCozinhas" type="xs:integer">
+										<xs:element name="qtdCozinhas" type="xs:integer" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Cozinha(s)</label>
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="qtdBanheiros" type="xs:integer">
+										<xs:element name="qtdBanheiros" type="xs:integer" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Banheiro(s)</label>
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="qtdQuintais" type="xs:integer">
+										<xs:element name="qtdQuintais" type="xs:integer" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Quintal(s)</label>
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="qtdUotros" type="xs:integer">
+										<xs:element name="qtdUotros" type="xs:integer" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Outro(s)</label>
@@ -376,7 +376,7 @@
 									</xs:sequence>
 								</xs:complexType>
 							</xs:element>
-							<xs:element name="tipoMoradia">
+							<xs:element name="tipoMoradia" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Tipo de Moradia</label>
@@ -394,56 +394,56 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="numMatricula" type="xs:integer">
+							<xs:element name="numMatricula" type="xs:integer" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Num. Matricula</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="cartorio" type="xs:string">
+							<xs:element name="cartorio" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Cartorio</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="zona" type="xs:string">
+							<xs:element name="zona" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Zona</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="nomeProprietario" type="xs:string">
+							<xs:element name="nomeProprietario" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Nome do Proprietario</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="valor" type="xs:float">
+							<xs:element name="valor" type="xs:float" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Valor</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="enderecoProprietario" type="xs:string">
+							<xs:element name="enderecoProprietario" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Endereco do Proprietario</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="telefoneProprietario" type="xs:string">
+							<xs:element name="telefoneProprietario" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Telefone do Proprietario</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="tipologiaConstrucao">
+							<xs:element name="tipologiaConstrucao" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Tipologia de Construcao</label>
@@ -463,7 +463,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="tipoCobertura">
+							<xs:element name="tipoCobertura" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Tipo de Cobertura</label>
@@ -478,7 +478,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="tipoPiso">
+							<xs:element name="tipoPiso" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Tipo de Piso</label>
@@ -493,7 +493,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="revestimentoParede">
+							<xs:element name="revestimentoParede" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Revestimento de Parede</label>
@@ -512,7 +512,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="casaEmSituacaRisco">
+							<xs:element name="casaEmSituacaRisco" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Casa Em Situaca de Risco</label>
@@ -526,7 +526,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="tipoRisco">
+							<xs:element name="tipoRisco" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Tipo de Risco</label>
@@ -597,7 +597,7 @@
 					</xs:annotation>
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element name="redeDeAgua">
+							<xs:element name="redeDeAgua" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Rede de Agua</label>
@@ -611,7 +611,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="abastecimentoAguaPublicoPrivado">
+							<xs:element name="abastecimentoAguaPublicoPrivado" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Abastecimento de Agua</label>
@@ -633,7 +633,7 @@
 								</xs:annotation>
 								<xs:complexType>
 									<xs:sequence>
-										<xs:element name="tipoAbastecimentoAgua">
+										<xs:element name="tipoAbastecimentoAgua" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Tipo de Abastecimento de Agua</label>
@@ -661,7 +661,7 @@
 									</xs:sequence>
 								</xs:complexType>
 							</xs:element>
-							<xs:element name="redeColetaEsgoto">
+							<xs:element name="redeColetaEsgoto" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Rede de Coleta de Esgoto</label>
@@ -675,7 +675,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="esgotamentoSanitario">
+							<xs:element name="esgotamentoSanitario" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Esgotamento Sanitario</label>
@@ -697,7 +697,7 @@
 								</xs:annotation>
 								<xs:complexType>
 									<xs:sequence>
-										<xs:element name="tipo">
+										<xs:element name="tipo" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
 													<label>Tipo</label>
@@ -724,7 +724,7 @@
 									</xs:sequence>
 								</xs:complexType>
 							</xs:element>
-							<xs:element name="tipoLigacaoRedeEletrica">
+							<xs:element name="tipoLigacaoRedeEletrica" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Tipo de Ligação com a Rede de Energia Elétrica</label>
@@ -740,7 +740,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="tipoPavimentacao">
+							<xs:element name="tipoPavimentacao" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Tipo de Pavimentação</label>
@@ -757,7 +757,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="tipoDrenagem">
+							<xs:element name="tipoDrenagem" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Tipo de Drenagem</label>
@@ -810,7 +810,7 @@
 									</xs:sequence>
 								</xs:complexType>
 							</xs:element>
-							<xs:element name="tipoServicoTelefonicoPredominante">
+							<xs:element name="tipoServicoTelefonicoPredominante" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Tipo de Serviço Telefônico Utilizado Predominantemente</label>
@@ -826,7 +826,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="coletaSistematicaLixo">
+							<xs:element name="coletaSistematicaLixo" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Coleta Sistemática (Lixo)</label>
@@ -840,7 +840,7 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
-							<xs:element name="destinoLixo">
+							<xs:element name="destinoLixo" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
 										<label>Destino do Lixo</label>
