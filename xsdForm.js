@@ -760,8 +760,9 @@ function createFieldString(name) {
 function createFieldFloat(name) {
     var field;
     field = createInput('text', name);
-    field.setAttribute('onkeypress','floatField(this);');
-    field.setAttribute('onkeyup','floatField(this);');
+    //field.setAttribute('onkeypress','floatField(this);bloquearTexto(event)');
+    field.setAttribute('onkeypress','return bloquearTexto(event);');
+    //field.setAttribute('onkeyup','floatField(this);');
     field.setAttribute('onblur', 'validateFloatField(this,event);');
     return field;
 }
@@ -826,27 +827,27 @@ function generateFormField(xmlNode, type, namePattern, minOccurs) {
     var dt = document.createElement('dt');
     var newLabel = createLabel(getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':', inputName);
 
-    if ( type == "xs:boolean" ) {
+    if ( type == "xs:boolean" && name != "codigoPMFNaoTem" ) {
         dt.setAttribute('class', 'dtsemdd');
         dt.appendChild(field);
         dt.appendChild(newLabel);
         frag.appendChild(dt);
-    } else {
+    } else if (name != "codigoPMFNaoTem") {
         var dd = document.createElement('dd');
 
         var divValidation = document.createElement('div');
-        divValidation.setAttribute('name', 'xsdFormValidation')
+        divValidation.setAttribute('name', 'xsdFormValidation');
 
         var divRequiredField = document.createElement('div');
-        divRequiredField.setAttribute('name', 'requiredField')
-        divRequiredField.setAttribute('style', 'display:none;')
+        divRequiredField.setAttribute('name', 'requiredField');
+        divRequiredField.setAttribute('style', 'display:none;');
 
         var required = ( minOccurs == '0' )? 'false': 'true';
         divRequiredField.appendChild( document.createTextNode( required ) );
 
         var divType = document.createElement('div');
-        divType.setAttribute('name', 'type')
-        divType.setAttribute('style', 'display:none;')
+        divType.setAttribute('name', 'type');
+        divType.setAttribute('style', 'display:none;');
         divType.appendChild( document.createTextNode( type ) );
 
         divValidation.appendChild(field);
@@ -854,6 +855,12 @@ function generateFormField(xmlNode, type, namePattern, minOccurs) {
         divValidation.appendChild(divType);
 
         dd.appendChild(divValidation);
+        dt.appendChild(newLabel);
+        frag.appendChild(dt);
+        frag.appendChild(dd);
+    } else {
+        var dd = document.createElement('dd');
+        dd.appendChild(field);
         dt.appendChild(newLabel);
         frag.appendChild(dt);
         frag.appendChild(dd);
@@ -900,4 +907,71 @@ function insereValor(nameField,valor) {
         }
 
     }
+}
+
+function bloquearTexto(objEvento) {
+    var lngCaracter;
+    
+    if(objEvento.keyCode)
+    {
+        lngCaracter = objEvento.keyCode;
+    }
+    else if(objEvento.which)
+    {
+        lngCaracter = objEvento.which;
+    }
+    else if(objEvento.charCode)
+    {
+        lngCaracter = objEvento.charCode;
+    }
+    else
+    {
+        lngCaracter = void(0);
+    }
+
+    switch (lngCaracter) {
+        case 48:
+            return true;
+            break;
+        case 49:
+            return true;
+            break;
+        case 50:
+            return true;
+            break;
+        case 51:
+            return true;
+            break;
+        case 52:
+            return true;
+            break;
+        case 53:
+            return true;
+            break;
+        case 54:
+            return true;
+            break;
+        case 55:
+            return true;
+            break;
+        case 56:
+            return true;
+            break;
+        case 57:
+            return true;
+            break;
+        case 46:
+            return true;
+            break;
+        case 116:
+            return true;
+            break;
+        case 8:
+            return true;
+            break;
+        case 9:
+            return true;
+            break;
+    }
+    return false;
 }

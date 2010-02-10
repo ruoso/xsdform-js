@@ -23,6 +23,13 @@
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
+                                                        <xs:element name="codigoPMFNaoTem" type="xs:boolean">
+								<xs:annotation>
+									<xs:appinfo>
+										<label>Não tem</label>
+									</xs:appinfo>
+								</xs:annotation>
+							</xs:element>
 							<xs:element name="data" type="xs:date" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
