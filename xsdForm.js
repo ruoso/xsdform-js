@@ -761,7 +761,7 @@ function createFieldFloat(name) {
     var field;
     field = createInput('text', name);
     //field.setAttribute('onkeypress','floatField(this);bloquearTexto(event)');
-    field.setAttribute('onkeypress','return bloquearTexto(event);');
+    field.setAttribute('onkeypress','return validaCampoNumerico(event,"float");');
     //field.setAttribute('onkeyup','floatField(this);');
     field.setAttribute('onblur', 'validateFloatField(this,event);');
     return field;
@@ -770,9 +770,10 @@ function createFieldFloat(name) {
 function createFieldInteger(name) {
     var field;
     field = createInput('text', name);
-    field.setAttribute('onchange', 'integerField(this);');
-    field.setAttribute('onkeypress', 'integerField(this);');
-    field.setAttribute('onkeyup', 'integerField(this);');
+    //field.setAttribute('onchange', 'integerField(this);');
+    //field.setAttribute('onkeypress', 'integerField(this);');
+    field.setAttribute('onkeypress','return validaCampoNumerico(event,"integer");');
+    //field.setAttribute('onkeyup', 'integerField(this);');
     return field;
 }
 
@@ -909,27 +910,35 @@ function insereValor(nameField,valor) {
     }
 }
 
-function bloquearTexto(objEvento) {
-    var lngCaracter;
-    
+function validaCampoNumerico(objEvento, type) {
+    var iKeyCode;
+
     if(objEvento.keyCode)
     {
-        lngCaracter = objEvento.keyCode;
+        iKeyCode = objEvento.keyCode;
     }
     else if(objEvento.which)
     {
-        lngCaracter = objEvento.which;
+        iKeyCode = objEvento.which;
     }
     else if(objEvento.charCode)
     {
-        lngCaracter = objEvento.charCode;
+        iKeyCode = objEvento.charCode;
     }
     else
     {
-        lngCaracter = void(0);
+        iKeyCode = void(0);
     }
 
-    switch (lngCaracter) {
+    if (type == "float") {
+        return validaFloat(iKeyCode);
+    } else {
+        return validaInteger(iKeyCode);
+    }
+}
+
+function validaFloat(iKeyCode) {
+    switch (iKeyCode) {
         case 48:
             return true;
             break;
@@ -961,6 +970,51 @@ function bloquearTexto(objEvento) {
             return true;
             break;
         case 46:
+            return true;
+            break;
+        case 116:
+            return true;
+            break;
+        case 8:
+            return true;
+            break;
+        case 9:
+            return true;
+            break;
+    }
+    return false;
+}
+
+function validaInteger(iKeyCode) {
+    switch (iKeyCode) {
+        case 48:
+            return true;
+            break;
+        case 49:
+            return true;
+            break;
+        case 50:
+            return true;
+            break;
+        case 51:
+            return true;
+            break;
+        case 52:
+            return true;
+            break;
+        case 53:
+            return true;
+            break;
+        case 54:
+            return true;
+            break;
+        case 55:
+            return true;
+            break;
+        case 56:
+            return true;
+            break;
+        case 57:
             return true;
             break;
         case 116:
