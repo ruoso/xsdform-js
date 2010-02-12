@@ -74,22 +74,22 @@
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
-										<xs:enumeration value="Espontanea"/>
-										<xs:enumeration value="nao Espontanea"/>
+										<xs:enumeration value="Espontânea"/>
+										<xs:enumeration value="não Espontânea"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
 							<xs:element name="cartao" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Cartao</label>
+										<label>Cartão</label>
 									</xs:appinfo>
 								</xs:annotation>
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
 										<xs:enumeration value="entregue"/>
-										<xs:enumeration value="nao entregue"/>
+										<xs:enumeration value="não entregue"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -100,7 +100,7 @@
 				<xs:element name="enderecoImovel">
 					<xs:annotation>
 						<xs:appinfo>
-							<label>Endereco do Imovel</label>
+							<label>Endereco do Imóvel</label>
 						</xs:appinfo>
 					</xs:annotation>
 					<xs:complexType>
@@ -115,7 +115,7 @@
 							<xs:element name="numero" type="xs:integer" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Numero</label>
+										<label>Número</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
@@ -129,7 +129,7 @@
 							<xs:element name="localizacaoCartografica" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>localizacao Cartografica</label>
+										<label>localização Cartográfica</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
@@ -168,7 +168,7 @@
 							<xs:element name="observacoes" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Observacoes</label>
+										<label>Observações</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
@@ -196,7 +196,7 @@
 							<xs:element name="notificacao" type="xs:dateTime" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Notificacao</label>
+										<label>Notificação</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
@@ -206,7 +206,7 @@
 				<xs:element name="caracteristicasImovel">
 					<xs:annotation>
 						<xs:appinfo>
-							<label>Caracteristicas do Imovel</label>
+							<label>Características do Imóvel</label>
 						</xs:appinfo>
 					</xs:annotation>
 					<xs:complexType>
@@ -214,7 +214,7 @@
 							<xs:element name="localizacao" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Localizacao</label>
+										<label>Localização</label>
 									</xs:appinfo>
 								</xs:annotation>
 								<xs:complexType>
@@ -236,21 +236,21 @@
 										<xs:element name="praca" type="xs:boolean">
 											<xs:annotation>
 												<xs:appinfo>
-													<label>Praca</label>
+													<label>Praça</label>
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
 										<xs:element name="areaVerde" type="xs:boolean">
 											<xs:annotation>
 												<xs:appinfo>
-													<label>Area Verde</label>
+													<label>Área Verde</label>
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
 										<xs:element name="terroParaEquipamentoComunitario" type="xs:boolean">
 											<xs:annotation>
 												<xs:appinfo>
-													<label>Terro p/ Equipamento Comunitario</label>
+													<label>Terro p/ Equipamento Comunitário</label>
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
@@ -274,7 +274,7 @@
 							<xs:element name="areaPreservacao" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Area de Preservacao</label>
+										<label>Area de Preservação</label>
 									</xs:appinfo>
 								</xs:annotation>
 								<xs:simpleType>
@@ -296,7 +296,7 @@
 										<xs:enumeration value="Não Informado"/>
 										<xs:enumeration value="residencial"/>
 										<xs:enumeration value="comercial"/>
-										<xs:enumeration value="servicos"/>
+										<xs:enumeration value="serviços"/>
 										<xs:enumeration value="mista"/>
 									</xs:restriction>
 								</xs:simpleType>
@@ -304,22 +304,22 @@
 							<xs:element name="tipoServico" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Tipo de Servico</label>
+										<label>Tipo de Serviço</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
 							<xs:element name="situacaoFundiaria" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Situacao Fundiaria</label>
+										<label>Situação Fundiária</label>
 									</xs:appinfo>
 								</xs:annotation>
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
-										<xs:enumeration value="publico"/>
-										<xs:enumeration value="privato"/>
-										<xs:enumeration value="nao sabe"/>
+										<xs:enumeration value="público"/>
+										<xs:enumeration value="privado"/>
+										<xs:enumeration value="não sabe"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -392,7 +392,7 @@
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
-										<xs:enumeration value="Propria/Regularizada"/>
+										<xs:enumeration value="Própria/Regularizada"/>
 										<xs:enumeration value="Comprada(Propria)"/>
 										<xs:enumeration value="cedida"/>
 										<xs:enumeration value="invadida"/>
@@ -404,14 +404,14 @@
 							<xs:element name="numMatricula" type="xs:integer" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Num. Matricula</label>
+										<label>Num. Matrícula</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
 							<xs:element name="cartorio" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Cartorio</label>
+										<label>Cartório</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
@@ -425,7 +425,7 @@
 							<xs:element name="nomeProprietario" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Nome do Proprietario</label>
+										<label>Nome do Proprietário</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
@@ -439,21 +439,21 @@
 							<xs:element name="enderecoProprietario" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Endereco do Proprietario</label>
+										<label>Endereço do Proprietário</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
 							<xs:element name="telefoneProprietario" type="xs:string" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Telefone do Proprietario</label>
+										<label>Telefone do Proprietário</label>
 									</xs:appinfo>
 								</xs:annotation>
 							</xs:element>
 							<xs:element name="tipologiaConstrucao" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Tipologia de Construcao</label>
+										<label>Tipologia de Construção</label>
 									</xs:appinfo>
 								</xs:annotation>
 								<xs:simpleType>
@@ -462,9 +462,9 @@
 										<xs:enumeration value="alvenaria"/>
 										<xs:enumeration value="taipa"/>
 										<xs:enumeration value="madeira"/>
-										<xs:enumeration value="pre-moldado"/>
-										<xs:enumeration value="papelao"/>
-										<xs:enumeration value="plastico"/>
+										<xs:enumeration value="pré-moldado"/>
+										<xs:enumeration value="papelão"/>
+										<xs:enumeration value="plástico"/>
 										<xs:enumeration value="lona"/>
 										<xs:enumeration value="mista"/>
 									</xs:restriction>
@@ -481,7 +481,7 @@
 										<xs:enumeration value="Não Informado"/>
 										<xs:enumeration value="telha"/>
 										<xs:enumeration value="palha"/>
-										<xs:enumeration value="plastico/Madeira"/>
+										<xs:enumeration value="plástico/Madeira"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -495,8 +495,8 @@
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
 										<xs:enumeration value="Barro Batido"/>
-										<xs:enumeration value="tabua"/>
-										<xs:enumeration value="ceramica"/>
+										<xs:enumeration value="tábua"/>
+										<xs:enumeration value="cerâmica"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -512,8 +512,8 @@
 										<xs:enumeration value="Com Reboco"/>
 										<xs:enumeration value="Sem Reboco"/>
 										<xs:enumeration value="Pintura"/>
-										<xs:enumeration value="plastico"/>
-										<xs:enumeration value="papelao"/>
+										<xs:enumeration value="plástico"/>
+										<xs:enumeration value="papelão"/>
 										<xs:enumeration value="madeira"/>
 										<xs:enumeration value="taipa"/>
 									</xs:restriction>
@@ -522,7 +522,7 @@
 							<xs:element name="casaEmSituacaRisco" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Casa Em Situaca de Risco</label>
+										<label>Casa Em Situação de Risco</label>
 									</xs:appinfo>
 								</xs:annotation>
 								<xs:simpleType>
@@ -551,7 +551,7 @@
 										<xs:element name="inundacao" type="xs:boolean">
 											<xs:annotation>
 												<xs:appinfo>
-													<label>Inundacao</label>
+													<label>Inundação</label>
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
@@ -565,14 +565,14 @@
 										<xs:element name="viaFerrea" type="xs:boolean">
 											<xs:annotation>
 												<xs:appinfo>
-													<label>Via Ferrea</label>
+													<label>Via Férrea</label>
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
 										<xs:element name="linhaAltaTensao" type="xs:boolean">
 											<xs:annotation>
 												<xs:appinfo>
-													<label>Linha de Alta Tensao</label>
+													<label>Linha de Alta Tensão</label>
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
@@ -607,27 +607,27 @@
 							<xs:element name="redeDeAgua" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Rede de Agua</label>
+										<label>Rede de Água</label>
 									</xs:appinfo>
 								</xs:annotation>
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
 										<xs:enumeration value="Sim"/>
-										<xs:enumeration value="Nao"/>
+										<xs:enumeration value="Não"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
 							<xs:element name="abastecimentoAguaPublicoPrivado" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Abastecimento de Agua</label>
+										<label>Abastecimento de Água</label>
 									</xs:appinfo>
 								</xs:annotation>
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
-										<xs:enumeration value="Publico"/>
+										<xs:enumeration value="Público"/>
 										<xs:enumeration value="Privado"/>
 									</xs:restriction>
 								</xs:simpleType>
@@ -643,16 +643,16 @@
 										<xs:element name="tipoAbastecimentoAgua" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
-													<label>Tipo de Abastecimento de Agua</label>
+													<label>Tipo de Abastecimento de Água</label>
 												</xs:appinfo>
 											</xs:annotation>
 											<xs:simpleType>
 												<xs:restriction base="xs:string">
 													<xs:enumeration value="Não Informado"/>
-													<xs:enumeration value="Hidrometro Individual"/>
-													<xs:enumeration value="Hidrometro Coletivo"/>
-													<xs:enumeration value="Ligacao Cladestina"/>
-													<xs:enumeration value="poco"/>
+													<xs:enumeration value="Hidrômetro Individual"/>
+													<xs:enumeration value="Hidrômetro Coletivo"/>
+													<xs:enumeration value="Ligação Cladestina"/>
+													<xs:enumeration value="poço"/>
 													<xs:enumeration value="Chafariz"/>
 													<xs:enumeration value="Outro"/>
 												</xs:restriction>
@@ -678,21 +678,21 @@
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
 										<xs:enumeration value="Sim"/>
-										<xs:enumeration value="Nao"/>
+										<xs:enumeration value="Não"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
 							<xs:element name="esgotamentoSanitario" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Esgotamento Sanitario</label>
+										<label>Esgotamento Sanitário</label>
 									</xs:appinfo>
 								</xs:annotation>
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
-										<xs:enumeration value="redeOficial"/>
-										<xs:enumeration value="redeNaoOficial"/>
+										<xs:enumeration value="Rede Oficial"/>
+										<xs:enumeration value="Rede Não Oficial"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -828,7 +828,7 @@
 										<xs:enumeration value="Não Informado"/>
 										<xs:enumeration value="Fixo"/>
 										<xs:enumeration value="Celular"/>
-										<xs:enumeration value="Publico"/>
+										<xs:enumeration value="Público"/>
 										<xs:enumeration value="Comunitário"/>
 									</xs:restriction>
 								</xs:simpleType>
@@ -843,7 +843,7 @@
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
 										<xs:enumeration value="Sim"/>
-										<xs:enumeration value="Nao"/>
+										<xs:enumeration value="Não"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
