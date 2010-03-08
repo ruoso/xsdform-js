@@ -175,7 +175,7 @@ function generateFormFromNode(xmlNode, namePattern) {
     }
 }
 
-function generateXmlFromNode(odoc, xmlNode, namePattern) {
+function generateXmlFromNode(odoc, namespace, xmlNode, namePattern) {
     var type = getValueAttributeByName(xmlNode, "type");
     var minOccurs = getValueAttributeByName(xmlNode, "minOccurs");
     if (type != null) {
@@ -185,9 +185,9 @@ function generateXmlFromNode(odoc, xmlNode, namePattern) {
             type == "xs:dateTime" ||
             type == "xs:date"     ||
             type == "xs:float") {
-            return generateXmlFromSimpleTextNode(odoc, xmlNode, namePattern);
+            return generateXmlFromSimpleTextNode(odoc, namespace, xmlNode, namePattern);
         } else if ( type == "xs:boolean" ) {
-            return generateXmlFromCheckboxTextNode(odoc, xmlNode, namePattern);
+            return generateXmlFromCheckboxTextNode(odoc, namespace, xmlNode, namePattern);
         } else {
     //throw type + " not supported.";
     }
@@ -195,9 +195,9 @@ function generateXmlFromNode(odoc, xmlNode, namePattern) {
         // inline type definition
         for (var i = 0; i < xmlNode.childNodes.length; i++) {
             if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:complexType') {
-                return generateXmlFromComplexTypeNode(odoc, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"));
+                return generateXmlFromComplexTypeNode(odoc, namespace, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"));
             } else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:simpleType') {
-                return generateXmlFromSimpleTypeNode(odoc, namePattern, getValueAttributeByName(xmlNode, "name"), minOccurs);
+                return generateXmlFromSimpleTypeNode(odoc, namespace, namePattern, getValueAttributeByName(xmlNode, "name"), minOccurs);
             }
         }
     }
@@ -235,10 +235,10 @@ function generateFormFromComplexTypeNode(xmlNode, namePattern, name, label) {
 
 }
 
-function generateXmlFromComplexTypeNode(odoc, xmlNode, namePattern, name) {
+function generateXmlFromComplexTypeNode(odoc, namespace, xmlNode, namePattern, name) {
     // gerar o fieldset com o legend e os conteudos...
 
-    var tag = odoc.createElement(name);
+    var tag = odoc.createElementNS(namespace, name);
 
 
     for (var i = 0; i < xmlNode.childNodes.length; i++) {
@@ -246,7 +246,7 @@ function generateXmlFromComplexTypeNode(odoc, xmlNode, namePattern, name) {
         if (el.nodeType == 1 && el.nodeName == 'xs:sequence') {
             for (var j = 0; j < el.childNodes.length; j++) {
                 if (el.childNodes[j].nodeType == 1 && el.childNodes[j].nodeName == "xs:element") {
-                    var elHtml = generateXmlFromNode(odoc, el.childNodes[j], namePattern + "__" + name);
+                    var elHtml = generateXmlFromNode(odoc, namespace, el.childNodes[j], namePattern + "__" + name);
                     if (elHtml) {
                         tag.appendChild(elHtml);
                     }
@@ -317,13 +317,13 @@ function generateFormFromSimpleTypeNode(xmlNode, namePattern, name, label, minOc
     return frag;
 }
 
-function generateXmlFromSimpleTypeNode(odoc, namePattern, name, minOccurs) {
+function generateXmlFromSimpleTypeNode(odoc, namespace, namePattern, name, minOccurs) {
 
     var inputName = namePattern + "__" + name;
     var valueField = getById(inputName).value;
 
     if ( minOccurs != '0' || valueField != '' ) {
-        var tag = odoc.createElement(name);
+        var tag = odoc.createElementNS(namespace, name);
         var content = odoc.createTextNode( valueField );
         tag.appendChild(content);
         return tag;
@@ -349,7 +349,7 @@ function getTextTagInAnnotationAppinfo(xmlNode, strTag, annotation) {
     return getTextByTagName(xmlNodeAux, strTag);
 }
 
-function generateXmlFromSimpleTextNode(odoc, xmlNode, namePattern) {
+function generateXmlFromSimpleTextNode(odoc, namespace, xmlNode, namePattern) {
 
     var name = getValueAttributeByName(xmlNode, "name");
     var minOccurs = getValueAttributeByName(xmlNode, "minOccurs");
@@ -357,7 +357,7 @@ function generateXmlFromSimpleTextNode(odoc, xmlNode, namePattern) {
     var valueField = getById(inputName).value;
 
     if ( minOccurs != '0' || valueField != '' ) {
-        var tag = odoc.createElement(name);
+        var tag = odoc.createElementNS(namespace, name);
         var content = odoc.createTextNode( valueField );
         tag.appendChild(content);
         return tag;
@@ -367,12 +367,12 @@ function generateXmlFromSimpleTextNode(odoc, xmlNode, namePattern) {
 
 }
 
-function generateXmlFromCheckboxTextNode(odoc, xmlNode, namePattern) {
+function generateXmlFromCheckboxTextNode(odoc, namespace, xmlNode, namePattern) {
 
     var name = getValueAttributeByName(xmlNode, "name");
     var inputName = namePattern + "__" + name;
 
-    var tag = odoc.createElement(name);
+    var tag = odoc.createElementNS(namespace, name);
     var content;
     if (getById(inputName).checked) {
         content = odoc.createTextNode("true");
@@ -502,10 +502,17 @@ function generateXml(xsdFile, input_to_set) {
         var xml = xmlLoader(xsdFile);
         var tagRaiz  = xml.getElementsByTagName('xs:schema')[0];
         var elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
+        // adicionar xmlns="..." de acordo com o atributo 'targetNamespace' do
+	// xml schema.
+        var namespace = getValueAttributeByName(tagRaiz,'targetNamespace');
+	window.alert('namespace is ' + namespace)	
         var odoc = document.implementation.createDocument("", "", null);
-        var generated = generateXmlFromNode(odoc,elemRoot, "xsdform___");
+        var generated = generateXmlFromNode(odoc, namespace, elemRoot, "xsdform___");
+
         odoc.appendChild(generated);
         input_to_set.value = ((new XMLSerializer()).serializeToString(odoc));
+
+
     } catch (myError) {
         alert( myError.name + ': ' + myError.message + "\n" + myError);
     }
