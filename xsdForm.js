@@ -505,7 +505,7 @@ function generateXml(xsdFile, input_to_set) {
         // adicionar xmlns="..." de acordo com o atributo 'targetNamespace' do
 	// xml schema.
         var namespace = getValueAttributeByName(tagRaiz,'targetNamespace');
-	window.alert('namespace is ' + namespace)	
+	//window.alert('namespace is ' + namespace)	
         var odoc = document.implementation.createDocument("", "", null);
         var generated = generateXmlFromNode(odoc, namespace, elemRoot, "xsdform___");
 
