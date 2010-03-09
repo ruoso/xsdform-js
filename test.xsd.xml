@@ -11,7 +11,7 @@
 				<xs:element name="identificacao">
 					<xs:annotation>
 						<xs:appinfo>
-							<label>Identificaçao</label>
+							<label>Identificação</label>
 						</xs:appinfo>
 					</xs:annotation>
 					<xs:complexType>
@@ -75,7 +75,7 @@
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
 										<xs:enumeration value="Espontânea"/>
-										<xs:enumeration value="não Espontânea"/>
+										<xs:enumeration value="Não Espontânea"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -88,8 +88,8 @@
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
-										<xs:enumeration value="entregue"/>
-										<xs:enumeration value="não entregue"/>
+										<xs:enumeration value="Entregue"/>
+										<xs:enumeration value="Não entregue"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -100,7 +100,7 @@
 				<xs:element name="enderecoImovel">
 					<xs:annotation>
 						<xs:appinfo>
-							<label>Endereco do Imóvel</label>
+							<label>Endereço do Imóvel</label>
 						</xs:appinfo>
 					</xs:annotation>
 					<xs:complexType>
@@ -156,12 +156,12 @@
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
-										<xs:enumeration value="presente"/>
-										<xs:enumeration value="ausente"/>
-										<xs:enumeration value="recusou-se"/>
-										<xs:enumeration value="casa desocupada"/>
-										<xs:enumeration value="terreno"/>
-										<xs:enumeration value="casa fechada"/>
+										<xs:enumeration value="Presente"/>
+										<xs:enumeration value="Ausente"/>
+										<xs:enumeration value="Recusou-se"/>
+										<xs:enumeration value="Casa desocupada"/>
+										<xs:enumeration value="Terreno"/>
+										<xs:enumeration value="Casa fechada"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -280,8 +280,8 @@
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
-										<xs:enumeration value="sim"/>
-										<xs:enumeration value="nao"/>
+										<xs:enumeration value="Sim"/>
+										<xs:enumeration value="Nao"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -294,10 +294,10 @@
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
-										<xs:enumeration value="residencial"/>
-										<xs:enumeration value="comercial"/>
-										<xs:enumeration value="serviços"/>
-										<xs:enumeration value="mista"/>
+										<xs:enumeration value="Residencial"/>
+										<xs:enumeration value="Comercial"/>
+										<xs:enumeration value="Serviços"/>
+										<xs:enumeration value="Mista"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -317,9 +317,9 @@
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
-										<xs:enumeration value="público"/>
-										<xs:enumeration value="privado"/>
-										<xs:enumeration value="não sabe"/>
+										<xs:enumeration value="Público"/>
+										<xs:enumeration value="Privado"/>
+										<xs:enumeration value="Não sabe"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -362,7 +362,7 @@
 										<xs:element name="qtdQuintais" type="xs:integer" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
-													<label>Quintal(s)</label>
+													<label>Qtde Quintais</label>
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
@@ -376,7 +376,7 @@
 										<xs:element name="localizacaoOutro" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:appinfo>
-													<label>Outro</label>
+													<label>Outro(s)</label>
 												</xs:appinfo>
 											</xs:annotation>
 										</xs:element>
@@ -393,11 +393,11 @@
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
 										<xs:enumeration value="Própria/Regularizada"/>
-										<xs:enumeration value="Comprada(Propria)"/>
-										<xs:enumeration value="cedida"/>
-										<xs:enumeration value="invadida"/>
-										<xs:enumeration value="trocada"/>
-										<xs:enumeration value="alugada"/>
+										<xs:enumeration value="Comprada(Própria)"/>
+										<xs:enumeration value="Cedida"/>
+										<xs:enumeration value="Invadida"/>
+										<xs:enumeration value="Trocada"/>
+										<xs:enumeration value="Alugada"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -459,14 +459,14 @@
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
-										<xs:enumeration value="alvenaria"/>
-										<xs:enumeration value="taipa"/>
-										<xs:enumeration value="madeira"/>
-										<xs:enumeration value="pré-moldado"/>
-										<xs:enumeration value="papelão"/>
-										<xs:enumeration value="plástico"/>
-										<xs:enumeration value="lona"/>
-										<xs:enumeration value="mista"/>
+										<xs:enumeration value="Alvenaria"/>
+										<xs:enumeration value="Taipa"/>
+										<xs:enumeration value="Madeira"/>
+										<xs:enumeration value="Pré-moldado"/>
+										<xs:enumeration value="Papelão"/>
+										<xs:enumeration value="Plástico"/>
+										<xs:enumeration value="Lona"/>
+										<xs:enumeration value="Mista"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -479,9 +479,9 @@
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
-										<xs:enumeration value="telha"/>
-										<xs:enumeration value="palha"/>
-										<xs:enumeration value="plástico/Madeira"/>
+										<xs:enumeration value="Telha"/>
+										<xs:enumeration value="Palha"/>
+										<xs:enumeration value="Plástico/Madeira"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -495,8 +495,8 @@
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
 										<xs:enumeration value="Barro Batido"/>
-										<xs:enumeration value="tábua"/>
-										<xs:enumeration value="cerâmica"/>
+										<xs:enumeration value="Tábua"/>
+										<xs:enumeration value="Cerâmica"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -512,17 +512,17 @@
 										<xs:enumeration value="Com Reboco"/>
 										<xs:enumeration value="Sem Reboco"/>
 										<xs:enumeration value="Pintura"/>
-										<xs:enumeration value="plástico"/>
-										<xs:enumeration value="papelão"/>
-										<xs:enumeration value="madeira"/>
-										<xs:enumeration value="taipa"/>
+										<xs:enumeration value="Plástico"/>
+										<xs:enumeration value="Papelão"/>
+										<xs:enumeration value="Madeira"/>
+										<xs:enumeration value="Taipa"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
 							<xs:element name="casaEmSituacaRisco" minOccurs="0">
 								<xs:annotation>
 									<xs:appinfo>
-										<label>Casa Em Situação de Risco</label>
+										<label>Casa em Situação de Risco</label>
 									</xs:appinfo>
 								</xs:annotation>
 								<xs:simpleType>
@@ -652,7 +652,7 @@
 													<xs:enumeration value="Hidrômetro Individual"/>
 													<xs:enumeration value="Hidrômetro Coletivo"/>
 													<xs:enumeration value="Ligação Cladestina"/>
-													<xs:enumeration value="poço"/>
+													<xs:enumeration value="Poço"/>
 													<xs:enumeration value="Chafariz"/>
 													<xs:enumeration value="Outro"/>
 												</xs:restriction>
@@ -717,7 +717,7 @@
 													<xs:enumeration value="Fossa/Sumidouro"/>
 													<xs:enumeration value="Vala Em Via Pública"/>
 													<xs:enumeration value="Rede de Drenagem/Recursos Hídricos"/>
-													<xs:enumeration value="outro"/>
+													<xs:enumeration value="Outro"/>
 												</xs:restriction>
 											</xs:simpleType>
 										</xs:element>
