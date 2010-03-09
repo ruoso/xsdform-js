@@ -281,7 +281,7 @@
 									<xs:restriction base="xs:string">
 										<xs:enumeration value="Não Informado"/>
 										<xs:enumeration value="Sim"/>
-										<xs:enumeration value="Nao"/>
+										<xs:enumeration value="Não"/>
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:element>
@@ -759,7 +759,7 @@
 										<xs:enumeration value="Asfalto"/>
 										<xs:enumeration value="Pedra Tosca"/>
 										<xs:enumeration value="Piçarra"/>
-										<xs:enumeration value="Paralelepipedo"/>
+										<xs:enumeration value="Paralelepípedo"/>
 										<xs:enumeration value="Sem Pavimentação"/>
 									</xs:restriction>
 								</xs:simpleType>
