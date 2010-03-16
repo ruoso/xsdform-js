@@ -974,94 +974,70 @@ function validaCampoNumerico(objEvento, type) {
 }
 
 function validaFloat(iKeyCode) {
-    switch (iKeyCode) {
-        case 48:
-            return true;
-            break;
-        case 49:
-            return true;
-            break;
-        case 50:
-            return true;
-            break;
-        case 51:
-            return true;
-            break;
-        case 52:
-            return true;
-            break;
-        case 53:
-            return true;
-            break;
-        case 54:
-            return true;
-            break;
-        case 55:
-            return true;
-            break;
-        case 56:
-            return true;
-            break;
-        case 57:
-            return true;
-            break;
-        case 46:
-            return true;
-            break;
-        case 116:
-            return true;
-            break;
-        case 8:
-            return true;
-            break;
-        case 9:
-            return true;
-            break;
-    }
-    return false;
+	switch (iKeyCode) {
+      case 48:
+        return true;
+      case 49:
+	    	return true;
+      case 50:
+	    	return true;
+      case 51:
+	    	return true;
+      case 52:
+	    	return true;
+      case 53:
+	    	return true;
+      case 54:
+	    	return true;
+      case 55:
+	    	return true;
+      case 56:
+	    	return true;
+      case 57:
+	    	return true;
+      case 46:
+	    	return true;
+      case 116:
+	    	return true;
+      case 8:
+	    	return true;
+      case 9:
+	    	return true;
+			default:
+				return false;
+  }
 }
 
 function validaInteger(iKeyCode) {
     switch (iKeyCode) {
-        case 48:
-            return true;
-            break;
-        case 49:
-            return true;
-            break;
-        case 50:
-            return true;
-            break;
-        case 51:
-            return true;
-            break;
-        case 52:
-            return true;
-            break;
-        case 53:
-            return true;
-            break;
-        case 54:
-            return true;
-            break;
-        case 55:
-            return true;
-            break;
-        case 56:
-            return true;
-            break;
-        case 57:
-            return true;
-            break;
-        case 116:
-            return true;
-            break;
-        case 8:
-            return true;
-            break;
-        case 9:
-            return true;
-            break;
-    }
+      case 48:
+        return true;
+      case 49:
+	    	return true;
+      case 50:
+	    	return true;
+      case 51:
+	    	return true;
+      case 52:
+	    	return true;
+      case 53:
+	    	return true;
+      case 54:
+	    	return true;
+      case 55:
+	    	return true;
+      case 56:
+	    	return true;
+      case 57:
+	    	return true;
+      case 116:
+	    	return true;
+      case 8:
+	    	return true;
+      case 9:
+	    	return true;
+			default:
+				return false;
+  }
     return false;
 }
