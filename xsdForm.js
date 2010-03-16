@@ -945,51 +945,52 @@ function validaCampoNumerico(objEvento, type) {
 }
 
 function validaFloat(iKeyCode) {
+    var retorno = false;
     switch (iKeyCode) {
         case 48:
-            return true;
+            retorno = true;
             break;
         case 49:
-            return true;
+            retorno = true;
             break;
         case 50:
-            return true;
+            retorno = true;
             break;
         case 51:
-            return true;
+            retorno = true;
             break;
         case 52:
-            return true;
+            retorno = true;
             break;
         case 53:
-            return true;
+            retorno = true;
             break;
         case 54:
-            return true;
+            retorno = true;
             break;
         case 55:
-            return true;
+            retorno = true;
             break;
         case 56:
-            return true;
+            retorno = true;
             break;
         case 57:
-            return true;
+            retorno = true;
             break;
         case 46:
-            return true;
+            retorno = true;
             break;
         case 116:
-            return true;
+            retorno = true;
             break;
         case 8:
-            return true;
+            retorno = true;
             break;
         case 9:
-            return true;
+            retorno = true;
             break;
     }
-    return false;
+    return retorno;
 }
 
 function validaInteger(iKeyCode) {
