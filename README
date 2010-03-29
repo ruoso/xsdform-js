@@ -21,6 +21,10 @@ of a HTML form from a pre-defined XML Schema definition. It currently
 only supports a subset of the XSD spec, but it is a very usefull
 subset of the spec.
 
+It generates the HTML form dinamically and also validates it while
+generating the expected XML document. The idea is that the server side
+will just provide the XSD and expect the XML document back.
+
 What is implemented?
 
  - The following simple types are implemented:
