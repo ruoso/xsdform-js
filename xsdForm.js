@@ -1,21 +1,21 @@
 /*
-# Copyright 2010 - Prefeitura Municipal de Fortaleza
-#
-# Este arquivo é parte do programa xsdform-js
-#
-# O xsdform-js é um software livre; você pode redistribui-lo e/ou
-# modifica-lo dentro dos termos da Licença Pública Geral GNU como
-# publicada pela Fundação do Software Livre (FSF); na versão 2 da
-# Licença.
-#
-# Este programa é distribuido na esperança que possa ser util, mas SEM
-# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
-# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
-# para maiores detalhes.
-#
-# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
-# título "LICENCA.txt", junto com este programa, se não, escreva para a
-# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+  # Copyright 2010 - Prefeitura Municipal de Fortaleza
+  #
+  # Este arquivo é parte do programa xsdform-js
+  #
+  # O xsdform-js é um software livre; você pode redistribui-lo e/ou
+  # modifica-lo dentro dos termos da Licença Pública Geral GNU como
+  # publicada pela Fundação do Software Livre (FSF); na versão 2 da
+  # Licença.
+  #
+  # Este programa é distribuido na esperança que possa ser util, mas SEM
+  # NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+  # MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+  # para maiores detalhes.
+  #
+  # Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+  # título "LICENCA.txt", junto com este programa, se não, escreva para a
+  # Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
 */
 
 function createInput(type, name, id) {
@@ -281,8 +281,8 @@ function generateFormFromComplexTypeNode(tagRaiz, xmlNode, namePattern, name, la
                 }
             }
         } else if (el.nodeType == 1 && el.nodeName == 'xs:choice') {
-    //throw "xs:choice not supported";
-    }
+            //throw "xs:choice not supported";
+        }
     }
 
     return fieldset;
@@ -307,8 +307,8 @@ function generateXmlFromComplexTypeNode(odoc, namespace, tagRaiz, xmlNode, nameP
                 }
             }
         } else if (el.nodeType == 1 && el.nodeName == 'xs:choice') {
-    //throw "xs:choice not supported";
-    }
+            //throw "xs:choice not supported";
+        }
     }
 
     return tag;
@@ -327,11 +327,11 @@ function generateFormFromSimpleTypeNode(tagRaiz, xmlNode, namePattern, name, lab
     var divValidation = document.createElement('div');
     divValidation.setAttribute('name', 'xsdFormValidation')
 
-    var divRequiredField = document.createElement('div');
+        var divRequiredField = document.createElement('div');
     divRequiredField.setAttribute('name', 'requiredField')
-    divRequiredField.setAttribute('style', 'display:none;')
+        divRequiredField.setAttribute('style', 'display:none;')
 
-    var required = ( minOccurs == '0' )? 'false': 'true';
+        var required = ( minOccurs == '0' )? 'false': 'true';
     divRequiredField.appendChild( document.createTextNode( required ) );
 
     var newSelect = document.createElement('select');
@@ -459,7 +459,7 @@ function generateXml(xsdFile, input_to_set) {
     var field;
     var requiredField;
     var div
-    var divMessageError;
+        var divMessageError;
     var messageError;
     var submitForm = true;
     var type;
@@ -798,19 +798,19 @@ function floatField(obj) {
 function formatCurrency(o, n, dig, dec) {
     new function(c, dig, dec, m){
         addEvent(o, "keypress", function(e, _){
-            if((_ = e.key == 45) || e.key > 47 && e.key < 58){
-                var o = this, d = 0, n, s, h = o.value.charAt(0) == "-" ? "-" : "",
-                l = (s = (o.value.replace(/^(-?)0+/g, "$1") + String.fromCharCode(e.key)).replace(/\D/g, "")).length;
-                m + 1 && (o.maxLength = m + (d = o.value.length - l + 1));
-                if(m + 1 && l >= m && !_) return false;
-                l <= (n = c) && (s = new Array(n - l + 2).join("0") + s);
-                for(var i = (l = (s = s.split("")).length) - n; (i -= 3) > 0; s[i - 1] += dig);
-                n && n < l && (s[l - ++n] += dec);
-                _ ? h ? m + 1 && (o.maxLength = m + d) : s[0] = "-" + s[0] : s[0] = h + s[0];
-                o.value = s.join("");
-            }
-            e.key > 30 && e.preventDefault();
-        });
+                if((_ = e.key == 45) || e.key > 47 && e.key < 58){
+                    var o = this, d = 0, n, s, h = o.value.charAt(0) == "-" ? "-" : "",
+                        l = (s = (o.value.replace(/^(-?)0+/g, "$1") + String.fromCharCode(e.key)).replace(/\D/g, "")).length;
+                    m + 1 && (o.maxLength = m + (d = o.value.length - l + 1));
+                    if(m + 1 && l >= m && !_) return false;
+                    l <= (n = c) && (s = new Array(n - l + 2).join("0") + s);
+                    for(var i = (l = (s = s.split("")).length) - n; (i -= 3) > 0; s[i - 1] += dig);
+                    n && n < l && (s[l - ++n] += dec);
+                    _ ? h ? m + 1 && (o.maxLength = m + d) : s[0] = "-" + s[0] : s[0] = h + s[0];
+                    o.value = s.join("");
+                }
+                e.key > 30 && e.preventDefault();
+            });
     }(!isNaN(n) ? Math.abs(n) : 2, typeof dig != "string" ? "." : dig, typeof dec != "string" ? "," : dec, o.maxLength);
 }
 
@@ -969,21 +969,21 @@ function validaCampoNumerico(objEvento, type) {
     var iKeyCode;
 
     if(objEvento.keyCode)
-    {
-        iKeyCode = objEvento.keyCode;
-    }
+        {
+            iKeyCode = objEvento.keyCode;
+        }
     else if(objEvento.which)
-    {
-        iKeyCode = objEvento.which;
-    }
+        {
+            iKeyCode = objEvento.which;
+        }
     else if(objEvento.charCode)
-    {
-        iKeyCode = objEvento.charCode;
-    }
+        {
+            iKeyCode = objEvento.charCode;
+        }
     else
-    {
-        iKeyCode = void(0);
-    }
+        {
+            iKeyCode = void(0);
+        }
 
     if (type == "float") {
         return validaFloat(iKeyCode);
@@ -994,93 +994,69 @@ function validaCampoNumerico(objEvento, type) {
 
 function validaFloat(iKeyCode) {
     switch (iKeyCode) {
-        case 48:
-            return true;
-            break;
-        case 49:
-            return true;
-            break;
-        case 50:
-            return true;
-            break;
-        case 51:
-            return true;
-            break;
-        case 52:
-            return true;
-            break;
-        case 53:
-            return true;
-            break;
-        case 54:
-            return true;
-            break;
-        case 55:
-            return true;
-            break;
-        case 56:
-            return true;
-            break;
-        case 57:
-            return true;
-            break;
-        case 46:
-            return true;
-            break;
-        case 116:
-            return true;
-            break;
-        case 8:
-            return true;
-            break;
-        case 9:
-            return true;
-            break;
+    case 48:
+        return true;
+    case 49:
+        return true;
+    case 50:
+        return true;
+    case 51:
+        return true;
+    case 52:
+        return true;
+    case 53:
+        return true;
+    case 54:
+        return true;
+    case 55:
+        return true;
+    case 56:
+        return true;
+    case 57:
+        return true;
+    case 46:
+        return true;
+    case 116:
+        return true;
+    case 8:
+        return true;
+    case 9:
+        return true;
+    default:
+        return false;
     }
-    return false;
 }
 
 function validaInteger(iKeyCode) {
     switch (iKeyCode) {
-        case 48:
-            return true;
-            break;
-        case 49:
-            return true;
-            break;
-        case 50:
-            return true;
-            break;
-        case 51:
-            return true;
-            break;
-        case 52:
-            return true;
-            break;
-        case 53:
-            return true;
-            break;
-        case 54:
-            return true;
-            break;
-        case 55:
-            return true;
-            break;
-        case 56:
-            return true;
-            break;
-        case 57:
-            return true;
-            break;
-        case 116:
-            return true;
-            break;
-        case 8:
-            return true;
-            break;
-        case 9:
-            return true;
-            break;
+    case 48:
+        return true;
+    case 49:
+        return true;
+    case 50:
+        return true;
+    case 51:
+        return true;
+    case 52:
+        return true;
+    case 53:
+        return true;
+    case 54:
+        return true;
+    case 55:
+        return true;
+    case 56:
+        return true;
+    case 57:
+        return true;
+    case 116:
+        return true;
+    case 8:
+        return true;
+    case 9:
+        return true;
+    default:
+        return false;
     }
     return false;
 }
