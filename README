@@ -1,0 +1,49 @@
+# Copyright 2010 - Prefeitura Municipal de Fortaleza
+#
+# Este arquivo é parte do programa xsdform-js
+#
+# O xsdform-js é um software livre; você pode redistribui-lo e/ou
+# modifica-lo dentro dos termos da Licença Pública Geral GNU como
+# publicada pela Fundação do Software Livre (FSF); na versão 2 da
+# Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+
+This is the xsdform-js library. It implements the automatic generation
+of a HTML form from a pre-defined XML Schema definition. It currently
+only supports a subset of the XSD spec, but it is a very usefull
+subset of the spec.
+
+What is implemented?
+
+ - The following simple types are implemented:
+   - xs:boolean
+   - xs:integer
+   - xs:string
+   - xs:float
+ - The following facet is implemented:
+   - xs:enumeration restriction on xs:string
+ - Declaring an element that references a type by name
+ - Using minOccurs="0" to represent optional elements
+ - Supports targetNamespace definition in the XML Schema
+
+What are the restrictions?
+
+ - The XML Schema must use the "xs" prefix for the XML Schema
+   namespace;
+
+ - The element that is going to be used as the base for the form
+   should be the first element defined in the file;
+
+Next Steps:
+
+ - Implementing maxOccurs different than "1"
+
+Look at the index.html file for an example on how to use it.
