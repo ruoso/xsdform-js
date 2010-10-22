@@ -26,6 +26,13 @@ function createInput(type, name, id) {
     return newInput;
 }
 
+function createTextArea(name, id) {
+    var newTextArea = document.createElement('textarea');
+    newTextArea.name  = name;
+    newTextArea.id    = ( id != undefined )? id: name;
+    return newTextArea;
+}
+
 function createLabel(innerHTML, idField) {
     var newLabel = document.createElement("label");
     newLabel.innerHTML = innerHTML;
@@ -317,21 +324,31 @@ function generateXmlFromComplexTypeNode(odoc, namespace, tagRaiz, xmlNode, nameP
 
 function generateFormFromSimpleTypeNode(tagRaiz, xmlNode, namePattern, name, label, minOccurs) {
 
+    var restrictionNode = getNodeByTagName(xmlNode, 'xs:restriction');
+
+    for (var i = 0; i < restrictionNode.childNodes.length; i++) {
+        if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:enumeration'  ) {
+            return generateFormFromSimpleTypeNodeRestrictionEnumeration(tagRaiz, xmlNode, namePattern, name, label, minOccurs);
+        } else if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:maxLength'  ) {
+            return generateFormFromSimpleTypeNodeRestrictionMaxLength(tagRaiz, xmlNode, namePattern, name, label, minOccurs);
+        }
+    }
+}
+
+function generateFormFromSimpleTypeNodeRestrictionEnumeration(tagRaiz, xmlNode, namePattern, name, label, minOccurs){
+    var inputName = namePattern + "__" + name;
+    var divValidation = document.createElement('div');
+    divValidation.setAttribute('name', 'xsdFormValidation')
+
     var frag = document.createDocumentFragment();
     var dt = document.createElement('dt');
     var dd = document.createElement('dd');
 
-    var restrictionNode = getNodeByTagName(xmlNode, 'xs:restriction');
-    var inputName = namePattern + "__" + name;
-
-    var divValidation = document.createElement('div');
-    divValidation.setAttribute('name', 'xsdFormValidation')
-
-        var divRequiredField = document.createElement('div');
+    var divRequiredField = document.createElement('div');
     divRequiredField.setAttribute('name', 'requiredField')
-        divRequiredField.setAttribute('style', 'display:none;')
+    divRequiredField.setAttribute('style', 'display:none;')
 
-        var required = ( minOccurs == '0' )? 'false': 'true';
+    var required = ( minOccurs == '0' )? 'false': 'true';
     divRequiredField.appendChild( document.createTextNode( required ) );
 
     var newSelect = document.createElement('select');
@@ -339,12 +356,14 @@ function generateFormFromSimpleTypeNode(tagRaiz, xmlNode, namePattern, name, lab
     newSelect.id    = inputName;
     dd.appendChild(newSelect);
 
+    var restrictionNode = getNodeByTagName(xmlNode, 'xs:restriction');
+
     var newOption;
     newOption = document.createElement("option");
     newOption.innerHTML = '';
     newSelect.appendChild(newOption);
     for (var i = 0; i < restrictionNode.childNodes.length; i++) {
-        if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:enumeration' ) {
+        if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:enumeration'  ) {
             newOption = document.createElement("option");
             newOption.innerHTML = getValueAttributeByName(restrictionNode.childNodes[i], 'value');
             newSelect.appendChild(newOption);
@@ -365,11 +384,39 @@ function generateFormFromSimpleTypeNode(tagRaiz, xmlNode, namePattern, name, lab
     frag.appendChild(dt);
     frag.appendChild(dd);
 
-    frag.appendChild(dt);
-    frag.appendChild(dd);
-
     return frag;
 }
+
+function generateFormFromSimpleTypeNodeRestrictionMaxLength(tagRaiz, xmlNode, namePattern, name, label, minOccurs){
+    var inputName = namePattern + "__" + name;
+
+    var divValidation = document.createElement('div');
+    divValidation.setAttribute('name', 'xsdFormValidation')
+     
+    var divRequiredField = document.createElement('div');
+    divRequiredField.setAttribute('name', 'requiredField')
+    divRequiredField.setAttribute('style', 'display:none;')
+
+    var required = ( minOccurs == '0' )? 'false': 'true';
+    divRequiredField.appendChild( document.createTextNode( required ) );
+    divValidation.appendChild(createInput('text' ,inputName, inputName));
+    divValidation.appendChild(divRequiredField);
+
+    var newLabel = document.createElement("label");
+    newLabel.innerHTML = label + ':';
+    newLabel.htmlFor = inputName;
+
+    var dt = document.createElement('dt');
+    var dd = document.createElement('dd');
+    dt.appendChild(newLabel);
+    dd.appendChild(divValidation);
+
+    var frag = document.createDocumentFragment();
+    frag.appendChild(dt);
+    frag.appendChild(dd);
+    return frag;
+}
+
 
 function generateXmlFromSimpleTypeNode(odoc, namespace, tagRaiz, namePattern, name, minOccurs) {
 
@@ -815,7 +862,7 @@ function formatCurrency(o, n, dig, dec) {
 }
 
 function createFieldString(name) {
-    return createInput('text', name);
+    return createTextArea(name);
 }
 
 function createFieldFloat(name) {

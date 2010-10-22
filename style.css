@@ -45,6 +45,7 @@ fieldset dl dt {
 }
 
 fieldset dl dd input,
+fieldset dl dd textarea,    
 fieldset dl dd select {
     width: 100%;
     position: relative;
