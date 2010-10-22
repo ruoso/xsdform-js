@@ -193,7 +193,7 @@ function generateFormFromNode(tagRaiz, xmlNode, namePattern) {
         // the definition is probably in the same schema.
         for (var i = 0; i < xmlNode.childNodes.length; i++) {
             if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:annotation' ) {
-                label = getTextTagInAnnotationAppinfo(xmlNode.childNodes[i], 'label', true);
+                label = getTextTagInAnnotationAppinfo(xmlNode.childNodes[i], 'xhtml:label', true);
                 break;
             }
         }
@@ -208,7 +208,7 @@ function generateFormFromNode(tagRaiz, xmlNode, namePattern) {
         // inline type definition
         for (var i = 0; i < xmlNode.childNodes.length; i++) {
             if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:annotation' ) {
-                label = getTextTagInAnnotationAppinfo(xmlNode.childNodes[i], 'label', true);
+                label = getTextTagInAnnotationAppinfo(xmlNode.childNodes[i], 'xhtml:label', true);
 
             } else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:complexType') {
                 return generateFormFromComplexTypeNode(tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label );
@@ -887,7 +887,7 @@ function generateFormField(tagRaiz, xmlNode, type, namePattern, minOccurs) {
 
     var frag = document.createDocumentFragment();
     var dt = document.createElement('dt');
-    var newLabel = createLabel(getTextTagInAnnotationAppinfo(xmlNode, 'label') + ':', inputName);
+    var newLabel = createLabel(getTextTagInAnnotationAppinfo(xmlNode, 'xhtml:label') + ':', inputName);
 
     if ( type == "xs:boolean") {
         dt.setAttribute('class', 'dtsemdd');
