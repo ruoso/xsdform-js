@@ -505,8 +505,8 @@ function generateXml(xsdFile, input_to_set) {
     var divParent;
     var field;
     var requiredField;
-    var div
-        var divMessageError;
+    var div;
+    var divMessageError;
     var messageError;
     var submitForm = true;
     var type;
@@ -527,7 +527,7 @@ function generateXml(xsdFile, input_to_set) {
         // percorre a div que contem o campo
         for (var j = 0; j < divParent.childNodes.length; j++) {
 
-            if ( divParent.childNodes[j].nodeName == 'INPUT' ) {
+            if ( divParent.childNodes[j].nodeName == 'INPUT' || divParent.childNodes[j].nodeName == 'TEXTAREA') {
                 field = divParent.childNodes[j];
 
             } else if ( divParent.childNodes[j].nodeName == 'DIV' && getValueAttributeByName(divParent.childNodes[j], 'name' ) == 'requiredField' ) {
@@ -549,7 +549,7 @@ function generateXml(xsdFile, input_to_set) {
 
 
         if ( requiredField == 'true' ) {
-            if ( field.nodeName == 'INPUT' ) {
+            if ( field.nodeName == 'INPUT' || field.nodeName == 'TEXTAREA') {
                 if ( messageError ) {
                     if ( field.value == '' ) {
                         submitForm = false;
@@ -1000,7 +1000,7 @@ function getFormFromNode(namePattern, xml) {
 }
 
 function insereValor(nameField,valor) {
-    if ((getById(nameField).nodeName == "INPUT" && getById(nameField).type == "text") || getById(nameField).nodeName == "SELECT") {
+    if ((getById(nameField).nodeName == "INPUT" && getById(nameField).type == "text") || getById(nameField).nodeName == "SELECT" || getById(nameField).nodeName == "TEXTAREA") {
         getById(nameField).value = valor;
     } else if (getById(nameField).type == "checkbox") {
         if (valor == 1) {
