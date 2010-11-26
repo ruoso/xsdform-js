@@ -22,6 +22,7 @@ function createInput(type, name, id) {
     var newInput = document.createElement('input');
     newInput.type  = type;
     newInput.name  = name;
+    newInput.setAttribute('maxlength', 255);
     newInput.id    = ( id != undefined )? id: name;
     return newInput;
 }
