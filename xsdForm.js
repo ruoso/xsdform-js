@@ -491,7 +491,7 @@ function generateForm(xsdFile,containerId) {
 
         //carrega o xml
         var xml = xmlLoader(xsdFile);
-        var tagRaiz  = xml.getElementsByTagName('xs:schema')[0];
+        var tagRaiz  = xml.getElementsByTagNameNS('http://www.w3.org/2001/XMLSchema','schema')[0];
         var elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
         var elHtml = generateFormFromNode(tagRaiz, elemRoot, "xsdform___");
         getById(containerId).appendChild( elHtml );
@@ -602,7 +602,7 @@ function generateXml(xsdFile, input_to_set) {
 
     try {
         var xml = xmlLoader(xsdFile);
-        var tagRaiz  = xml.getElementsByTagName('xs:schema')[0];
+        var tagRaiz  = xml.getElementsByTagNameNS('http://www.w3.org/2001/XMLSchema','schema')[0];
         var elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
         // adicionar xmlns="..." de acordo com o atributo 'targetNamespace' do
 	// xml schema.
