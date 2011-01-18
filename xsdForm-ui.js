@@ -108,17 +108,97 @@ function convert_date_ptbr2xsd(date) {
     dateReturn = ano+'-'+mes+'-'+dia;
     return dateReturn;
 }
+/**
+ * Converte data e hora do formato iso para o formato brasileiro
+ */
+function convert_dateTime_xsd2ptbr(dateTime) {
+    if(dateTime === '') return '';
+    var ano;
+    var mes;
+    var dia;
+    var hora;
+    var minuto;
+    var segundo;
+    var dateTimeReturn;
+
+    ano     = dateTime.substring(0,4);
+    mes     = dateTime.substring(5,7);
+    dia     = dateTime.substring(8,10);
+    hora    = dateTime.substring(11,13);
+    minuto  = dateTime.substring(14,16);
+    segundo = dateTime.substring(17,19);
+
+    dateTimeReturn = dia+'/'+mes+'/'+ano+' '+hora+':'+minuto+':'+segundo;
+    
+    return dateTimeReturn;
+}
+
+/**
+ * Converte data e hora do formato brasileiro para o formato iso
+ */
+function convert_dateTime_ptbr2xsd(dateTime) {
+    if(dateTime === '') return '';
+    var ano;
+    var mes;
+    var dia;
+    var hora;
+    var minuto;
+    var segundo;
+    var dateTimeReturn;
+
+    dia = date.substring(0,2);
+    mes = date.substring(3,5);
+    ano = date.substring(6,10);
+    hora    = dateTime.substring(11,13);
+    minuto  = dateTime.substring(14,16);
+    segundo = dateTime.substring(17,19);
+
+    dateTimeReturn = ano+'-'+mes+'-'+dia+'T'+hora+':'+minuto+':'+segundo;
+
+    return dateTimeReturn;
+}
+/**
+ * Converte float do formato do xsd para o formato brasileiro
+ */
+function convert_float_xsd2ptbr(floatValue) {
+    floatValue = '654654565461258.32164897987564';
+    var integerPart;
+    var decimalPart;
+    var count = 0;
+    var arrayValues = new Array();
+    var arrayIntPart = new Array();
+    var floatReturn = '';
+
+    arrayValues = floatValue.split('.');
+    integerPart = arrayValues[0];
+    arrayIntPart = arrayValues[0].split('');
+    decimalPart = arrayValues[1];
+    for (x = arrayIntPart.length-1;x>=0;x--) {
+        count++;
+        if(count == 4) {
+            floatReturn = arrayIntPart[x]+'.'+floatReturn;
+            count = 1;
+        } else {
+            floatReturn = arrayIntPart[x]+floatReturn;
+        }
+    }
+
+    floatReturn = floatReturn+','+decimalPart;
+    return floatReturn;
+
+}
+/**
+ *  Converte float do formato brasileiro para o formato xsd
+ */
+function convert_float_ptbr2xsd(floatValue) {
+    while (floatValue.indexOf('.', 0) != -1)
+       floatValue = floatValue.replace(".","");
+    floatValue = floatValue.replace(",",".");
+    floatValue = parseFloat(floatValue);
+    return floatValue;
+}
 
 function generateXsdFormUI() {
-    //$('input.xsdForm__date').setMask('date');
-//    $('input.xsdForm__dateTime .inflated').setMask({
-//        mask : '39/19/9999 29:59:59'
-//    });
-//    $('input.xsdForm__decimal .inflated').setMask({
-//        mask : '99.999.999,99',
-//        type : 'reverse',
-//        defaultValue: '000'
-//    });
 
     $('input.xsdForm__date').inputDeflate({
         inflate: convert_date_xsd2ptbr,
@@ -136,6 +216,21 @@ function generateXsdFormUI() {
         mask : '99,999.999.999.999.999.999.999.999.999.99',
         type : 'reverse'
     });
+    
+    $('input.xsdForm__dateTime').inputDeflate({
+        inflate: convert_dateTime_xsd2ptbr,
+        deflate: convert_dateTime_ptbr2xsd,
+        addClass: 'inflated'
+    });
+    $('input.xsdForm__dateTime.inflated').setMask({
+        mask : '39/19/9999 29:59:59'
+    });
 
+    $('input.xsdForm__float').inputDeflate({
+        inflate: convert_float_xsd2ptbr,
+        deflate: convert_float_ptbr2xsd,
+        addClass: 'inflated'
+    });
+    $('input.xsdForm__float.inflated').regexMask('float-ptbr');
 
 }
