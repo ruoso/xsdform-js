@@ -186,6 +186,7 @@ function generateFormFromNode(tagRaiz, xmlNode, namePattern) {
     var label;
     var type = getValueAttributeByName(xmlNode, "type");
     var minOccurs = getValueAttributeByName(xmlNode, "minOccurs");
+    if (minOccurs == null) {minOccurs = 1}
     if (type != null && static_type(type)) {
         return generateFormField(tagRaiz, xmlNode, type, namePattern, minOccurs);
     } else if (type != null) {
@@ -223,6 +224,7 @@ function generateFormFromNode(tagRaiz, xmlNode, namePattern) {
 function generateXmlFromNode(odoc, namespace, tagRaiz, xmlNode, namePattern) {
     var type = getValueAttributeByName(xmlNode, "type");
     var minOccurs = getValueAttributeByName(xmlNode, "minOccurs");
+    if (minOccurs == null) {minOccurs = 1}
     if (type != null && static_type(type)) {
         // pre-defined types
         if (type == "xs:integer"  ||
@@ -421,18 +423,30 @@ function getTextTagInAnnotationAppinfo(xmlNode, strTag, annotation) {
 }
 
 function generateXmlFromSimpleTextNode(odoc, namespace, tagRaiz, xmlNode, namePattern) {
-
+    var type = getValueAttributeByName(xmlNode, "type");
     var name = getValueAttributeByName(xmlNode, "name");
     var minOccurs = getValueAttributeByName(xmlNode, "minOccurs");
+    if (minOccurs == null) {minOccurs = 1}
     var inputName = namePattern + "__" + name;
     var valueField = getById(inputName).value;
 
-    if ( minOccurs != '0' || valueField != '' ) {
-        var tag = odoc.createElementNS(namespace, name);
-        var content = odoc.createTextNode( valueField );
-        tag.appendChild(content);
-        return tag;
-    } else if ( minOccurs == '0' ) {
+    if ( minOccurs > 0 && valueField == '' ) {
+        throw "Campo obrigatório";
+    } else if ( valueField != '' ) {
+        // valida mandatorio
+        if (!validateValue(type, valueField)) {
+            $('#'+inputName+"_input_deflate").addClass('xsd__validationfailed');
+            $('#'+inputName).addClass('xsd__validationfailed');
+            throw "Erro de validação";
+        } else {
+            $('#'+inputName+"_input_deflate").removeClass('xsd__validationfailed');
+            $('#'+inputName).removeClass('xsd__validationfailed');
+            var tag = odoc.createElementNS(namespace, name);
+            var content = odoc.createTextNode( valueField );
+            tag.appendChild(content);
+            return tag;
+        }
+    } else {
         return false;
     }
 
@@ -501,6 +515,8 @@ function generateXml(xsdFile, input_to_set) {
         var xml = xmlLoader(xsdFile);
         var tagRaiz  = xml.getElementsByTagNameNS('http://www.w3.org/2001/XMLSchema','schema')[0];
         var elemRoot = getNodeByTagName(tagRaiz, 'xs:element'); // elemento raiz
+
+        validateMandatory();
         // adicionar xmlns="..." de acordo com o atributo 'targetNamespace' do
 	// xml schema.
         var namespace = getValueAttributeByName(tagRaiz,'targetNamespace');
@@ -513,45 +529,68 @@ function generateXml(xsdFile, input_to_set) {
 
 
     } catch (myError) {
-        alert( myError.name + ': ' + myError.message + "\n" + myError);
+        if (myError.name != null) {
+            alert( myError.name + ': ' + myError.message + "\n" + myError);
+        } else {
+            alert(myError);
+        }
     }
 }
 
-function createFieldString(name) {
-    return createTextArea(name);
+function createFieldString(name, minOccurs) {
+    var field = createTextArea(name);
+    if (minOccurs > 0) {
+        field.setAttribute('class', 'xsdForm__mandatory')
+    }
+
+    return field;
 }
 
-function createFieldFloat(name) {
+function createFieldFloat(name, minOccurs) {
     var field;
     field = createInput('text', name);
     field.setAttribute('class','xsdForm__float');
+    if (minOccurs > 0) {
+        field.setAttribute('class', 'xsdForm__float xsdForm__mandatory')
+    }
     return field;
 }
 
-function createFieldInteger(name) {
+function createFieldInteger(name, minOccurs) {
     var field;
     field = createInput('text', name);
     field.setAttribute('class','xsdForm__integer');
+    if (minOccurs > 0) {
+        field.setAttribute('class', 'xsdForm__integer xsdForm__mandatory')
+    }
     return field;
 }
 
-function createFieldDate(name) {
+function createFieldDate(name, minOccurs) {
     var field;
     field = createInput('text', name);
     field.setAttribute('maxlength', '10');
     field.setAttribute('class', 'xsdForm__date');
+    //field.setAttribute('onblur', 'validateValues()');
+    if (minOccurs > 0) {
+        field.setAttribute('class', 'xsdForm__date xsdForm__mandatory')
+    }
     return field;
 }
 
-function createFieldDateTime(name) {
+function createFieldDateTime(name, minOccurs) {
     var field;
     field = createInput('text', name);
     field.setAttribute('maxlength', '19');
     field.setAttribute('class','xsdForm__dateTime');
+    //field.setAttribute('onblur', 'validateValues()');
+    if (minOccurs > 0) {
+        field.setAttribute('class', 'xsdForm__dateTime xsdForm__mandatory')
+    }
     return field;
 }
 
-function createFieldDecimal(namePattern, name, label) {
+function createFieldDecimal(namePattern, name, label, minOccurs) {
     var field;
     
     var inputName = namePattern + "__" + name;
@@ -563,6 +602,10 @@ function createFieldDecimal(namePattern, name, label) {
     
     field = createInput('text', inputName);
     field.setAttribute('class','xsdForm__decimal');
+
+    if (minOccurs > 0) {
+        field.setAttribute('class', 'xsdForm__decimal xsdForm__mandatory')
+    }
     
     newLabel.innerHTML = label;
     newLabel.htmlFor = inputName;
@@ -577,7 +620,7 @@ function createFieldDecimal(namePattern, name, label) {
     return frag;
 }
 
-function createFieldBoolean(name) {
+function createFieldBoolean(name, minOccurs) {
     return createInput('checkbox', name);
 }
 
@@ -588,17 +631,17 @@ function generateFormField(tagRaiz, xmlNode, type, namePattern, minOccurs) {
 
     var field;
     if ( type == "xs:string" ) {
-        field = createFieldString(inputName);
+        field = createFieldString(inputName, minOccurs);
     } else if ( type == "xs:float" ) {
-        field = createFieldFloat(inputName);
+        field = createFieldFloat(inputName, minOccurs);
     } else if ( type == "xs:decimal" ) {
-        field = createFieldDecimal(inputName);
+        field = createFieldDecimal(inputName, minOccurs);
     } else if ( type == "xs:integer" ) {
-        field = createFieldInteger(inputName);
+        field = createFieldInteger(inputName, minOccurs);
     } else if ( type == "xs:date" ) {
-        field = createFieldDate(inputName);
+        field = createFieldDate(inputName, minOccurs);
     } else if ( type == "xs:dateTime" ) {
-        field = createFieldDateTime(inputName);
+        field = createFieldDateTime(inputName, minOccurs);
     } else if ( type == "xs:boolean" ) {
         field = createFieldBoolean(inputName);
     } else {
@@ -681,3 +724,112 @@ function insereValor(nameField,valor) {
     }
 }
 
+function validateMandatory() {
+    var error = 0;
+    $('.xsdForm__mandatory').each(function() {
+        if ($(this).val() == null ||
+            $(this).val() == "") {
+            $(this).addClass('xsd__validationfailed');
+            error = 1;
+        } else {
+            $(this).removeClass('xsd__validationfailed');
+        }
+    });
+    if (error) {
+        throw "Campos obrigatórios não preenchidos";
+    }
+}
+
+function validateDate(value) {
+    var dia = parseInt( value.substring(8,10), 10 );
+    var mes = parseInt( value.substring(5,7), 10 );
+    var ano = parseInt( value.substring(0,4), 10 );
+
+    var DateVal = mes + "/" + dia + "/" + ano;
+    var date = new Date(DateVal);
+    var mesValid = (mes - 1); // o metodo getMonth retorna o mes porem janeiro é zero
+
+    if ( date.getDate() != dia ) {
+        return false;
+    } else if ( date.getMonth() != mesValid ) {
+        return false;
+    } else if ( date.getFullYear() != ano ) {
+        return false;
+    }
+    return true;
+}
+
+function validateDateTime(value) {
+    var dia = parseInt( value.substring(8,10), 10 );
+    var mes = parseInt( value.substring(5,7), 10 );
+    var ano = parseInt( value.substring(0,4), 10 );
+
+    var hora = parseInt( value.substring(11,13), 10 );
+    var minuto = parseInt( value.substring(14,16), 10 );
+    var segundo = parseInt( value.substring(17,19), 10 );
+
+    var DateVal = mes + "/" + dia + "/" + ano + ' ' + hora + ':' + minuto + ':' + segundo;
+    var date = new Date(DateVal);
+    var mesValid = (mes - 1); // o metodo getMonth retorna o mes porem janeiro é zero
+
+    if ( date.getDate() != dia ) {
+        return false;
+    } else if ( date.getMonth() != mesValid ) {
+        return false;
+    } else if ( date.getFullYear() != ano ) {
+        return false;
+    } else if ( date.getHours() != hora ) {
+        return false;
+    } else if ( date.getHours() != hora ) {
+        return false;
+    } else if ( date.getMinutes() != minuto ) {
+        return false;
+    } else if ( date.getSeconds() != segundo ) {
+        return false;
+    }
+    return true;
+
+}
+
+function validateFloat(value) {
+    var expRegNumInt = /^\d+(\.\d+)?$/; // float
+    if (value != "") {
+        if (!expRegNumInt.test(value)) {
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return true;
+    }
+}
+
+function validateInteger(value) {
+    var expRegNumInt = /^\d+$/; // float
+    if (value != "") {
+        if (!expRegNumInt.test(value)) {
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return true;
+    }
+}
+
+
+function validateValue(type, value) {
+    if (type == "xs:float") {
+        return validateFloat(value);
+    } else if (type == "xs:integer") {
+        return validateInteger(value);
+    } else if (type == "xs:decimal") {
+        return validateFloat(value);
+    } else if (type == "xs:date") {
+        return validateDate(value);
+    } else if (type == "xs:dateTime") {
+        return validateDateTime(value);
+    } else {
+        return true;
+    }
+}

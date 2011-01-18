@@ -54,3 +54,7 @@ fieldset dl dd select {
 .dtsemdd {
     width: 30em; !important;
 }
+
+.xsd__validationfailed {
+    background-color: red;
+}

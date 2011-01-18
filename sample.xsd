@@ -33,7 +33,7 @@
                 </xs:annotation>
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="codigo" type="xs:integer" minOccurs="0">
+                        <xs:element name="codigo" type="xs:integer" minOccurs="1">
                             <xs:annotation>
                                 <xs:appinfo>
                                     <xhtml:label>1 Código</xhtml:label>
@@ -47,7 +47,7 @@
                                 </xs:appinfo>
                             </xs:annotation>
                         </xs:element>
-                        <xs:element name="data" type="xs:date" minOccurs="0">
+                        <xs:element name="data" type="xs:date">
                             <xs:annotation>
                                 <xs:appinfo>
                                     <xhtml:label>2 Data</xhtml:label>

@@ -182,7 +182,7 @@ function convert_float_xsd2ptbr(floatValue) {
         }
     }
 
-    floatReturn = floatReturn+','+decimalPart;
+    floatReturn = decimalPart != null ? floatReturn+','+decimalPart : floatReturn;
     return floatReturn;
 
 }
