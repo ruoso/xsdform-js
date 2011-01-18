@@ -534,6 +534,7 @@ function generateXml(xsdFile, input_to_set) {
         } else {
             alert(myError);
         }
+	return false;
     }
 }
 
