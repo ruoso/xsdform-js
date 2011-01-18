@@ -161,7 +161,6 @@ function convert_dateTime_ptbr2xsd(dateTime) {
  * Converte float do formato do xsd para o formato brasileiro
  */
 function convert_float_xsd2ptbr(floatValue) {
-    floatValue = '654654565461258.32164897987564';
     var integerPart;
     var decimalPart;
     var count = 0;
