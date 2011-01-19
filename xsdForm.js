@@ -186,9 +186,10 @@ function generateFormFromNode(tagRaiz, xmlNode, namePattern) {
     var label;
     var type = getValueAttributeByName(xmlNode, "type");
     var minOccurs = getValueAttributeByName(xmlNode, "minOccurs");
+    var maxOccurs = getValueAttributeByName(xmlNode, "maxOccurs");
     if (minOccurs == null) {minOccurs = 1}
     if (type != null && static_type(type)) {
-        return generateFormField(tagRaiz, xmlNode, type, namePattern, minOccurs);
+        return generateFormField(tagRaiz, xmlNode, type, namePattern, minOccurs, maxOccurs);
     } else if (type != null) {
         // the definition is probably in the same schema.
         for (var i = 0; i < xmlNode.childNodes.length; i++) {
@@ -201,7 +202,7 @@ function generateFormFromNode(tagRaiz, xmlNode, namePattern) {
             var inner = tagRaiz.childNodes[i];
             if (inner.nodeType == 1 && inner.nodeName == 'xs:complexType' &&
                 getValueAttributeByName(inner, "name") == type) {
-                return generateFormFromComplexTypeNode(tagRaiz, inner, namePattern, getValueAttributeByName(xmlNode, "name"), label );
+                return generateFormFromComplexTypeNode(tagRaiz, inner, namePattern, getValueAttributeByName(xmlNode, "name"), label, minOccurs, maxOccurs );
             }
         }
     } else {
@@ -211,7 +212,7 @@ function generateFormFromNode(tagRaiz, xmlNode, namePattern) {
                 label = getTextTagInAnnotationAppinfo(xmlNode.childNodes[i], 'xhtml:label', true);
 
             } else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:complexType') {
-                return generateFormFromComplexTypeNode(tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label );
+                return generateFormFromComplexTypeNode(tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label, minOccurs, maxOccurs );
 
             } else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:simpleType') {
                 return generateFormFromSimpleTypeNode(tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label, minOccurs);
@@ -258,13 +259,66 @@ function generateXmlFromNode(odoc, namespace, tagRaiz, xmlNode, namePattern) {
     }
 }
 
-function generateFormFromComplexTypeNode(tagRaiz, xmlNode, namePattern, name, label) {
+function generateFormFromComplexTypeNode(tagRaiz, xmlNode, namePattern, name, label, minOccurs, maxOccurs) {
     // gerar o fieldset com o legend e os conteudos...
 
+    if (maxOccurs != null && maxOccurs != "1") {
+        // produzir a barra de repeticoes
+        var divRepeat = document.createElement('fieldset');
+        var divBarra  = document.createElement('span');
+        var spanLabel = document.createElement('legend');
+        spanLabel.innerHTML = label;
+        var subnamePattern = namePattern +'__'+name;
+        var buttonAdd = document.createElement('input');
+        var buttonDel = document.createElement('input');
+        buttonAdd.setAttribute('type', 'button');
+        buttonAdd.setAttribute('value', '+');
+        buttonDel.setAttribute('type', 'button');
+        buttonDel.setAttribute('value', '-');
+        divRepeat.setAttribute('id', subnamePattern);
+        divBarra.setAttribute('id', subnamePattern+'__barra');
+        divBarra.setAttribute('class', 'xsdForm__repeatBarra');
+        divRepeat.setAttribute('class', 'xsdForm__repeat');
+        divRepeat.appendChild(spanLabel);
+        divBarra.appendChild(buttonAdd);
+        divBarra.appendChild(buttonDel);
+        spanLabel.appendChild(divBarra);
+
+        var currentCount = 0;
+        var onclickAdd = function() {
+            if (maxOccurs == "unbounded" || currentCount < maxOccurs) {
+                var html = generateFormFromComplexTypeNodeNoRepeat(tagRaiz, xmlNode, namePattern+"__"+currentCount, name, "Item "+(currentCount+1));
+                divRepeat.appendChild(html);
+                currentCount++;
+            }
+        }
+        buttonAdd.onclick = onclickAdd;
+
+        var onclickDel = function() {
+            if (currentCount > minOccurs) {
+                divRepeat.removeChild(divRepeat.childNodes[currentCount]);
+                currentCount--;
+            }
+        }
+        buttonDel.onclick = onclickDel;
+
+        for (var i = 0; i < minOccurs; i++) {
+            onclickAdd();
+        }
+
+        return divRepeat;
+    } else {
+        return generateFormFromComplexTypeNodeNoRepeat(tagRaiz, xmlNode, namePattern, name, label);
+    }
+}
+
+function generateFormFromComplexTypeNodeNoRepeat(tagRaiz, xmlNode, namePattern, name, label) {
+    // gerar o fieldset com o legend e os conteudos...
     var legend = document.createElement('legend');
     legend.innerHTML = label;
 
     var fieldset = document.createElement('fieldset');
+    fieldset.setAttribute('id', namePattern+"__"+name);
     fieldset.appendChild(legend);
 
     var dl = document.createElement('dl');
@@ -537,12 +591,11 @@ function generateXml(xsdFile, input_to_set) {
     }
 }
 
-function createFieldString(name, minOccurs) {
+function createFieldString(name, minOccurs, maxOccurs) {
     var field = createTextArea(name);
     if (minOccurs > 0) {
         field.setAttribute('class', 'xsdForm__mandatory')
     }
-
     return field;
 }
 
@@ -624,24 +677,24 @@ function createFieldBoolean(name, minOccurs) {
     return createInput('checkbox', name);
 }
 
-function generateFormField(tagRaiz, xmlNode, type, namePattern, minOccurs) {
+function generateFormField(tagRaiz, xmlNode, type, namePattern, minOccurs, maxOccurs) {
 
     var name = getValueAttributeByName(xmlNode, "name");
     var inputName = namePattern + "__" + name;
 
     var field;
     if ( type == "xs:string" ) {
-        field = createFieldString(inputName, minOccurs);
+        field = createFieldString(inputName, minOccurs, maxOccurs);
     } else if ( type == "xs:float" ) {
-        field = createFieldFloat(inputName, minOccurs);
+        field = createFieldFloat(inputName, minOccurs, maxOccurs);
     } else if ( type == "xs:decimal" ) {
-        field = createFieldDecimal(inputName, minOccurs);
+        field = createFieldDecimal(inputName, minOccurs, maxOccurs);
     } else if ( type == "xs:integer" ) {
-        field = createFieldInteger(inputName, minOccurs);
+        field = createFieldInteger(inputName, minOccurs, maxOccurs);
     } else if ( type == "xs:date" ) {
-        field = createFieldDate(inputName, minOccurs);
+        field = createFieldDate(inputName, minOccurs, maxOccurs);
     } else if ( type == "xs:dateTime" ) {
-        field = createFieldDateTime(inputName, minOccurs);
+        field = createFieldDateTime(inputName, minOccurs, maxOccurs);
     } else if ( type == "xs:boolean" ) {
         field = createFieldBoolean(inputName);
     } else {
