@@ -1,0 +1,118 @@
+<formCadernoA xmlns="test:ns">
+    <identificacao>
+        <codigo>12345</codigo>
+        <codigoNaoTem>false</codigoNaoTem>
+        <data>2011-03-29</data>
+        <orgaoCadastrador>slkjgfjk</orgaoCadastrador>
+        <test>dlksskl</test>
+        <entrevistador>klasfklasgfkl</entrevistador>
+        <titularBeneficiario>kjkljkadadf</titularBeneficiario>
+        <nomeComunidade>klajkfd jklekd</nomeComunidade>
+        <tipoDemanda>Não Informado</tipoDemanda>
+        <cartao>Não Informado</cartao>
+    </identificacao>
+    <enderecoImovel>
+        <logradouro>asdfmkajlasdf sdfsdkls swdd</logradouro>
+        <numero>9</numero>
+        <complemento>klslsnl 2</complemento>
+        <localizacaoCartografica>654</localizacaoCartografica>
+        <bairro>kdkfn  ksslks</bairro>
+        <telefone>88889966</telefone>
+        <informante>Não Informado</informante>
+        <observacoes>oskfmf fkeeododfmdf ossmkmlaaam ddcsg</observacoes>
+    </enderecoImovel>
+    <caracteristicasImovel>
+        <localizacao>
+            <quadraloteada>true</quadraloteada>
+            <leitoDeRua>true</leitoDeRua>
+            <praca>true</praca>
+            <areaVerde>false</areaVerde>
+            <terroParaEquipamentoComunitario>false</terroParaEquipamentoComunitario>
+            <outro>false</outro>
+            <localizacaoOutro>23423r</localizacaoOutro>
+        </localizacao>
+        <localizacao>
+            <quadraloteada>false</quadraloteada>
+            <leitoDeRua>false</leitoDeRua>
+            <praca>false</praca>
+            <areaVerde>false</areaVerde>
+            <terroParaEquipamentoComunitario>true</terroParaEquipamentoComunitario>
+            <outro>true</outro>
+            <localizacaoOutro>tedffd</localizacaoOutro>
+        </localizacao>
+        <areaPreservacao>Não Informado</areaPreservacao>
+        <tipologiaUso>Não Informado</tipologiaUso>
+        <tipoServico>231332123kjh jhgj</tipoServico>
+        <compartimentosMoradia>
+            <qtdQuartos>1</qtdQuartos>
+            <qtdSalas>2</qtdSalas>
+            <qtdCozinhas>2</qtdCozinhas>
+            <qtdBanheiros>2</qtdBanheiros>
+            <qtdQuintais>2</qtdQuintais>
+            <qtdUotros>2</qtdUotros>
+            <localizacaoOutro>teste</localizacaoOutro>
+        </compartimentosMoradia>
+        <tipoMoradia>Invadida</tipoMoradia>
+        <numMatricula>123456</numMatricula>
+        <cartorio>awaasdfa</cartorio>
+        <zona>78</zona>
+        <nomeProprietario>rwgfafg afgasggsfg fssfsg</nomeProprietario>
+        <valor>321345646.44</valor>
+        <terreno>3222333.123545</terreno>
+        <enderecoProprietario>lçjasdgf</enderecoProprietario>
+        <telefoneProprietario>33332222</telefoneProprietario>
+        <tipologiaConstrucao>Taipa</tipologiaConstrucao>
+        <tipoCobertura>Plástico/Madeira</tipoCobertura>
+        <tipoPiso>Barro Batido</tipoPiso>
+        <revestimentoParede>Com Reboco</revestimentoParede>
+        <casaEmSituacaRisco>Sim</casaEmSituacaRisco>
+        <tipoRisco>
+            <alagamento>true</alagamento>
+            <inundacao>true</inundacao>
+            <deslizamento>false</deslizamento>
+            <viaFerrea>false</viaFerrea>
+            <linhaAltaTensao>false</linhaAltaTensao>
+            <outro>false</outro>
+            <tipoRiscoOutro>asdfasdf</tipoRiscoOutro>
+        </tipoRisco>
+        <tipoRisco>
+            <alagamento>false</alagamento>
+            <inundacao>false</inundacao>
+            <deslizamento>false</deslizamento>
+            <viaFerrea>false</viaFerrea>
+            <linhaAltaTensao>true</linhaAltaTensao>
+            <outro>true</outro>
+            <tipoRiscoOutro>dfghsrhsg</tipoRiscoOutro>
+        </tipoRisco>
+    </caracteristicasImovel>
+    <infraestrutura>
+        <redeDeAgua>Não</redeDeAgua>
+        <abastecimentoAguaPublicoPrivado>Privado</abastecimentoAguaPublicoPrivado>
+        <abastecimentoAgua>
+            <tipoAbastecimentoAgua>Não Informado</tipoAbastecimentoAgua>
+        </abastecimentoAgua>
+        <redeColetaEsgoto>Não Informado</redeColetaEsgoto>
+        <esgotamentoSanitario>Não Informado</esgotamentoSanitario>
+        <esgotamentoSanitario2>
+            <tipo>Não Informado</tipo>
+        </esgotamentoSanitario2>
+        <tipoLigacaoRedeEletrica>Não Informado</tipoLigacaoRedeEletrica>
+        <tipoPavimentacao>Não Informado</tipoPavimentacao>
+        <tipoDrenagem>
+            <galeriaSubterranea>true</galeriaSubterranea>
+            <sarjeta>true</sarjeta>
+            <cursoDaguaCanalizado>true</cursoDaguaCanalizado>
+            <cursoDaguaNaoCanalizado>true</cursoDaguaNaoCanalizado>
+            <outro>false</outro>
+        </tipoDrenagem>
+        <tipoServicoTelefonicoPredominante>Não Informado</tipoServicoTelefonicoPredominante>
+        <coletaSistematicaLixo>Não Informado</coletaSistematicaLixo>
+        <destinoLixo>
+            <sistemaColeta>true</sistemaColeta>
+            <sarjeta>true</sarjeta>
+            <cursoDaguaCanalizado>true</cursoDaguaCanalizado>
+            <cursoDaguaNaoCanalizado>true</cursoDaguaNaoCanalizado>
+            <outro>false</outro>
+        </destinoLixo>
+    </infraestrutura>
+</formCadernoA>

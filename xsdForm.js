@@ -225,6 +225,7 @@ function generateFormFromNode(tagRaiz, xmlNode, namePattern) {
 function generateXmlFromNode(odoc, namespace, tagRaiz, xmlNode, namePattern) {
     var type = getValueAttributeByName(xmlNode, "type");
     var minOccurs = getValueAttributeByName(xmlNode, "minOccurs");
+    var maxOccurs = getValueAttributeByName(xmlNode, "maxOccurs");
     if (minOccurs == null) {minOccurs = 1}
     if (type != null && static_type(type)) {
         // pre-defined types
@@ -244,14 +245,14 @@ function generateXmlFromNode(odoc, namespace, tagRaiz, xmlNode, namePattern) {
             var inner = tagRaiz.childNodes[i];
             if (inner.nodeType == 1 && inner.nodeName == 'xs:complexType' &&
                 getValueAttributeByName(inner, "name") == type) {
-                return generateXmlFromComplexTypeNode(odoc, namespace, tagRaiz, inner, namePattern, getValueAttributeByName(xmlNode, "name"));
+                return generateXmlFromComplexTypeNode(odoc, namespace, tagRaiz, inner, namePattern, getValueAttributeByName(xmlNode, "name"), minOccurs, maxOccurs);
             }
         }
     } else {
         // inline type definition
         for (var i = 0; i < xmlNode.childNodes.length; i++) {
             if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:complexType') {
-                return generateXmlFromComplexTypeNode(odoc, namespace, tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"));
+                return generateXmlFromComplexTypeNode(odoc, namespace, tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), minOccurs, maxOccurs);
             } else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:simpleType') {
                 return generateXmlFromSimpleTypeNode(odoc, namespace, tagRaiz, namePattern, getValueAttributeByName(xmlNode, "name"), minOccurs);
             }
@@ -299,6 +300,11 @@ function generateFormFromComplexTypeNode(tagRaiz, xmlNode, namePattern, name, la
             }
         }
 
+        var getCurrentCount = function() {
+            return currentCount;
+        }
+        divRepeat.xsdFormCurrentCount = getCurrentCount;
+
         var onclickAdd = function() {
             if (maxOccurs == "unbounded" || currentCount < maxOccurs) {
                 var html = generateFormFromComplexTypeNodeNoRepeat(tagRaiz, xmlNode, namePattern+"__"+currentCount, name, "Item "+(currentCount+1));
@@ -308,6 +314,7 @@ function generateFormFromComplexTypeNode(tagRaiz, xmlNode, namePattern, name, la
             refreshEnableDisable();
         }
         buttonAdd.onclick = onclickAdd;
+        divRepeat.addRepeat = onclickAdd;
 
         var onclickDel = function() {
             if (currentCount > minOccurs) {
@@ -317,6 +324,7 @@ function generateFormFromComplexTypeNode(tagRaiz, xmlNode, namePattern, name, la
             refreshEnableDisable();
         }
         buttonDel.onclick = onclickDel;
+        divRepeat.delRepeat = onclickDel;
 
         for (var i = 0; i < minOccurs; i++) {
             onclickAdd();
@@ -361,7 +369,22 @@ function generateFormFromComplexTypeNodeNoRepeat(tagRaiz, xmlNode, namePattern, 
 
 }
 
-function generateXmlFromComplexTypeNode(odoc, namespace, tagRaiz, xmlNode, namePattern, name) {
+function generateXmlFromComplexTypeNode(odoc, namespace, tagRaiz, xmlNode, namePattern, name, minOccurs, maxOccurs) {
+    if (maxOccurs != null && maxOccurs != "1") {
+        var id = namePattern+"__"+name;
+        var divRepeat = getById(id);
+        var count = divRepeat.xsdFormCurrentCount();
+        var frag = odoc.createDocumentFragment();
+        for (var i = 0; i < count; i++) {
+            frag.appendChild(generateXmlFromComplexTypeNodeNoRepeat(odoc, namespace, tagRaiz, xmlNode, namePattern+"__"+i, name));
+        }
+        return frag;
+    } else {
+        return generateXmlFromComplexTypeNodeNoRepeat(odoc, namespace, tagRaiz, xmlNode, namePattern, name);
+    }
+}
+
+function generateXmlFromComplexTypeNodeNoRepeat(odoc, namespace, tagRaiz, xmlNode, namePattern, name) {
     // gerar o fieldset com o legend e os conteudos...
 
     var tag = odoc.createElementNS(namespace, name);
@@ -771,10 +794,36 @@ function getFormFromNode(namePattern, xml) {
     for (var i = 0; i < xml.childNodes.length; i++) {
         xmlNode = xml;
         if (xml.childNodes[i].nodeType == 1) {
-            xmlNode = getNodeByTagName(xmlNode,xml.childNodes[i].nodeName);
+            xmlNode = xml.childNodes[i];
             name = namePattern + "__" + xmlNode.nodeName;
-            if (xmlNode.childNodes.length > 1) {
-                getFormFromNode(name, xmlNode);
+
+            if (xmlNode.childNodes.length > 1 ||
+                (xmlNode.childNodes.length == 1 &&
+                 xmlNode.childNodes[0].nodeType == 1)) {
+                var fieldset = getById(name);
+                var mycounter = 0;
+                if(fieldset.getAttribute('class')=="xsdForm__repeat") {
+                    var j = i;
+                    for (j = i; j < xml.childNodes.length; j++) {
+                        if (xml.childNodes[j].nodeType == 1) {
+                            if (xml.childNodes[j].nodeName == xmlNode.nodeName) {
+                                if (mycounter >= fieldset.xsdFormCurrentCount()) {
+                                    fieldset.addRepeat();
+                                }
+                                getFormFromNode(namePattern+"__"+mycounter+"__"+xmlNode.nodeName, xml.childNodes[j]);
+                                mycounter++;
+                            } else {
+                                i = j - 1;
+                                break;
+                            }
+                        }
+                    }
+                    if (j == xml.childNodes.length) {
+                        i = j;
+                    }
+                } else {
+                    getFormFromNode(name, xmlNode);
+                }
             } else if (xmlNode.childNodes.length == 1) {
                 insereValor(name,getText(xmlNode));
             }
@@ -783,10 +832,11 @@ function getFormFromNode(namePattern, xml) {
 }
 
 function insereValor(nameField,valor) {
+
     if ((getById(nameField).nodeName == "INPUT" && getById(nameField).type == "text") || getById(nameField).nodeName == "SELECT" || getById(nameField).nodeName == "TEXTAREA") {
         getById(nameField).value = valor;
     } else if (getById(nameField).type == "checkbox") {
-        if (valor == 1) {
+        if (valor == 1 || valor == "true") {
             getById(nameField).checked = true;
         } else {
             getById(nameField).checked = false;
