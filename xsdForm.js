@@ -280,17 +280,32 @@ function generateFormFromComplexTypeNode(tagRaiz, xmlNode, namePattern, name, la
         divBarra.setAttribute('class', 'xsdForm__repeatBarra');
         divRepeat.setAttribute('class', 'xsdForm__repeat');
         divRepeat.appendChild(spanLabel);
-        divBarra.appendChild(buttonAdd);
         divBarra.appendChild(buttonDel);
+        divBarra.appendChild(buttonAdd);
         spanLabel.appendChild(divBarra);
 
         var currentCount = 0;
+
+        var refreshEnableDisable = function() {
+            if (maxOccurs == "unbounded" || currentCount < maxOccurs) {
+                buttonAdd.removeAttribute('disabled');
+            } else {
+                buttonAdd.setAttribute('disabled',true);
+            }
+            if (currentCount > minOccurs) {
+                buttonDel.removeAttribute('disabled');
+            } else {
+                buttonDel.setAttribute('disabled',true);
+            }
+        }
+
         var onclickAdd = function() {
             if (maxOccurs == "unbounded" || currentCount < maxOccurs) {
                 var html = generateFormFromComplexTypeNodeNoRepeat(tagRaiz, xmlNode, namePattern+"__"+currentCount, name, "Item "+(currentCount+1));
                 divRepeat.appendChild(html);
                 currentCount++;
             }
+            refreshEnableDisable();
         }
         buttonAdd.onclick = onclickAdd;
 
@@ -299,12 +314,14 @@ function generateFormFromComplexTypeNode(tagRaiz, xmlNode, namePattern, name, la
                 divRepeat.removeChild(divRepeat.childNodes[currentCount]);
                 currentCount--;
             }
+            refreshEnableDisable();
         }
         buttonDel.onclick = onclickDel;
 
         for (var i = 0; i < minOccurs; i++) {
             onclickAdd();
         }
+        refreshEnableDisable();
 
         return divRepeat;
     } else {

@@ -33,7 +33,7 @@
                 </xs:annotation>
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="codigo" type="xs:integer" minOccurs="1">
+                        <xs:element name="codigo" type="xs:integer">
                             <xs:annotation>
                                 <xs:appinfo>
                                     <xhtml:label>1 Código</xhtml:label>
@@ -254,7 +254,7 @@
                 </xs:annotation>
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="localizacao" minOccurs="0">
+                        <xs:element name="localizacao" minOccurs="0" maxOccurs="2">
                             <xs:annotation>
                                 <xs:appinfo>
                                     <xhtml:label>21 Localização</xhtml:label>
@@ -613,7 +613,7 @@
                                 </xs:restriction>
                             </xs:simpleType>
                         </xs:element>
-                        <xs:element name="tipoRisco" minOccurs="0">
+                        <xs:element name="tipoRisco" minOccurs="1" maxOccurs="unbounded">
                             <xs:annotation>
                                 <xs:appinfo>
                                     <xhtml:label>42 Tipo de Risco</xhtml:label>
