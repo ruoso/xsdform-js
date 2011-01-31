@@ -18,11 +18,13 @@
   # Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
 */
 
-function createInput(type, name, id) {
+function createInput(type, name, id, maxlength) {
     var newInput = document.createElement('input');
     newInput.type  = type;
     newInput.name  = name;
-    newInput.setAttribute('maxlength', 255);
+    if (maxlength != null) {
+        newInput.setAttribute('maxlength', maxlength);
+    }
     newInput.id    = ( id != undefined )? id: name;
     return newInput;
 }
@@ -228,17 +230,10 @@ function generateXmlFromNode(odoc, namespace, tagRaiz, xmlNode, namePattern) {
     var maxOccurs = getValueAttributeByName(xmlNode, "maxOccurs");
     if (minOccurs == null) {minOccurs = 1}
     if (type != null && static_type(type)) {
-        // pre-defined types
-        if (type == "xs:integer"  ||
-            type == "xs:string"   ||
-            type == "xs:dateTime" ||
-            type == "xs:date"     ||
-            type == "xs:float") {
-            return generateXmlFromSimpleTextNode(odoc, namespace, tagRaiz, xmlNode, namePattern);
-        } else if ( type == "xs:boolean" ) {
+        if ( type == "xs:boolean" ) {
             return generateXmlFromCheckboxTextNode(odoc, namespace, tagRaiz, xmlNode, namePattern);
         } else {
-            //throw type + " not supported.";
+            return generateXmlFromSimpleTextNode(odoc, namespace, tagRaiz, xmlNode, namePattern);
         }
     } else if (type != null) {
         for (var i = 0; i < tagRaiz.childNodes.length; i++) {
@@ -254,7 +249,7 @@ function generateXmlFromNode(odoc, namespace, tagRaiz, xmlNode, namePattern) {
             if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:complexType') {
                 return generateXmlFromComplexTypeNode(odoc, namespace, tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), minOccurs, maxOccurs);
             } else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:simpleType') {
-                return generateXmlFromSimpleTypeNode(odoc, namespace, tagRaiz, namePattern, getValueAttributeByName(xmlNode, "name"), minOccurs);
+                return generateXmlFromSimpleTypeNode(odoc, namespace, tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), minOccurs, maxOccurs);
             }
         }
     }
@@ -415,10 +410,12 @@ function generateFormFromSimpleTypeNode(tagRaiz, xmlNode, namePattern, name, lab
     var restrictionNode = getNodeByTagName(xmlNode, 'xs:restriction');
 
     for (var i = 0; i < restrictionNode.childNodes.length; i++) {
-        if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:enumeration'  ) {
+        if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:pattern' ) {
+            return generateFormFromSimpleTypeNodeRestrictionPattern(tagRaiz, xmlNode, namePattern, name, label, minOccurs,restrictionNode.childNodes[i].getAttribute('value') );
+        } else if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:enumeration'  ) {
             return generateFormFromSimpleTypeNodeRestrictionEnumeration(tagRaiz, xmlNode, namePattern, name, label, minOccurs);
         } else if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:maxLength'  ) {
-            return generateFormFromSimpleTypeNodeRestrictionMaxLength(tagRaiz, xmlNode, namePattern, name, label, minOccurs);
+            return generateFormFromSimpleTypeNodeRestrictionMaxLength(tagRaiz, xmlNode, namePattern, name, label, minOccurs,restrictionNode.childNodes[i].getAttribute('value') );
         } else if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:fractionDigits'  ) {
             return createFieldDecimal(namePattern, name, label);
         }
@@ -465,7 +462,7 @@ function generateFormFromSimpleTypeNodeRestrictionEnumeration(tagRaiz, xmlNode, 
     return frag;
 }
 
-function generateFormFromSimpleTypeNodeRestrictionMaxLength(tagRaiz, xmlNode, namePattern, name, label, minOccurs){
+function generateFormFromSimpleTypeNodeRestrictionPattern(tagRaiz, xmlNode, namePattern, name, label, minOccurs, pattern){
     var inputName = namePattern + "__" + name;
 
     var newLabel = document.createElement("label");
@@ -483,15 +480,91 @@ function generateFormFromSimpleTypeNodeRestrictionMaxLength(tagRaiz, xmlNode, na
     return frag;
 }
 
+function generateFormFromSimpleTypeNodeRestrictionMaxLength(tagRaiz, xmlNode, namePattern, name, label, minOccurs, maxLength){
+    var inputName = namePattern + "__" + name;
 
-function generateXmlFromSimpleTypeNode(odoc, namespace, tagRaiz, namePattern, name, minOccurs) {
+    var newLabel = document.createElement("label");
+    newLabel.innerHTML = label;
+    newLabel.htmlFor = inputName;
+
+    var dt = document.createElement('dt');
+    var dd = document.createElement('dd');
+    dt.appendChild(newLabel);
+    dd.appendChild(createInput('text' ,inputName, inputName, maxLength));
+
+    var frag = document.createDocumentFragment();
+    frag.appendChild(dt);
+    frag.appendChild(dd);
+    return frag;
+}
+
+
+function generateXmlFromSimpleTypeNode(odoc, namespace, tagRaiz, xmlNode, namePattern, name, minOccurs, maxOccurs) {
 
     var inputName = namePattern + "__" + name;
-    var valueField = getById(inputName).value;
+    var fieldValue = getById(inputName).value;
 
-    if ( minOccurs != '0' || valueField != '' ) {
+    if ( minOccurs != '0' || fieldValue != '' ) {
+
+	    // validar o fieldValue
+	    var restriction = null;
+	    for (var i = 0; i < xmlNode.childNodes.length; i++) {
+	        var node = xmlNode.childNodes[i];
+            if (node.nodeType == 1) {
+                if (node.nodeName == "xs:restriction" &&
+                    node.getAttribute('base') == "xs:string") {
+                    restriction = node;
+                } else {
+                    throw "Unkown simple type";
+                }
+            }
+	    }
+        var rdecl = [];
+        for (var i = 0; i < restriction.childNodes.length; i++) {
+            var decl = restriction.childNodes[i];
+            if (decl.nodeType == 1) {
+                rdecl.push(decl);
+            }
+        }
+        if (rdecl.length == 0) {
+            throw "Invalid restriction declaration, need restriction type.";
+        }
+
+        var valid = 0;
+
+        if (rdecl[0].nodeName == "xs:enumeration") {
+            for (var i = 0; i < rdecl.length; i++) {
+                if (rdecl[i].getAttribute('value') == fieldValue) {
+                    valid = 1;
+                    break;
+                }
+            }
+        } else if (rdecl[0].nodeName == "xs:pattern") {
+            var regex = '^'+rdecl[0].getAttribute('value')+'$';
+            var rx = new RegExp(regex);
+            if (rx.test(fieldValue)) {
+                valid = 1;
+            }
+        } else if (rdecl[0].nodeName == "xs:maxLength") {
+            var maxl = rdecl[0].getAttribute('value');
+            if (fieldValue.length <= maxl) {
+                valid = 1;
+            }
+        } else {
+            throw "Unkown restriction type: "+rdecl[0].nodeName;
+        }
+
+        if (!valid) {
+            $('#'+inputName+"_input_deflate").addClass('xsd__validationfailed');
+            $('#'+inputName).addClass('xsd__validationfailed');
+            throw "Erro de Validação";
+        } else {
+            $('#'+inputName+"_input_deflate").removeClass('xsd__validationfailed');
+            $('#'+inputName).removeClass('xsd__validationfailed');
+        }
+
         var tag = odoc.createElementNS(namespace, name);
-        var content = odoc.createTextNode( valueField );
+        var content = odoc.createTextNode( fieldValue );
         tag.appendChild(content);
         return tag;
     } else if ( minOccurs == '0' ) {

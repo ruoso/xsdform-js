@@ -66,16 +66,29 @@
                         <xs:element name="test" minOccurs="0">
                             <xs:annotation>
                                 <xs:appinfo>
-                                    <xhtml:label>TEST</xhtml:label>
+                                    <xhtml:label>Test MaxLength</xhtml:label>
                                 </xs:appinfo>
                             </xs:annotation>
                             <xs:simpleType>
                                 <xs:restriction base="xs:string">
-                                    <xs:maxLength value="255" />
+                                    <xs:maxLength value="10" />
                                 </xs:restriction>
                             </xs:simpleType>
                         </xs:element>
 						
+                        <xs:element name="test2" minOccurs="0">
+                            <xs:annotation>
+                                <xs:appinfo>
+                                    <xhtml:label>Test Pattern</xhtml:label>
+                                </xs:appinfo>
+                            </xs:annotation>
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:pattern value="\d+(,\d+)?" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+
                         <xs:element name="entrevistador" type="xs:string"
 							minOccurs="0">
                             <xs:annotation>
@@ -100,7 +113,7 @@
                                 </xs:appinfo>
                             </xs:annotation>
                         </xs:element>
-                        <xs:element name="tipoDemanda" minOccurs="0">
+                        <xs:element name="tipoDemanda">
                             <xs:annotation>
                                 <xs:appinfo>
                                     <xhtml:label>6 Tipo de Demanda</xhtml:label>
