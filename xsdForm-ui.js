@@ -232,4 +232,7 @@ function generateXsdFormUI() {
     });
     $('input.xsdForm__float.inflated').regexMask('float-ptbr');
 
+    $('input.xsdForm__integer').regexMask('integer');
+
+
 }
