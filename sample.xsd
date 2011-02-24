@@ -75,6 +75,19 @@
                                 </xs:restriction>
                             </xs:simpleType>
                         </xs:element>
+
+                        <xs:element name="escola" minOccurs="0">
+                            <xs:annotation>
+                                <xs:appinfo>
+                                    <xhtml:label>Escola</xhtml:label>
+                                </xs:appinfo>
+                            </xs:annotation>
+                            <xs:simpleType>
+                                <xs:restriction base="autocomplete">
+                                    <xs:maxLength value="255" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
 						
                         <xs:element name="test2" minOccurs="0">
                             <xs:annotation>

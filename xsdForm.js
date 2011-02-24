@@ -18,12 +18,15 @@
   # Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
 */
 
-function createInput(type, name, id, maxlength) {
+function createInput(type, name, id, maxlength, restrictionNode) {
     var newInput = document.createElement('input');
     newInput.type  = type;
     newInput.name  = name;
     if (maxlength != null) {
         newInput.setAttribute('maxlength', maxlength);
+    }
+    if (restrictionNode.getAttribute('base') == 'autocomplete') {
+        
     }
     newInput.id    = ( id != undefined )? id: name;
     return newInput;
@@ -415,7 +418,7 @@ function generateFormFromSimpleTypeNode(tagRaiz, xmlNode, namePattern, name, lab
         } else if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:enumeration'  ) {
             return generateFormFromSimpleTypeNodeRestrictionEnumeration(tagRaiz, xmlNode, namePattern, name, label, minOccurs);
         } else if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:maxLength'  ) {
-            return generateFormFromSimpleTypeNodeRestrictionMaxLength(tagRaiz, xmlNode, namePattern, name, label, minOccurs,restrictionNode.childNodes[i].getAttribute('value') );
+            return generateFormFromSimpleTypeNodeRestrictionMaxLength(tagRaiz, xmlNode, namePattern, name, label, minOccurs,restrictionNode.childNodes[i].getAttribute('value'),restrictionNode);
         } else if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:fractionDigits'  ) {
             return createFieldDecimal(namePattern, name, label);
         }
@@ -480,7 +483,7 @@ function generateFormFromSimpleTypeNodeRestrictionPattern(tagRaiz, xmlNode, name
     return frag;
 }
 
-function generateFormFromSimpleTypeNodeRestrictionMaxLength(tagRaiz, xmlNode, namePattern, name, label, minOccurs, maxLength){
+function generateFormFromSimpleTypeNodeRestrictionMaxLength(tagRaiz, xmlNode, namePattern, name, label, minOccurs, maxLength, restrictionNode){
     var inputName = namePattern + "__" + name;
 
     var newLabel = document.createElement("label");
@@ -490,7 +493,7 @@ function generateFormFromSimpleTypeNodeRestrictionMaxLength(tagRaiz, xmlNode, na
     var dt = document.createElement('dt');
     var dd = document.createElement('dd');
     dt.appendChild(newLabel);
-    dd.appendChild(createInput('text' ,inputName, inputName, maxLength));
+    dd.appendChild(createInput('text' ,inputName, inputName, maxLength, restrictionNode));
 
     var frag = document.createDocumentFragment();
     frag.appendChild(dt);
@@ -512,7 +515,7 @@ function generateXmlFromSimpleTypeNode(odoc, namespace, tagRaiz, xmlNode, namePa
 	        var node = xmlNode.childNodes[i];
             if (node.nodeType == 1) {
                 if (node.nodeName == "xs:restriction" &&
-                    node.getAttribute('base') == "xs:string") {
+                    node.getAttribute('base') == "xs:string" || node.getAttribute('base') == 'autocomplete') {
                     restriction = node;
                 } else {
                     throw "Unkown simple type";
