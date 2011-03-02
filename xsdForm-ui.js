@@ -234,5 +234,12 @@ function generateXsdFormUI() {
 
     $('input.xsdForm__integer').regexMask('integer');
 
+    $('input.autoComplete').each(
+	function(i,elemento) {
+		$(this).autocomplete({
+                	source: $(elemento).attr('rel'),
+			minLength: 2	                
+	        });
+	});
 
 }
