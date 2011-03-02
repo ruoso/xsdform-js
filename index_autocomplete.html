@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+# Copyright 2010 - Prefeitura Municipal de Fortaleza
+#
+# Este arquivo é parte do programa xsdform-js
+#
+# O xsdform-js é um software livre; você pode redistribui-lo e/ou
+# modifica-lo dentro dos termos da Licença Pública Geral GNU como
+# publicada pela Fundação do Software Livre (FSF); na versão 2 da
+# Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>xsdFormJs</title>
+        <link href="style.css" rel="stylesheet" type="text/css"></link>
+
+    </head>
+    <body
+        <!-- A regular usage will simply return the result of the generateXml function,
+             but here we just want to show the generated xml, so we return false every time.
+             Usually the processed_xml field would be a hidden input, not a textarea. -->
+        <form onsubmit="generateXml('sample.xsd', this.processed_xml); return false">
+            <H1>The Form</H1>
+            <div id="xsdform_container" ></div>
+            <input type="submit" />
+            <H1>The Output</H1>
+            <textarea name="processed_xml" rows="20" cols="100"></textarea>
+        </form>
+        <script src="jquery-1.4.4.js" type="text/javascript"></script>
+        <script src="input.deflate.plugin.js" type="text/javascript"></script>
+        <script src="jquery.meio.mask.js" type="text/javascript"></script>
+        <script src="xsdForm.js" type="text/javascript"></script>
+        <script src="xsdForm-ui.js" type="text/javascript"></script>
+        <script src="funcoes_autocomplete.js" type="text/javascript"></script>
+        <script language="javascript" src="jquery-simulate.js"></script>
+        <script language="javascript" src="regex-mask-plugin.js"></script>
+    </body>
+</html>
