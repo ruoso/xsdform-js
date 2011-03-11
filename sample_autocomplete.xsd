@@ -15,6 +15,7 @@
 	-->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:xhtml="http://www.w3.org/1999/xhtml" targetNamespace="test:ns"
+	xmlns:xsdext="http://schemas.fortaleza.ce.gov.br/xsdform/extensions.xsd"
 	elementFormDefault="qualified">
 
 
@@ -199,8 +200,12 @@
                                 <xs:appinfo>
                                     <xhtml:label>Município</xhtml:label>
                                 </xs:appinfo>
+				<xsdext:extensions>
+					<xsdext:engine>autoComplete</xsdext:engine>
+					<xsdext:service>/cgi-bin/loadMunicipios.cgi?UF=CE</xsdext:service>
+				</xsdext:extensions>
                             </xs:annotation>
-                            <xs:simpleType engine="autoComplete" service="/cgi-bin/loadMunicipios.cgi?UF=CE" >
+                            <xs:simpleType>
                                 <xs:restriction base="xs:string">
                                     <xs:maxLength value="100" />
                                 </xs:restriction>

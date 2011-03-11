@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://schemas.fortaleza.ce.gov.br/xsdform/extensions.xsd"
+	targetNamespace="http://schemas.fortaleza.ce.gov.br/xsdform/extensions.xsd"
+	elementFormDefault="qualified">
+
+    <xs:complexType name="extensions">
+       <xs:sequence>
+           <xs:element name="engine" minOccurs="0" maxOccurs="1" type="xs:string" />
+           <xs:element name="service" minOccurs="0" maxOccurs="1" type="xs:string" />
+       </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="extension" type="extensions" />
+
+</xs:schema>

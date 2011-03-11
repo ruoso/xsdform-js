@@ -128,16 +128,17 @@ function getTextByIndex(xmlNode,index) {
 }
 
 function getTextByTagName(xmlNode,tagName) {
-    var node;
-    for (var i = 0; i < xmlNode.childNodes.length; i++) {
-        if ( xmlNode.childNodes[i].nodeType == 1 ) {
-            if ( xmlNode.childNodes[i].nodeName == tagName ) {
-                node = xmlNode.childNodes[i];
-                break;
-            }
-        }
-    }
-    return getText(node);
+	var node;
+	if (!xmlNode) return ""; 
+	for (var i = 0; i < xmlNode.childNodes.length; i++) {
+		if ( xmlNode.childNodes[i].nodeType == 1 ) {
+			if ( xmlNode.childNodes[i].nodeName == tagName ) {
+				node = xmlNode.childNodes[i];
+				break;
+			}
+		}
+	}
+	return getText(node);
 }
 // Retorna o atributo 'attributeName' do no xmlNode
 function getValueAttributeByName(xmlNode,attributeName) {
@@ -186,6 +187,8 @@ function static_type(type) {
 
 function generateFormFromNode(tagRaiz, xmlNode, namePattern) {
     var label;
+    var engine;
+    var service;
     var type = getValueAttributeByName(xmlNode, "type");
     var minOccurs = getValueAttributeByName(xmlNode, "minOccurs");
     var maxOccurs = getValueAttributeByName(xmlNode, "maxOccurs");
@@ -197,6 +200,8 @@ function generateFormFromNode(tagRaiz, xmlNode, namePattern) {
         for (var i = 0; i < xmlNode.childNodes.length; i++) {
             if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:annotation' ) {
                 label = getTextTagInAnnotationAppinfo(xmlNode.childNodes[i], 'xhtml:label', true);
+                engine = getTextTagInAnnotationExtensions(xmlNode.childNodes[i], 'xsdext:engine');
+                service = getTextTagInAnnotationExtensions(xmlNode.childNodes[i], 'xsdext:service');
                 break;
             }
         }
@@ -204,7 +209,7 @@ function generateFormFromNode(tagRaiz, xmlNode, namePattern) {
             var inner = tagRaiz.childNodes[i];
             if (inner.nodeType == 1 && inner.nodeName == 'xs:complexType' &&
                 getValueAttributeByName(inner, "name") == type) {
-                return generateFormFromComplexTypeNode(tagRaiz, inner, namePattern, getValueAttributeByName(xmlNode, "name"), label, minOccurs, maxOccurs );
+                return generateFormFromComplexTypeNode(tagRaiz, inner, namePattern, getValueAttributeByName(xmlNode, "name"), label, minOccurs, maxOccurs, engine, service );
             }
         }
     } else {
@@ -212,12 +217,13 @@ function generateFormFromNode(tagRaiz, xmlNode, namePattern) {
         for (var i = 0; i < xmlNode.childNodes.length; i++) {
             if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:annotation' ) {
                 label = getTextTagInAnnotationAppinfo(xmlNode.childNodes[i], 'xhtml:label', true);
-
+                engine = getTextTagInAnnotationExtensions(xmlNode.childNodes[i], 'xsdext:engine');
+                service = getTextTagInAnnotationExtensions(xmlNode.childNodes[i], 'xsdext:service');
             } else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:complexType') {
-                return generateFormFromComplexTypeNode(tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label, minOccurs, maxOccurs );
+                return generateFormFromComplexTypeNode(tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label, minOccurs, maxOccurs, engine, service );
 
             } else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:simpleType') {
-                return generateFormFromSimpleTypeNode(tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label, minOccurs);
+                return generateFormFromSimpleTypeNode(tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label, minOccurs,  engine, service);
 
             }
         }
@@ -405,11 +411,9 @@ function generateXmlFromComplexTypeNodeNoRepeat(odoc, namespace, tagRaiz, xmlNod
 
 }
 
-function generateFormFromSimpleTypeNode(tagRaiz, xmlNode, namePattern, name, label, minOccurs) {
+function generateFormFromSimpleTypeNode(tagRaiz, xmlNode, namePattern, name, label, minOccurs, engine, service) {
 
     var restrictionNode = getNodeByTagName(xmlNode, 'xs:restriction');
-    var engine = getValueAttributeByName(xmlNode, "engine");
-    var service = getValueAttributeByName(xmlNode, "service");
 
     for (var i = 0; i < restrictionNode.childNodes.length; i++) {
         if (restrictionNode.childNodes[i].nodeType == 1 && restrictionNode.childNodes[i].nodeName == 'xs:pattern' ) {
@@ -588,6 +592,13 @@ function generateXmlFromSimpleTypeNode(odoc, namespace, tagRaiz, xmlNode, namePa
     }
 
 }
+
+function getTextTagInAnnotationExtensions(xmlNode, strTag) {
+
+	var xmlNodeAux = getNodeByTagName(xmlNode, "xsdext:extensions");
+	return getTextByTagName(xmlNodeAux, strTag);
+}
+
 
 function getTextTagInAnnotationAppinfo(xmlNode, strTag, annotation) {
 

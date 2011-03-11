@@ -236,6 +236,7 @@ function generateXsdFormUI() {
 
     $('input.autoComplete').each(
 	function(i,elemento) {
+		alert('teste');
 		$(this).autocomplete({
                 	source: $(elemento).attr('rel'),
 			minLength: 2	                
