@@ -453,7 +453,10 @@ function generateFormFromSimpleTypeNodeRestrictionEnumeration(tagRaiz, xmlNode, 
             newSelect.appendChild(newOption);
         }
     }
-
+    
+    if (minOccurs == '1') {
+        newSelect.setAttribute('class', 'required');
+    }
     var newLabel = document.createElement("label");
     newLabel.innerHTML = label;
     newLabel.htmlFor = inputName;
@@ -631,7 +634,7 @@ function generateXmlFromSimpleTextNode(odoc, namespace, tagRaiz, xmlNode, namePa
     if ( minOccurs > 0 && (valueField == '' || valueField == null)  ) {
         throw "Campo obrigatório";
     } else if ( valueField != '' ) {
-        // valida mandatorio
+        // valida mandatório
         if (!validateValue(type, valueField)) {
             $('#'+inputName+"_input_deflate").addClass('required');
             $('#'+inputName).addClass('required');
@@ -730,7 +733,6 @@ function generateXml(xsdFile, input_to_set) {
         if (myError.name != null) {
             alert( myError.name + ': ' + myError.message + "\n" + myError);
         } else {
-            alert('TESTE');
             alert(myError);
         }
 	return false;
