@@ -33,27 +33,6 @@
                 </xs:annotation>
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="codigo" type="xs:integer">
-                            <xs:annotation>
-                                <xs:appinfo>
-                                    <xhtml:label>1 Código</xhtml:label>
-                                </xs:appinfo>
-                            </xs:annotation>
-                        </xs:element>
-                        <xs:element name="codigoNaoTem" type="xs:boolean">
-                            <xs:annotation>
-                                <xs:appinfo>
-                                    <xhtml:label>Não tem</xhtml:label>
-                                </xs:appinfo>
-                            </xs:annotation>
-                        </xs:element>
-                        <xs:element name="data" type="xs:date">
-                            <xs:annotation>
-                                <xs:appinfo>
-                                    <xhtml:label>2 Data</xhtml:label>
-                                </xs:appinfo>
-                            </xs:annotation>
-                        </xs:element>
                         <xs:element name="orgaoCadastrador" type="xs:string"
 							minOccurs="0">
                             <xs:annotation>
@@ -126,7 +105,7 @@
                                 </xs:appinfo>
                             </xs:annotation>
                         </xs:element>
-                        <xs:element name="tipoDemanda">
+                        <xs:element name="tipoDemanda" minOccurs="1">
                             <xs:annotation>
                                 <xs:appinfo>
                                     <xhtml:label>6 Tipo de Demanda</xhtml:label>
@@ -639,7 +618,7 @@
                                 </xs:restriction>
                             </xs:simpleType>
                         </xs:element>
-                        <xs:element name="tipoRisco" minOccurs="1" maxOccurs="unbounded">
+                        <xs:element name="tipoRisco" maxOccurs="unbounded">
                             <xs:annotation>
                                 <xs:appinfo>
                                     <xhtml:label>42 Tipo de Risco</xhtml:label>

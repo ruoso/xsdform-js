@@ -574,13 +574,17 @@ function generateXmlFromSimpleTypeNode(odoc, namespace, tagRaiz, xmlNode, namePa
             throw "Unkown restriction type: "+rdecl[0].nodeName;
         }
 
-        if (!valid) {
-            $('#'+inputName+"_input_deflate").addClass('xsd__validationfailed');
-            $('#'+inputName).addClass('xsd__validationfailed');
+        if (!valid && fieldValue != '') {
+            $('#'+inputName+"_input_deflate").addClass('required');
+            $('#'+inputName).addClass('required');
             throw "Erro de Validação";
+        } else if (fieldValue == '') {
+            $('#'+inputName+"_input_deflate").addClass('required');
+            $('#'+inputName).addClass('required');
+            throw "Campo obrigatório";
         } else {
-            $('#'+inputName+"_input_deflate").removeClass('xsd__validationfailed');
-            $('#'+inputName).removeClass('xsd__validationfailed');
+            $('#'+inputName+"_input_deflate").removeClass('required');
+            $('#'+inputName).removeClass('required');
         }
 
         var tag = odoc.createElementNS(namespace, name);
@@ -624,17 +628,17 @@ function generateXmlFromSimpleTextNode(odoc, namespace, tagRaiz, xmlNode, namePa
     var inputName = namePattern + "__" + name;
     var valueField = getById(inputName).value;
 
-    if ( minOccurs > 0 && valueField == '' ) {
+    if ( minOccurs > 0 && (valueField == '' || valueField == null)  ) {
         throw "Campo obrigatório";
     } else if ( valueField != '' ) {
         // valida mandatorio
         if (!validateValue(type, valueField)) {
-            $('#'+inputName+"_input_deflate").addClass('xsd__validationfailed');
-            $('#'+inputName).addClass('xsd__validationfailed');
+            $('#'+inputName+"_input_deflate").addClass('required');
+            $('#'+inputName).addClass('required');
             throw "Erro de validação";
         } else {
-            $('#'+inputName+"_input_deflate").removeClass('xsd__validationfailed');
-            $('#'+inputName).removeClass('xsd__validationfailed');
+            $('#'+inputName+"_input_deflate").removeClass('required');
+            $('#'+inputName).removeClass('required');
             var tag = odoc.createElementNS(namespace, name);
             var content = odoc.createTextNode( valueField );
             tag.appendChild(content);
@@ -726,6 +730,7 @@ function generateXml(xsdFile, input_to_set) {
         if (myError.name != null) {
             alert( myError.name + ': ' + myError.message + "\n" + myError);
         } else {
+            alert('TESTE');
             alert(myError);
         }
 	return false;
