@@ -469,12 +469,9 @@ function generateFormFromSimpleTypeNode(tagRaiz, xmlNode, namePattern, name, lab
         divRepeat.addRepeat = onclickAdd;
 
         var onclickDel = function() {
-            alert(currentCount);
             if (currentCount > minOccurs) {
                 divRepeat.removeChild(divRepeat.childNodes[currentCount]);
                 currentCount--;
-                //divRepeat.removeChild(divRepeat.childNodes[currentCount]);
-                //currentCount--;
             }
             refreshEnableDisable();
         }
