@@ -223,7 +223,7 @@ function generateFormFromNode(tagRaiz, xmlNode, namePattern) {
                 return generateFormFromComplexTypeNode(tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label, minOccurs, maxOccurs, engine, service );
 
             } else if (xmlNode.childNodes[i].nodeType == 1 && xmlNode.childNodes[i].nodeName == 'xs:simpleType') {
-                return generateFormFromSimpleTypeNode(tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label, minOccurs,  engine, service);
+                return generateFormFromSimpleTypeNode(tagRaiz, xmlNode.childNodes[i], namePattern, getValueAttributeByName(xmlNode, "name"), label, minOccurs,  engine, service, maxOccurs);
 
             }
         }
@@ -411,7 +411,88 @@ function generateXmlFromComplexTypeNodeNoRepeat(odoc, namespace, tagRaiz, xmlNod
 
 }
 
-function generateFormFromSimpleTypeNode(tagRaiz, xmlNode, namePattern, name, label, minOccurs, engine, service) {
+function generateFormFromSimpleTypeNode(tagRaiz, xmlNode, namePattern, name, label, minOccurs, engine, service, maxOccurs) {        
+    if (maxOccurs != null && maxOccurs != "1") {
+        // produzir a barra de repeticoes
+        var divRepeat = document.createElement('fieldset');
+        var divBarra  = document.createElement('span');
+        var spanLabel = document.createElement('legend');
+        spanLabel.innerHTML = label;
+        var subnamePattern = namePattern +'__'+name;
+        var buttonAdd = document.createElement('input');
+        var buttonDel = document.createElement('input');
+        buttonAdd.setAttribute('type', 'button');
+        buttonAdd.setAttribute('value', '+');
+        buttonDel.setAttribute('type', 'button');
+        buttonDel.setAttribute('value', '-');
+        divRepeat.setAttribute('id', subnamePattern);
+        divBarra.setAttribute('id', subnamePattern+'__barra');
+        divBarra.setAttribute('class', 'xsdForm__repeatBarra');
+        divRepeat.setAttribute('class', 'xsdForm__repeat');
+        divRepeat.appendChild(spanLabel);
+        divBarra.appendChild(buttonDel);
+        divBarra.appendChild(buttonAdd);
+        spanLabel.appendChild(divBarra);
+        
+
+        var currentCount = 0;
+
+        var refreshEnableDisable = function() {
+            if (maxOccurs == "unbounded" || currentCount < maxOccurs) {
+                buttonAdd.removeAttribute('disabled');
+            } else {
+                buttonAdd.setAttribute('disabled',true);
+            }
+            if (currentCount > minOccurs) {
+                buttonDel.removeAttribute('disabled');
+            } else {
+                buttonDel.setAttribute('disabled',true);
+            }
+        }
+
+        var getCurrentCount = function() {
+            return currentCount;
+        }
+        divRepeat.xsdFormCurrentCount = getCurrentCount;
+
+        var onclickAdd = function() {
+            if (maxOccurs == "unbounded" || currentCount < maxOccurs) {
+                var html = generateFormFromSimpleTypeNodeNoRepeat(tagRaiz, xmlNode, namePattern+"__"+currentCount, name, "Item "+(currentCount+1), minOccurs, engine, service);
+                var divEngloba = document.createElement('div');
+                divEngloba.appendChild(html);
+                divRepeat.appendChild(divEngloba);
+                currentCount++;
+            }
+            refreshEnableDisable();
+        }
+        buttonAdd.onclick = onclickAdd;
+        divRepeat.addRepeat = onclickAdd;
+
+        var onclickDel = function() {
+            alert(currentCount);
+            if (currentCount > minOccurs) {
+                divRepeat.removeChild(divRepeat.childNodes[currentCount]);
+                currentCount--;
+                //divRepeat.removeChild(divRepeat.childNodes[currentCount]);
+                //currentCount--;
+            }
+            refreshEnableDisable();
+        }
+        buttonDel.onclick = onclickDel;
+        divRepeat.delRepeat = onclickDel;
+
+        for (var i = 0; i < minOccurs; i++) {
+            onclickAdd();
+        }
+        refreshEnableDisable();
+
+        return divRepeat;
+    } else {
+        return generateFormFromSimpleTypeNodeNoRepeat(tagRaiz, xmlNode, namePattern, name, label, minOccurs, engine, service);
+    }
+}
+
+function generateFormFromSimpleTypeNodeNoRepeat(tagRaiz, xmlNode, namePattern, name, label, minOccurs, engine, service) {
 
     var restrictionNode = getNodeByTagName(xmlNode, 'xs:restriction');
 
