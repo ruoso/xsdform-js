@@ -68,9 +68,10 @@ function convert_decimal_xsd2ptbr(valor){
 
     valor = inteiro+","+decimal;
 
-    if (valor = '0,00') {
+    if (valor == '0,00') {
         valor = '';
     }
+
     return valor;
 
 }
@@ -78,7 +79,11 @@ function convert_decimal_xsd2ptbr(valor){
  * Converte a data do formato iso para o formato brasileiro
  */
 function convert_date_xsd2ptbr(date) {
+
     if(date === "") return '';
+
+    if(date.match(/^\d{2}\/\d{2}\/\d{4}$/)) return date;
+
     var ano;
     var mes;
     var dia;
@@ -198,7 +203,7 @@ function convert_float_ptbr2xsd(floatValue) {
 }
 
 function generateXsdFormUI() {
-
+    
     $('input.xsdForm__date').inputDeflate({
         inflate: convert_date_xsd2ptbr,
         deflate: convert_date_ptbr2xsd,
